@@ -1,0 +1,148 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+#singnup-page{
+    background-image: url('../../assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+#singnup-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 255, 0.26); 
+    z-index: 1;
+    pointer-events: none;
+    }
+
+#signup-box {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    border: 2px solid #000080;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    width: 50vw;
+    min-width: 700px;
+    padding: 20px;
+    margin: 20px;
+    max-width: 1140px;
+    row-gap: 2vw;
+}
+#intro{
+    display: flex;
+  width: 100%;
+justify-content: space-between;
+align-items: center;
+  
+}
+
+#intro >div > p {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #333333;
+}
+#logo-container {
+    padding-right: 2vw;
+}
+
+#logo {
+    width: 250px;
+    max-width: 120px;
+    display: flex;
+    justify-content: flex-end;
+
+}
+#form{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 2vh;
+    grid-template-columns: 1fr 1fr ;
+    row-gap: 3.5vh;
+    column-gap:3vw ;
+    border: #000080 0px dashed;
+}
+
+
+.btn {
+    transition: all 0.3s ease-in-out;
+    font-family: "Dosis", sans-serif;
+   
+   
+  }
+  
+  .btn {
+    width: 7vw;
+    height: 7vh;
+    grid-column: 1/3;
+    grid-row: 4;  
+    border-radius: 50px;
+    background-image: linear-gradient(135deg, #1E3A8A 0%, #2b4796 100%);
+    box-shadow: 0 20px 30px -6px rgba(22, 33, 79, 0.5);
+    outline: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1.2rem;
+    color: white;
+    margin: auto;
+   
+  }
+  
+  .btn:hover {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+  
+  .btn:active {
+    opacity: 0.5;
+  }
+
+/* From Uiverse.io by alexruix */ 
+.input {
+    max-width: 220px;
+    height: 44px;
+    background-color: #1E3A8A33;
+    border-radius: .5rem;
+    padding: 0 1rem;
+    border: 2px solid #1E3A8A;
+    font-size: 1rem;
+    transition: border-color .3s cubic-bezier(.25,.01,.25,1) 0s, color .3s cubic-bezier(.25,.01,.25,1) 0s,background .2s cubic-bezier(.25,.01,.25,1) 0s;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: .3rem;
+    font-size: .9rem;
+    font-weight: bold;
+    color: #05060f99;
+    transition: color .3s cubic-bezier(.25,.01,.25,1) 0s;
+  }
+  
+  .input:hover, .input:focus, .input-group:hover .input {
+    outline: none;
+    border-color: #05060f;
+  }
+  
+  .input-group:hover .label, .input:focus {
+    color: #05060fc2;
+  }
+
+  #login-page-link{
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  #login-page-link:hover{
+    color: #FFB15F;
+  }

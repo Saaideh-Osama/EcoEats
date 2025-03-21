@@ -1,23 +1,149 @@
-body{
-    background-color: #ebe8e4;
-}
-.gradient-custom-2 {
-    /* fallback for old browsers */
-   
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  }
+
+#login-container{
+  margin: auto;
+  position: relative;
+    width: 60vw;
+    height: 80vh;
+    margin-top: 3vw;
+    display: grid ;
+    grid-template-columns:1fr 1fr ;
+    grid-template-rows:1fr ;
+    justify-content: center;
+    align-items: center;
+    background-color:#f9f9f9; /* Semi-transparent white background */
+    border: 2px solid #000080;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.9);
     
-    background: #c1a48d;
+    justify-content: flex-start;
+   
 }
-  
-  @media (min-width: 768px) {
-    .gradient-form {
-      height: 100vh !important;
-    }
+#bg-logo{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: 0px;
+}
+
+#login-form{
+  height: 100%;
+  width: 100%;
+    display: flex;
+flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 3vh;
+   
+   
+}
+#logo{
+    width: 15vw;
+    height: 16vh;
+  position: relative;
+  margin: auto;
+  grid-row: 1;
   }
-  @media (min-width: 769px) {
-    .gradient-custom-2 {
-      border-top-right-radius: .3rem;
-      border-bottom-right-radius: .3rem;
-    }
-  }
+
+    
+    /* Input container */
+.input-container {
+  position: relative;
+  margin: 20px;
+}
+
+/* Input field */
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #333333;
+  outline: none;
+  background-color: transparent;
+}
+
+/* Input label */
+.input-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  color: rgba(204, 204, 204, 0);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Input highlight */
+.input-highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: #FFB15F;
+  transition: all 0.3s ease;
+}
+
+/* Input field:focus styles */
+.input-field:focus + .input-label {
+  top: -20px;
+  font-size: 12px;
+  color: #007bff;
+}
+
+.input-field:focus + .input-label + .input-highlight {
+  width: 100%;
+}
+
+.btn {
+  transition: all 0.3s ease-in-out;
+  font-family: "Dosis", sans-serif;
+ 
+}
+
+.btn {
+  width: 7vw;
+  height: 7vh;
+  grid-column: 1;
+  grid-row: 4;  
+  border-radius: 50px;
+  background-image: linear-gradient(135deg, #1E3A8A 0%, #2b4796 100%);
+  box-shadow: 0 20px 30px -6px rgba(22, 33, 79, 0.5);
+  outline: none;
+  cursor: pointer;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  margin: auto;
+ 
+}
+
+.btn:hover {
+  transform: translateY(3px);
+  box-shadow: none;
+}
+
+.btn:active {
+  opacity: 0.5;
+}
+#alrdy{
+  padding-left:1vw ;
+
+}
+
+
+#signup{
+  font-size: 1.2vw;
+  font-weight: 500;
+  color: #3966d8;
+  text-decoration: none;
+}
+#signup:hover{
+  color: #FFB15F;
+}
