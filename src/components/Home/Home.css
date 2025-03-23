@@ -1,0 +1,108 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+
+}
+#home-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 5vh;
+}
+#home-background{
+    width: 98.7vw;
+    height: 100vh;
+    opacity: 50%;
+}
+#signup-links{
+display: flex;
+column-gap: 3vw;
+position: absolute;
+top: 80vh;
+left: 5vw;
+}
+#signup-links > a{
+    text-decoration: none;
+    width: 12vw;
+    height: 10vh;
+    font-size: 1.5rem;
+    line-height: 2.2rem;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 5px;
+}
+#client-button{
+    background-color: #df7e17;
+    color: white;
+    
+}
+#rest-button{
+    background-color: white;
+    color: #1E3A8A;
+    
+    border: #1E3A8A 3px solid;
+}
+#ourmission{
+    margin-top: 3vw;
+    width: 95%;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    border: #1E3A8A 3px solid;
+    justify-content: space-around;
+    
+}
+#mission-typing{
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    row-gap: 3vw;
+    font-size: 1.5rem;
+
+}
+#mission-typing>h3 {
+    text-align: center;
+    color: #FFB15F;
+}
+
+#why-ecobites{
+    width: 100%;
+    display: grid; 
+    grid-template-rows:4  5vh 10vh 10vh 5vh;
+    grid-template-columns: 3 30vw 30vw    30vw;
+    justify-content: center;
+    align-items: center;
+   color: #1E3A8A;
+    font-size: 1.5rem;
+}
+#title{
+grid-column: 2;
+grid-row: 1;
+text-align: center;
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#top-left{
+    grid-row:2;
+    grid-column: 1;
+    width: 30vw;
+text-align: center;
+}
+
+#mid-right{
+    grid-row: 3;
+    grid-column: 3;
+}
+#bottom-left{
+    text-align: right;
+    grid-row: 3;
+    grid-column: 1;
+}
+#box-center{
+    grid-row: 2/4;
+    grid-column: 2;
+background-color: #E9D9C3;
+border-radius: 50%;
+}
