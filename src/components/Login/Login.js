@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import axios from "axios";
-import logo from '../../assets/images/ecoBites logo.jpg';
+import logo from '../../assets/images/logo.png';
 import login from '../../assets/images/dose-juice-ocnsb17U6FE-unsplash.jpg';
 import "./Login.css";
 
@@ -43,7 +43,7 @@ return (
 <div id='login-container' > 
 
   <div id='bg-image' >
-    <img src={login} alt="company logo" id="bg-logo" />
+    <img src={logo} alt="company logo" id="bg-logo" />
 </div>
   <div id='form-part' > 
   

@@ -1,13 +1,13 @@
 import React from 'react'
-import Homebackground from '../../assets/images/pexels-ella-olsson-572949-1640773 (1).jpg'
 import Bag from '../../assets/images/bag .jpg'
 import Box from '../../assets/images/box-removebg-preview.png'
+import home from '../../assets/images/home.png'
 import './Home.css'
 function Home() {
   return (
     <div id='home-page'>
-<img src={Homebackground} id='home-background'/>
-<div id='signup-links'> <a href='/signup' id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
+<img src={home} id='home-background'/>
+<div id='signup-links'> <a  href='/signup' id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
 
 <div id='ourmission'>
      <img src={Bag} />  

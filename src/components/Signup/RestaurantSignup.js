@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
-import logo from "../../assets/images/ecoBites_logo-removebg-preview.png";
+import logo from "../../assets/images/logo.png";
 import "./RestaurantSignup.css";
 
 
