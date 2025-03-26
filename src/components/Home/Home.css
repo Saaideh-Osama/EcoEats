@@ -14,7 +14,7 @@
 #home-background{
     width: 98.7vw;
     height: 100vh;
-    opacity: 50%;
+    opacity: 90%;
 }
 #signup-links{
 display: flex;
@@ -27,8 +27,8 @@ left: 5vw;
     text-decoration: none;
     width: 12vw;
     height: 10vh;
-    font-size: 1.5rem;
-    line-height: 2.2rem;
+    font-size: 1.2rem;
+    line-height: 2rem;
     text-align: center;
     font-weight: 600;
     border-radius: 5px;
@@ -45,7 +45,7 @@ left: 5vw;
     border: #1E3A8A 3px solid;
 }
 #ourmission{
-    margin-top: 3vw;
+    
     width: 95%;
     height: 80vh;
     display: flex;
@@ -60,11 +60,12 @@ left: 5vw;
     width: 30vw;
     row-gap: 3vw;
     font-size: 1.5rem;
+    color: #333;
 
 }
 #mission-typing>h3 {
     text-align: center;
-    color: #FFB15F;
+    color: #f17d02;
 }
 
 #why-ecobites{
@@ -74,8 +75,8 @@ left: 5vw;
     grid-template-columns: 3 30vw 30vw    30vw;
     justify-content: center;
     align-items: center;
-   color: #1E3A8A;
-    font-size: 1.5rem;
+   color: #333;
+    font-size: 1.4rem;
 }
 #title{
 grid-column: 2;

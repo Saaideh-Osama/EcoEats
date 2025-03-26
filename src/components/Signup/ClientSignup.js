@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ClientSignup.css';
 import axios from 'axios';
-import logo from '../../assets/images/ecoBites logo.jpg';
+import logo from '../../assets/images/logo.png';
 
 
 function Signup() {
