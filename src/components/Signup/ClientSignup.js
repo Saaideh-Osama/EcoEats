@@ -41,7 +41,7 @@ function Signup() {
         };
         
         try {
-            const response = await axios.post("https://9965-91-186-251-83.ngrok-free.app/api/clients/register", userData, {
+            const response = await axios.post("https://87e9-92-241-35-12.ngrok-free.app/api/clients/register", userData, {
                 headers: { "Content-Type": "application/json" },
             });
             
@@ -78,7 +78,7 @@ function Signup() {
   <span className="signup-input-highlight"></span>
   </div>
                     <div className="signup-input-container">
-  <input placeholder="Enter Password" className="signup-input-field" type="text" onChange={(e) => setPassword(e.target.value)} />
+  <input placeholder="Enter Password" className="signup-input-field" type="password" onChange={(e) => setPassword(e.target.value)} />
   <label htmlFor="input-field" className="signup-input-label">Enter Password</label>
   <span className="signup-input-highlight"></span>
   </div>
@@ -89,7 +89,7 @@ function Signup() {
                     </form>
 
                     <div id='alreadyhaveacc'> 
-                        <p>Already have an account?</p> &nbsp;<a href='/'>Log in</a>
+                        <p>Already have an account?</p> &nbsp;<a href='/login'>Log in</a>
                     </div>
                 </div>
 

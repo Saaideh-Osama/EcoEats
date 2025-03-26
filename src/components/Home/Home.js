@@ -7,7 +7,7 @@ function Home() {
   return (
     <div id='home-page'>
 <img src={Homebackground} id='home-background'/>
-<div id='signup-links'> <a  href='/signup' id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
+<div id='signup-links'> <a href='/signup' id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
 
 <div id='ourmission'>
      <img src={Bag} />  

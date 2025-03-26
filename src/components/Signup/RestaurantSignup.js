@@ -19,7 +19,7 @@ function RestaurantSignup() {
     const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post("https://9965-91-186-251-83.ngrok-free.app/api/restaurants/register", { email, name, phone_number, password ,restaurant_info,address,working_hours ,role_id }, {
+        const response = await axios.post("https://87e9-92-241-35-12.ngrok-free.app/api/restaurants/register", { email, name, phone_number, password ,restaurant_info,address,working_hours ,role_id }, {
             headers: { "Content-Type": "application/json" }
         });
 
