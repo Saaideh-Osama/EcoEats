@@ -1,0 +1,18 @@
+#create-meal-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+}
+
+#create-meal-form{
+    width: 30vw;
+    height: 60vh;
+    display: flex;
+    row-gap: 3vh;
+    flex-direction: column;
+}
+#create-meal-form>div {
+    display: flex;
+    justify-content: space-between;
+}

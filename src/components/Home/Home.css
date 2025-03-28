@@ -2,6 +2,7 @@
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
+    font-family: "Raleway";
 
 }
 #home-page{
@@ -9,7 +10,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    row-gap: 5vh;
+    row-gap: 0vh;
 }
 #home-background{
     width: 98.7vw;
@@ -27,13 +28,15 @@ left: 5vw;
     text-decoration: none;
     width: 12vw;
     height: 10vh;
-    font-size: 1.2rem;
-    line-height: 2rem;
+    font-size: 1rem;
     text-align: center;
     font-weight: 600;
     border-radius: 5px;
 }
 #client-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #df7e17;
     color: white;
     
@@ -41,8 +44,10 @@ left: 5vw;
 #rest-button{
     background-color: white;
     color: #1E3A8A;
-    
     border: #1E3A8A 3px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #ourmission{
     
@@ -59,7 +64,7 @@ left: 5vw;
     flex-direction: column;
     width: 30vw;
     row-gap: 3vw;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #333;
 
 }
@@ -77,12 +82,15 @@ left: 5vw;
     align-items: center;
    color: #333;
     font-size: 1.4rem;
+    margin-top: 7vh;
+    row-gap: 3vh;
+    column-gap: 1vw;
 }
 #title{
 grid-column: 2;
 grid-row: 1;
 text-align: center;
-font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
 }
 
 #top-left{
