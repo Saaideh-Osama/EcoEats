@@ -51,58 +51,68 @@ function Signup() {
             console.error("Signup error:", error.response?.data || error.message);
             alert("Signup failed. Please try again.");
         } finally {
-            setLoading(false); // Stop loading state
+            setLoading(false);
         }
     };
 
     return (
         <div id="signup-page">
-            <div id="signup-container">
-                <div id='left-part'>
-                    <p id='clientsignup-form-title'>Create an account</p>
-                    <form id='client-signup-form' onSubmit={handleSubmit}>
-                
-                    <div className="signup-input-container">
-  <input placeholder="Enter Name" className="signup-input-field" type="text" onChange={(e) => setName(e.target.value)} />
-  <label htmlFor="input-field" className="signup-input-label">Enter Name</label>
-  <span className="signup-input-highlight"></span>
-  </div>
-                    <div className="signup-input-container">
-  <input placeholder="Enter Email" className="signup-input-field" type="text" onChange={(e) => setEmail(e.target.value)} />
-  <label htmlFor="input-field" className="signup-input-label">Enter Email</label>
-  <span className="signup-input-highlight"></span>
-  </div>
-                    <div className="signup-input-container">
-  <input placeholder="Enter Phone Number" className="signup-input-field" type="number" onChange={(e) => setPhone_number(e.target.value)} />
-  <label htmlFor="input-field" className="signup-input-label">Enter Phone Number</label>
-  <span className="signup-input-highlight"></span>
-  </div>
-                    <div className="signup-input-container">
-  <input placeholder="Enter Password" className="signup-input-field" type="text" onChange={(e) => setPassword(e.target.value)} />
-  <label htmlFor="input-field" className="signup-input-label">Enter Password</label>
-  <span className="signup-input-highlight"></span>
-  </div>
+        <div id="signup-container">
+            <div id='left-part'>
+                <p id='clientsignup-form-title'>Create an account</p>
+                <form id='client-signup-form' onSubmit={handleSubmit}>
+            
+                <div className="signup-input-container">
+<input placeholder="Enter Name" className="signup-input-field" type="text" onChange={(e) => setName(e.target.value)} />
+<label htmlFor="input-field" className="signup-input-label">Enter Name</label>
+<span className="signup-input-highlight"></span>
+</div>
+                <div className="signup-input-container">
+<input placeholder="Enter Email" className="signup-input-field" type="text" onChange={(e) => setEmail(e.target.value)} />
+<label htmlFor="input-field" className="signup-input-label">Enter Email</label>
+<span className="signup-input-highlight"></span>
+</div>
+                <div className="signup-input-container">
+<input placeholder="Enter Phone Number" className="signup-input-field" type="number" onChange={(e) => setPhone_number(e.target.value)} />
+<label htmlFor="input-field" className="signup-input-label">Enter Phone Number</label>
+<span className="signup-input-highlight"></span>
+</div>
+                <div className="signup-input-container">
+<input placeholder="Enter Password" className="signup-input-field" type="text" onChange={(e) => setPassword(e.target.value)} />
+<label htmlFor="input-field" className="signup-input-label">Enter Password</label>
+<span className="signup-input-highlight"></span>
+</div>
+<div className="signup-input-container">
 
-  <button class="btn" type="submit">Signup</button>
+<label htmlFor="dropdown">Diet system:</label>
+  <select 
+    id="dropdown" 
+    value={is_vegetarian} 
+    onChange={handleChange}
+  >
+
+    <option value="option1">omnivore</option>
+    <option value="option2">vegetarian</option>
+    
+  </select>
+  
+  
+</div>
+
+<button class="btn" type="submit">Signup</button>
 
 
-                    </form>
+                </form>
 
-                    <div id='alreadyhaveacc'> 
-                        <p>Already have an account?</p> &nbsp;<a href='/'>Log in</a>
-                    </div>
-                </div>
-
-                <div id='right-part'>
-                    <img src={logo} id='singup-logo' alt="Logo" />
-                    <p>
-                        An innovative platform that reduces food waste by connecting restaurants with consumers, 
-                        enabling additional profits for restaurants and providing fresh meals at affordable prices 
-                        while preserving the environment.
-                    </p>
+                <div id='alreadyhaveacc'> 
+                    <p>Already have an account?</p> &nbsp;<a href='/'>Log in</a>
                 </div>
             </div>
+
+           
         </div>
+    </div>
+      
     );
 }
 
