@@ -79,6 +79,14 @@ function RestaurantSignup() {
         if (!formData.address.trim()) newErrors.address = 'Address is required';
         if (!formData.license_file) newErrors.license_file = 'License file is required';
         
+        // Validate working hours
+        if (!formData.working_hours.from) newErrors.working_hours = 'Opening time is required';
+        if (!formData.working_hours.to) newErrors.working_hours = 'Closing time is required';
+        if (formData.working_hours.from && formData.working_hours.to && 
+            formData.working_hours.from >= formData.working_hours.to) {
+            newErrors.working_hours = 'Closing time must be after opening time';
+        }
+        
         // Validate formats
         if (formData.email && !emailRegex.test(formData.email)) {
             newErrors.email = 'Please enter a valid email address';
@@ -112,13 +120,14 @@ function RestaurantSignup() {
             formDataToSend.append('phone_number', formData.phone_number);
             formDataToSend.append('password', formData.password);
             formDataToSend.append('address', formData.address);
-            formDataToSend.append('working_hours', `${formData.working_hours.from} to ${formData.working_hours.to}`);
+            formDataToSend.append('working_hours_from', formData.working_hours.from);
+            formDataToSend.append('working_hours_to', formData.working_hours.to);
             formDataToSend.append('restaurant_info', formData.restaurant_info);
             formDataToSend.append('role_id', formData.role_id);
             formDataToSend.append('license', formData.license_file);
 
             const response = await axios.post(
-                "https://9965-91-186-251-83.ngrok-free.app/api/restaurants/register",
+                "https://87e9-92-241-35-12.ngrok-free.app/api/restaurants/register",
                 formDataToSend,
                 {
                     headers: {
@@ -131,7 +140,11 @@ function RestaurantSignup() {
             alert("Signup successful! You can now log in.");
         } catch (err) {
             console.error("Signup Error", err.response?.data || err.message);
-            setErrors(prev => ({ ...prev, form: err.response?.data?.message || "Signup failed. Please try again." }));
+            setErrors(prev => ({ 
+                ...prev, 
+                form: err.response?.data?.message || "Signup failed. Please try again.",
+                ...(err.response?.data?.errors || {})
+            }));
         } finally {
             setIsSubmitting(false);
         }
@@ -237,6 +250,18 @@ function RestaurantSignup() {
                                 ))}
                             </select>
                         </div>
+                        {errors.working_hours && <span className="error-text">{errors.working_hours}</span>}
+                    </div>
+                    
+                    <div className="input-group">
+                        <label className="label">Restaurant Info</label>
+                        <textarea 
+                            name="restaurant_info" 
+                            className="input"
+                            value={formData.restaurant_info}
+                            onChange={handleChange}
+                            rows="3"
+                        />
                     </div>
                     
                     <div className="input-group file-upload">

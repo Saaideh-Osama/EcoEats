@@ -4,7 +4,7 @@ import './AuthForm.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [dietSystem, setDietSystem] = useState("option1");
+  const [isVegetarian, setIsVegetarian] = useState(false); // Changed from dietSystem
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -31,8 +31,8 @@ const AuthForm = () => {
     }
   };
 
-  const handleDietChange = (e) => {
-    setDietSystem(e.target.value);
+  const handleVegetarianChange = (e) => {
+    setIsVegetarian(e.target.checked); // Changed to boolean toggle
   };
 
   const validateForm = () => {
@@ -75,9 +75,8 @@ const AuthForm = () => {
     
     try {
       if (isLogin) {
-        // Login API call
         const response = await axios.post(
-          "",
+          "https://87e9-92-241-35-12.ngrok-free.app/api/login",
           {
             email: formData.email,
             password: formData.password
@@ -86,13 +85,12 @@ const AuthForm = () => {
         console.log("Login Successful", response.data);
         alert("Login successful!");
       } else {
-        // Signup API call
         const response = await axios.post(
-          "",
+          "https://87e9-92-241-35-12.ngrok-free.app/api/clients/register",
           {
             ...formData,
-            dietSystem,
-            role_id: 2// 
+            is_vegetarian: isVegetarian, // Changed to match backend expectation
+            role_id: 2
           },
           {
             headers: {
@@ -197,16 +195,15 @@ const AuthForm = () => {
             </div>
             
             {!isLogin && (
-              <div className="input-group">
-                <label htmlFor="dietSystem">Diet system:</label>
-                <select 
-                  id="dietSystem" 
-                  value={dietSystem} 
-                  onChange={handleDietChange}
-                >
-                  <option value="option1">Omnivore</option>
-                  <option value="option2">Vegetarian</option>
-                </select>
+              <div className="input-group vegetarian-toggle">
+                <label>
+                  <input 
+                    type="checkbox"
+                    checked={isVegetarian}
+                    onChange={handleVegetarianChange}
+                  />
+                  <span>Vegetarian</span>
+                </label>
               </div>
             )}
             
