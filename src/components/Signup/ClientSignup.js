@@ -91,8 +91,8 @@ function Signup() {
     onChange={handleChange}
   >
 
-    <option value="option1">omnivore</option>
-    <option value="option2">vegetarian</option>
+    <option value="0">omnivore</option>
+    <option value="1">vegetarian</option>
     
   </select>
   

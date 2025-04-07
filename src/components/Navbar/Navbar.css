@@ -16,7 +16,7 @@
 nav {
     min-width: 98vw;
     background: #ffffff;
-    padding: 1vh;
+    
     border-bottom: 1px rgb(186, 182, 182) groove;
 }
 
@@ -28,7 +28,7 @@ nav ul {
 nav ul li {
     list-style: none;
     display: inline-block;
-    padding: 7px 15px;
+    padding: 3px 8px;
     margin: 10px;
     font-size: 1rem;
     font-weight: 500;
