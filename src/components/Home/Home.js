@@ -4,13 +4,15 @@ import Box from '../../assets/images/box-removebg-preview.png'
 import home from '../../assets/images/home.png'
 import "@fontsource/rum-raisin"; // Defaults to weight 400
 import "@fontsource/rum-raisin/400.css"; // Specify weight
+import { useNavigate } from 'react-router';
 import './Home.css'
 function Home() {
+    const navigate = useNavigate();
   return (
     <div id='home-page'>
     
 <img src={home} id='home-background'/>
-<div id='signup-links'> <a  href='/signup' id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
+<div id='signup-links'> <a  onClick={() => navigate("/signup", { state: { isSignup: true } })} id='client-button'>Sign up as a client </a>  <a href='/resignup' id='rest-button'>Sign up as a Restaurant </a></div>
 <div id="planet">
     <p>SAVE MONEY, FOOD,</p>
      <p >SAVE THE <span >PLANET</span></p>

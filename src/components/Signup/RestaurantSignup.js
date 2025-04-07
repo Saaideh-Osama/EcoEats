@@ -1,20 +1,22 @@
 import { useState } from "react";
 import axios from 'axios';
-import logo from "../../assets/images/logo.png";
+import { useNavigate } from "react-router-dom";
+
 import "./RestaurantSignup.css";
 
+
+
 function RestaurantSignup() {
-    const [formData, setFormData] = useState({
-        email: "",
-        name: "",
-        phone_number: "",
-        password: "",
-        address: "",
-        working_hours: { from: "09:00", to: "17:00" },
-        restaurant_info: "",
-        role_id: 3,
-        license_file: null
-    });
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [phone_number, setPhone_number] = useState("");
+    const [password, setPassword] = useState("");
+    const [address, setAddress] = useState("");
+    const [working_hours_from, setWorking_hours_from] = useState("");
+    const [working_hours_to, setWorking_hours_to] = useState("");
+    const [restaurant_info, setRestaurant_info] = useState("");
+    const [role_id, setRole_Id]=useState(3);
     
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
@@ -151,54 +153,30 @@ function RestaurantSignup() {
     };
     
     return (
-        <div id="signup-page">
-            <div id="signup-box">
-                <div id="intro"> 
-                    <div><p>Sign Up your Business</p></div>
-                    <div id="logo-container"><img src={logo} alt="logo" id="logo"/></div>
-                </div>
-                
-                {errors.form && <div className="error-message">{errors.form}</div>}
-                
-                <form onSubmit={handleSubmit} id="form" noValidate>
-                    <div className="input-group">
-                        <label className="label">Restaurant Name *</label>
-                        <input 
-                            autoComplete="off" 
-                            name="name" 
-                            className={`input ${errors.name ? 'input-error' : ''}`}
-                            type="text" 
-                            value={formData.name}
-                            onChange={handleChange}
-                        />
-                        {errors.name && <span className="error-text">{errors.name}</span>}
-                    </div>
-                    
-                    <div className="input-group">
-                        <label className="label">Email address *</label>
-                        <input 
-                            autoComplete="off" 
-                            name="email" 
-                            className={`input ${errors.email ? 'input-error' : ''}`}
-                            type="email" 
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                        {errors.email && <span className="error-text">{errors.email}</span>}
-                    </div>
-                    
-                    <div className="input-group">
-                        <label className="label">Password *</label>
-                        <input 
-                            autoComplete="off" 
-                            name="password" 
-                            className={`input ${errors.password ? 'input-error' : ''}`}
-                            type="password" 
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                        {errors.password && <span className="error-text">{errors.password}</span>}
-                    </div>
+    
+    
+<div id="signup-page">
+    <div id="signup-box">
+        <div id="intro"> 
+            <div><p>Sign Up your Business  </p></div>
+            <div id="logo-container"></div>
+        </div>
+        <form onSubmit={handleSubmit} id="form">
+        
+            <div className="input-group">
+                <label className="label">Restaurant Name </label>
+                <input autoComplete="off" name="Name"  className="input" type="text"  onChange={(e) => setName(e.target.value)}/>
+        <div></div></div>
+        
+            <div className="input-group">
+                <label className="label">Email address</label>
+                <input autoComplete="off" name="Email" onChange={(e) => setEmail(e.target.value)} className="input" type="email"/>
+        <div></div></div>
+        
+        <div className="input-group">
+                    <label className="label">Password</label>
+                    <input autoComplete="off" name="password" onChange={(e) => setPassword(e.target.value)}  className="input" type="password"/>
+            <div></div></div>
 
                     <div className="input-group">
                         <label className="label">Restaurant address *</label>
@@ -300,4 +278,7 @@ function RestaurantSignup() {
     );
 };
 
-export default RestaurantSignup;
+
+
+
+export default RestaurantSignup
