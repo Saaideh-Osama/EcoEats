@@ -21,6 +21,7 @@ function Navbar() {
 <li> <a onClick={() => navigate("/signup", { state: { isLogin: true } })} >Login  </a> </li>
 <li> <a href='/createmeal' >createmeal  </a> </li>
 <li> <a onClick={handleLogout}>Logout </a>   </li>
+<li> <a href='/restaurants'>restaurants </a>   </li>
 
 
 </ul>
