@@ -2,17 +2,30 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Meals.css";
 
+const token = localStorage.getItem('authToken');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 export default function Meals() {
   const [recommendedMeals, setRecommendedMeals] = useState([]);
   const [allMeals, setAllMeals] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("pizza");
-  
+  const [selectedCategory, setSelectedCategory] = useState();  
+  const [isVegetarian, setIsVegetarian] = useState(true);
 
+  
+  
   const fetchMealsByCategory = async (category) => {
     try {
-     
-      const response = await axios.get(`https://87e9-92-241-35-12.ngrok-free.app/api/meals/category/${category}`);
+      
+      const response = await axios.get(`https://20ad-91-186-249-228.ngrok-free.app/api/meals/category/${category}`,{
+        headers: {
+          'Accept': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+        }
+      });
       setAllMeals(response.data.meals); 
+      console.log(response);
+
     } catch (error) {
       console.error("Error fetching meals by category:", error);
       setAllMeals([]);
@@ -22,7 +35,10 @@ export default function Meals() {
   const fetchAllMeals = async () => {
     try {
      
-      const response = await axios.get("https://87e9-92-241-35-12.ngrok-free.app/api/all-meals");
+      const response = await axios.get("https://fe4d-91-186-249-228.ngrok-free.app/api/all-meals",{  headers: {
+        'Accept': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+      }});
       setAllMeals(response.data.meals); 
     } catch (error) {
       console.error("Error fetching all meals:", error);
@@ -32,8 +48,17 @@ export default function Meals() {
 
   const fetchRecommendedMeals = async () => {
     try {
-     
-      const response = await axios.get("https://87e9-92-241-35-12.ngrok-free.app/api/vegetarian-meals");
+      let endpoint = "https://20ad-91-186-249-228.ngrok-free.app/api/all-meals";
+      if (isVegetarian) {
+        endpoint = "https://20ad-91-186-249-228.ngrok-free.app/api/vegetarian-meals";
+      }
+      
+      const response = await axios.get(endpoint, {  
+        headers: {
+          'Accept': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+        }
+      });
       setRecommendedMeals(response.data.meals ); 
     } catch (error) {
       console.error("Error fetching recommended meals:", error);
@@ -43,9 +68,10 @@ export default function Meals() {
 
   useEffect(() => {
     fetchMealsByCategory(selectedCategory);
-    fetchRecommendedMeals();
-    fetchAllMeals();
+    
   }, [selectedCategory]);
+  
+  
 
   return (
     <div className="container">
@@ -84,7 +110,12 @@ export default function Meals() {
         <div className="grid">
           {allMeals?.map((meal) => (
             <div key={meal.id} className="card">
-              <img src={meal.image} alt={meal.name} />
+              <img src={meal.image} alt={meal.name}  crossOrigin="anonymous" //
+  onError={(e) => {
+    e.target.src = '/placeholder.jpg';
+  }}
+
+              />
               <h3>{meal.name}</h3>
               <p>${meal.price}</p>
             </div>
