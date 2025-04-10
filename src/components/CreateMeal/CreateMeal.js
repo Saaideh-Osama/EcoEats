@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./CreateMeal.css";
 
-function CreateMeal() {
+function CreateMeal({ onMealCreated }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [available_count, setAvailable_count] = useState("");
