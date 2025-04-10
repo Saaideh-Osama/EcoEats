@@ -5,6 +5,7 @@ import Home from "./components/Home/Home";
 import NavBar from "./components/Navbar/Navbar"
 import Meals from "./components/Client/Meals";
 import AuthForm from "./components/AuthForm";
+import Navbar from "./components/Navbar/Navbar";
 import CreateMeal from "./components/CreateMeal/CreateMeal";
 import RestaurantsList from "./components/RestaurantsList/RestaurantsList";
 
@@ -12,10 +13,11 @@ function App() {
   return (
 
 <BrowserRouter>
-<NavBar/>
+    <Navbar></Navbar>
 
       <Routes>
-          <Route index path="/" element={<Home/>}/>
+          <Route index path="/" element={<Meals/>}/>
+          <Route  path="/login" element={<Login/>}/>
           <Route  path="/signup" element={<AuthForm/>} />
           <Route  path="/resignup" element={<RestaurantSignup />} />
           <Route  path="/client" element={<Meals/>}/>
