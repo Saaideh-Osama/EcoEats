@@ -17,7 +17,7 @@ function App() {
 
       <Routes>
           <Route index path="/" element={<Meals/>}/>
-          <Route  path="/login" element={<Login/>}/>
+          
           <Route  path="/signup" element={<AuthForm/>} />
           <Route  path="/resignup" element={<RestaurantSignup />} />
           <Route  path="/client" element={<Meals/>}/>

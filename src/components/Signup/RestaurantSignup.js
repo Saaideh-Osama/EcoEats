@@ -12,6 +12,20 @@ function RestaurantSignup() {
     const [name, setName] = useState("");
     const [phone_number, setPhone_number] = useState("");
     const [password, setPassword] = useState("");
+    const [formData, setFormData] = useState({
+        name: "",   
+        email: "",
+        phone_number: "",
+        password: "",
+        address: "",
+        working_hours: {
+            from: "",
+            to: ""
+        },
+        restaurant_info: "",
+        role_id: 3,
+        license_file: null
+    });
     const [address, setAddress] = useState("");
     const [working_hours_from, setWorking_hours_from] = useState("");
     const [working_hours_to, setWorking_hours_to] = useState("");
