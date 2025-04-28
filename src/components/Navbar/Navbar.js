@@ -1,6 +1,7 @@
 import React from 'react'
 import '../Navbar/Navbar.css'
 import { useNavigate } from "react-router-dom";
+
 function Navbar() {
   const navigate = useNavigate();
 
@@ -21,7 +22,10 @@ function Navbar() {
 <li> <a onClick={() => navigate("/signup", { state: { isLogin: true } })} >Login  </a> </li>
 <li> <a href='/createmeal' >createmeal  </a> </li>
 <li> <a onClick={handleLogout}>Logout </a>   </li>
-<li> <a href='/restaurants'>restaurants </a>   </li>
+<li> <a href='/restaurantslist'>restaurants </a>   </li>
+<li> <a href='/meals'>meals </a>   </li>
+<li> <a href='/context'>context </a>   </li>
+
 
 
 </ul>

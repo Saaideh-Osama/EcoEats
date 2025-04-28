@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
+import { userContext } from "./context/UserContext";
+import { useContext } from "react"; 
 import './AuthForm.css';
 
 const AuthForm = () => {
+  
   const location = useLocation();
   
   const [isLogin, setIsLogin] = useState(false);
@@ -62,7 +65,7 @@ const handleLogin = async (e) => {
     
       // Login API call
       const response = await axios.post(
-        "https://20ad-91-186-249-228.ngrok-free.app/api/login",
+        "https://ad67-91-186-251-160.ngrok-free.app/api/login",
         {
           email: formData.email,
           password: formData.password
@@ -71,6 +74,20 @@ const handleLogin = async (e) => {
       console.log("Login Successful", response.data);
       alert("Login successful!");
       localStorage.setItem("authToken", response.data.token);
+      console.log("before refreshUser");
+       
+      if (response.data.role_id === 2) {
+        window.location.href = "/meals"; // Redirect to client page
+      }
+      else if (response.data.role_id === 1) {
+        window.location.href = "/admin"; // Redirect to admin page
+      } 
+      else if (response.data.role_id === 3) {
+        window.location.href = "/createmeal"; // Redirect to chef page
+    }
+    else {
+        alert("Invalid role ID. Please contact support.");
+      }
     }
     catch (err) {
       console.error("Error", err.response?.data || err.message);
@@ -131,7 +148,7 @@ const handleLogin = async (e) => {
       try{
         // Signup API call
         const response = await axios.post(
-          "https://20ad-91-186-249-228.ngrok-free.app/api/clients/register",
+          "https://ad67-91-186-251-160.ngrok-free.app/api/clients/register",
           {
             ...formData,
             role_id: 2

@@ -6,7 +6,11 @@ body {
     background-color: #f8f9fa;
     color: #333;
   }
-  
+  .loading {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 3rem;
+  }
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -146,4 +150,10 @@ body {
     text-align: center;
     padding: 20px;
     color: #666;
+  }
+  #category_name{
+    font-size:1.7rem ;
+    text-transform: uppercase;
+    margin: 20x 0;
+    color: #FFB15F;
   }
