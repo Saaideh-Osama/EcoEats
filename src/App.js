@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
 import CreateMeal from "./components/CreateMeal/CreateMeal";
 import RestaurantsList from "./components/RestaurantsList/RestaurantsList";
+import SinglePageRestaurant from "./components/RestaurantsList/SinglePageRestaurant";
 
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
@@ -24,6 +25,8 @@ function App() {
           <Route  path="/signup" element={<AuthForm/>} />
           <Route  path="/resignup" element={<RestaurantSignup />} />
           <Route  path="/restaurantslist" element={<RestaurantsList />} />
+          <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
+
           <Route  path="/client" element={<Meals/>}/>
           
           
