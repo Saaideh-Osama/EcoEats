@@ -5,6 +5,7 @@ import "./Meals.css";
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
+import { MdRestaurant } from "react-icons/md";
 
 const Meals = () => {
   // State and refs for the popup
@@ -251,6 +252,13 @@ const Meals = () => {
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
         <div className="tabs">
+          <button
+            className="tab "
+            onClick={(e) => (window.location.href = "/")}
+          >
+            Your Orders
+          </button>
+
           <button className="tab active">Meals</button>
           <button
             className="tab"
@@ -370,22 +378,46 @@ const Meals = () => {
               <p>Loading...</p>
             ) : (
               <>
-                <img src={popupContent.image} alt={popupContent.name} />
-                <p>{popupContent.name}</p>
-                <p>{popupContent.description}</p>
-                <p>Price : ${popupContent.price}</p>
+                <div id="image-container">
+                  <img src={popupContent.image} alt={popupContent.name} />
+                </div>
+                <h3 className="meal-title">{popupContent.name}</h3>
+                <div className="restaurant-info">
+                  <MdRestaurant className="restaurant-icon" />
+                  <span> {popupContent.restaurant_name}</span>
+                </div>
+                <hr className="separator" />
+
+                <div className="ingredients-section">
+                  <span className="ingredients-label">ingredient:</span>
+                  <p className="ingredients-text">{popupContent.description}</p>
+                </div>
+                <div className="price-quantity-section">
+                  <div className="quantity-controls">
+                    <span className="quantity-label">quantity:</span>
+                    <button onClick={handleDecrement}>-</button>
+                    <span className="quantity-value">{orderquantity}</span>
+                    <button onClick={handleIncrement}>+</button>
+                  </div>
+                  <div className="price">
+                    {(popupContent.price * orderquantity).toFixed(2)} JOD
+                  </div>
+                </div>
                 <p
                   style={{
                     backgroundColor:
                       popupContent.contains_chicken === 0 &&
                       popupContent.contains_meat === 0
-                        ? "lightgreen"
-                        : "orange",
-                    padding: "8px",
+                        ? "orange"
+                        : "gray",
+                    padding: "4px 12px",
                     borderRadius: "6px",
                     color: "#333",
                     fontWeight: "bold",
                     width: "fit-content",
+                    top: " 220px",
+                    right: "24px",
+                    position: "absolute",
                   }}
                 >
                   {popupContent.contains_chicken === 0 &&
@@ -393,15 +425,10 @@ const Meals = () => {
                     ? "Vegetarian"
                     : "Contains Meat or Chicken"}
                 </p>
-                <p>Quantity: {popupContent.available_count}</p>
-                <p>Restaurant: {popupContent.restaurant_name}</p>
-                <div>
-                  {" "}
-                  <button onClick={handleIncrement}>+</button>
-                  <span>{orderquantity}</span>
-                  <button onClick={handleDecrement}>-</button>{" "}
-                  <button onClick={handlePlaceOrder}>order</button>
+                <div className="order-btn-container">
+                  <button id="orderBTN">order</button>
                 </div>
+
                 <button
                   onClick={() => {
                     setOpenPopup(false);
