@@ -14,7 +14,7 @@ function CreateMeal({ onMealCreated }) {
   const [error, setError] = useState(null);
   const [image, setImage] = useState(null);
 
-  const ngrokURL = "https://ad67-91-186-251-160.ngrok-free.app/api/create/meals";
+  const ngrokURL = "https://4399-91-186-255-241.ngrok-free.app/api/create/meals";
 
   const handleChange = (event) => {
     setCategory(event.target.value);

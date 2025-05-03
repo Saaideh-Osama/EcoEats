@@ -2,10 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useRef } from "react";
 import "./Meals.css";
-import { UserContext } from "../context/UserContext"; // adjust path as needed
+import { UserContext } from "../../context/UserContext"; // adjust path as needed
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
-import { MdRestaurant } from "react-icons/md";
 
 const Meals = () => {
   // State and refs for the popup
@@ -89,7 +88,7 @@ const Meals = () => {
         headers: {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: ` Bearer ${localStorage.getItem("authToken")}`,
         },
       });
       setRecommendedMeals(response.data.meals);
@@ -112,7 +111,7 @@ const Meals = () => {
           headers: {
             Accept: "application/json",
             "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer${token}`,
           },
         }
       );
@@ -193,6 +192,31 @@ const Meals = () => {
     }
   }, [selectedCategory]);
 
+  //place an order function
+
+  const handlePlaceOrder = () => {
+    placeOrder(orderquantity, popupContent.id);
+  };
+
+  const placeOrder = async (orderQuantity, popupContentId) => {
+    try {
+      const response = await axios.post(
+        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        {
+          meal_id: popupContentId,
+          quantity: orderQuantity,
+        }
+      );
+
+      console.log("Order placed successfully:", response.data);
+      alert(`Order placed successfully! `);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to place order:", error);
+      throw error;
+    }
+  };
+
   // This effect handles closing the popup when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -227,12 +251,6 @@ const Meals = () => {
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
         <div className="tabs">
-          <button
-            className="tab "
-            onClick={(e) => (window.location.href = "/")}
-          >
-            Your Orders
-          </button>
           <button className="tab active">Meals</button>
           <button
             className="tab"
@@ -308,7 +326,7 @@ const Meals = () => {
               >
                 <img src={meal.image} alt={meal.name} />
                 <h3>{meal.name}</h3>
-                <p>${meal.price}</p>
+                <p>JOD{meal.price}</p>
               </div>
             ))
           ) : (
@@ -352,47 +370,22 @@ const Meals = () => {
               <p>Loading...</p>
             ) : (
               <>
-                <div id="image-container">
-                  <img src={popupContent.image} alt={popupContent.name} />
-                </div>
-                <h3 className="meal-title">{popupContent.name}</h3>
-                <div className="restaurant-info">
-                  <MdRestaurant className="restaurant-icon" />
-                  <span> {popupContent.restaurant_name}</span>
-                </div>
-                <hr className="separator" />
-
-                <div className="ingredients-section">
-                  <span className="ingredients-label">ingredient:</span>
-                  <p className="ingredients-text">{popupContent.description}</p>
-                </div>
-                <div className="price-quantity-section">
-                  <div className="quantity-controls">
-                    <span className="quantity-label">quantity:</span>
-                    <button onClick={handleDecrement}>-</button>
-                    <span className="quantity-value">{orderquantity}</span>
-                    <button onClick={handleIncrement}>+</button>
-                  </div>
-                  <div className="price">
-                    {(popupContent.price * orderquantity).toFixed(2)} JOD
-                  </div>
-                </div>
-
+                <img src={popupContent.image} alt={popupContent.name} />
+                <p>{popupContent.name}</p>
+                <p>{popupContent.description}</p>
+                <p>Price : ${popupContent.price}</p>
                 <p
                   style={{
                     backgroundColor:
                       popupContent.contains_chicken === 0 &&
                       popupContent.contains_meat === 0
-                        ? "orange"
-                        : "gray",
-                    padding: "4px 12px",
+                        ? "lightgreen"
+                        : "orange",
+                    padding: "8px",
                     borderRadius: "6px",
                     color: "#333",
                     fontWeight: "bold",
                     width: "fit-content",
-                    top: " 220px",
-                    right: "24px",
-                    position: "absolute",
                   }}
                 >
                   {popupContent.contains_chicken === 0 &&
@@ -400,11 +393,15 @@ const Meals = () => {
                     ? "Vegetarian"
                     : "Contains Meat or Chicken"}
                 </p>
-
-                <div className="order-btn-container">
-                  <button id="orderBTN">order</button>
+                <p>Quantity: {popupContent.available_count}</p>
+                <p>Restaurant: {popupContent.restaurant_name}</p>
+                <div>
+                  {" "}
+                  <button onClick={handleIncrement}>+</button>
+                  <span>{orderquantity}</span>
+                  <button onClick={handleDecrement}>-</button>{" "}
+                  <button onClick={handlePlaceOrder}>order</button>
                 </div>
-
                 <button
                   onClick={() => {
                     setOpenPopup(false);

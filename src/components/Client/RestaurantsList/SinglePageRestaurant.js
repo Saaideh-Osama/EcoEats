@@ -65,7 +65,7 @@ const SinglePageRestaurant = () => {
   return (
     <div>
       <h1>{restaurant.name}</h1>
-      <img src={restaurant.license} alt="License" width="300px" />
+      <img src={restaurant.image} alt="License" width="300px" />
       <p><strong>Address:</strong> {restaurant.address}</p>
       <p><strong>Phone:</strong> {restaurant.phone_number}</p>
       <p><strong>Working Hours:</strong> {restaurant.working_hours_from} - {restaurant.working_hours_to}</p>
