@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useRef } from "react";
-import "./Meals.css";
+import "./Meals.css"; // adjust path as needed
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
@@ -400,13 +400,13 @@ const Meals = () => {
                   <button onClick={handleIncrement}>+</button>
                   <span>{orderquantity}</span>
                   <button onClick={handleDecrement}>-</button>{" "}
-                  <button onClick={handlePlaceOrder}>order</button>
+                  <button onClick={handlePlaceOrder} id="orderBTN">order</button>
                 </div>
                 <button
                   onClick={() => {
                     setOpenPopup(false);
                     setOrderquantity(1);
-                  }}
+                  }}t
                   id="close-popup"
                 >
                   <MdOutlineClose />
