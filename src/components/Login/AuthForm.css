@@ -12,7 +12,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../assets/images/signback.png');
+    background-image: url('../../assets/images/signback.png');
   }
   
   .auth-container {

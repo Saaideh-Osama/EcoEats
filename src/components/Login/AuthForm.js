@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
-import { userContext } from "./context/UserContext";
+import { userContext } from "../context/UserContext";
 import { useContext } from "react"; 
 import './AuthForm.css';
 

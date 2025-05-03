@@ -2,7 +2,7 @@ import { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import { useRef } from "react";
 import "./Meals.css";
-import { UserContext } from '../context/UserContext'; // adjust path as needed
+import { UserContext } from '../../context/UserContext'; // adjust path as needed
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
 
@@ -189,7 +189,30 @@ useEffect(() => {
   }
 }, [selectedCategory]);
 
-  
+//place an order function 
+
+const handlePlaceOrder = () => {
+  placeOrder(orderquantity, popupContent.id);
+};
+
+const placeOrder = async (orderQuantity, popupContentId) => {
+  try {
+    const response = await axios.post('https://4399-91-186-255-241.ngrok-free.app/api/place-order', {
+      meal_id: popupContentId,
+      quantity: orderQuantity
+    });
+ 
+    console.log('Order placed successfully:', response.data);
+    alert(`Order placed successfully! `);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to place order:', error);
+    throw error;
+  }
+};
+
+
+
   // This effect handles closing the popup when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -275,7 +298,7 @@ useEffect(() => {
       }} >
         <img src={meal.image} alt={meal.name} />
         <h3>{meal.name}</h3>
-        <p>${meal.price}</p>
+        <p>JOD{meal.price}</p>  
       </div>
     ))
   ) : (
@@ -328,7 +351,7 @@ useEffect(() => {
 </p>
           <p>Quantity: {popupContent.available_count}</p>
           <p>Restaurant: {popupContent.restaurant_name}</p>
-         <div> <button onClick={handleIncrement}>+</button><span>{orderquantity}</span><button onClick={handleDecrement}>-</button> <button>order</button></div>
+         <div> <button onClick={handleIncrement}>+</button><span>{orderquantity}</span><button onClick={handleDecrement}>-</button> <button onClick={handlePlaceOrder}>order</button></div>
           <button onClick={() => {setOpenPopup(false); setOrderquantity(1)} } id="close-popup"><MdOutlineClose /></button>
         </>
       )}

@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-import RestaurantSignup from "./components/Signup/RestaurantSignup";
-
-import Meals from "./components/Client/Meals";
-import AuthForm from "./components/AuthForm";
+import RestaurantSignup from "./components/Restaurant/Signup/RestaurantSignup";
+import Meals from "./components/Client/MealListings/Meals";
+import AuthForm from "./components/Login/AuthForm";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
-import CreateMeal from "./components/CreateMeal/CreateMeal";
-import RestaurantsList from "./components/RestaurantsList/RestaurantsList";
-import SinglePageRestaurant from "./components/RestaurantsList/SinglePageRestaurant";
-
+import CreateMeal from "./components/Restaurant/CreateMeal/CreateMeal";
+import RestaurantsList from "./components/Client/RestaurantsList/RestaurantsList";
+import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePageRestaurant";
+import EditUserProfile from "./components/Client/EditProfile/EditUserProfile";
+import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
@@ -26,8 +26,9 @@ function App() {
           <Route  path="/resignup" element={<RestaurantSignup />} />
           <Route  path="/restaurantslist" element={<RestaurantsList />} />
           <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
-
           <Route  path="/client" element={<Meals/>}/>
+          <Route  path="/editclient" element={<EditUserProfile/>}/>
+          <Route  path="/editrestaurant" element={<EditRestaurantProfile/>}/>
           
           
         </Routes>

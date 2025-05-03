@@ -5,11 +5,11 @@ import { FaPhoneSquareAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from 'react-router';
 
-function RestaurantCard({id, name, address, image,working_hours_from,working_hours_to,phone_number,restaurant_info }) {
+function RestaurantCard({id, name, address, image,working_hours_from,working_hours_to,phone_number,restaurant_info,license }) {
     return (
-      <div class="restaurant-card" key={id}>
+      <div class="restaurant-card" key={id} onClick={(e) => window.location.href=`/restaurant/${id}`}>
       <div class="restaurant-card-inner">
-        <div class="restaurant-card-front"><img src={image}/></div>
+        <div class="restaurant-card-front"><img src={image} alt='name'/></div>
         <div class="restaurant-card-back">
           <h2>{name}</h2>
           

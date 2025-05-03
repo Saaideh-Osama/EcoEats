@@ -1,5 +1,5 @@
 // src/context/UserContext.js
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState} from "react";
 import axios from "axios";
 
 export const UserContext = createContext();
@@ -21,7 +21,8 @@ export const UserProvider = ({ children }) => {
       }
 
       try {
-        const response = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/client/info", {
+        const response = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/client/info",
+           {
           headers: {
             'Accept': 'application/json',
             'ngrok-skip-browser-warning': 'true',

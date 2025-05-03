@@ -62,7 +62,7 @@ const AllRestaurants = () => {
             id={restaurant.id}
             name={restaurant.name}
             address={restaurant.address}
-            image={restaurant.license}
+            image={restaurant.image}
             phone_number={restaurant.phone_number}
             Working_hours_from={restaurant.working_hours_from}
             Working_hours_to={restaurant.working_hours_to}
