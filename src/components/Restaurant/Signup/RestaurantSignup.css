@@ -136,14 +136,14 @@
   
   .res-signup-btn {
     grid-column: 1 / -1;
-    width: 150px;
+    width: 120px;
     height: 50px;
     margin: 0px auto 0;
-    border-radius: 50px;
+    border-radius: 10px;
     box-shadow: 0 10px 20px -6px rgba(22, 33, 79, 0.5);
     border: none;
     background-color: #1E3A8A;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -205,9 +205,9 @@
   .button-container {
     grid-column: 1 / -1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    justify-content: center; /* محاذاة الأزرار في المنتصف */
+    align-items: center; /* محاذاة العناصر رأسياً */
+    gap: 15px;  /* المسافة بين الأزرار */
   }
   
   .login-link {
