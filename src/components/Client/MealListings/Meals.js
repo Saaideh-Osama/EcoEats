@@ -426,7 +426,7 @@ const Meals = () => {
                     : "Contains Meat or Chicken"}
                 </p>
                 <div className="order-btn-container">
-                  <button id="orderBTN" id="orderBTN">order</button>
+                  <button id="orderBTN" >order</button>
                 </div>
 
                 <button

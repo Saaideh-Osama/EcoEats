@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
+import GuestProtectedRoute from "./components/protectedRoute/GuestProtectedRoute";
+import ClientProtectedRoute from "./components/protectedRoute/ClientProtectedRoute";
+import RestaurantProtectedRoute from "./components/protectedRoute/RestaurantProtectedRoute";
 import RestaurantSignup from "./components/Restaurant/Signup/RestaurantSignup";
 import Meals from "./components/Client/MealListings/Meals";
 import AuthForm from "./components/Login/AuthForm";
@@ -15,26 +18,23 @@ import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile
 function App() {
   return (
 
-<BrowserRouter>
-    <Navbar></Navbar>
-
-      <Routes>
-          <Route index path="/" element={<Home/>}/>
-          <Route  path="/meals" element={<Meals/>}/>
-          <Route path ="/createmeal" element={<CreateMeal/>}/>
-          <Route  path="/signup" element={<AuthForm/>} />
-          <Route  path="/resignup" element={<RestaurantSignup />} />
-          <Route  path="/restaurantslist" element={<RestaurantsList />} />
-          <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
-          <Route  path="/client" element={<Meals/>}/>
-          <Route  path="/editclient" element={<EditUserProfile/>}/>
-          <Route  path="/editrestaurant" element={<EditRestaurantProfile/>}/>
+  <BrowserRouter>
+      <Navbar/>
+        <Routes>
+            <Route index path="/" element={<Home/>}/>
+            <Route   path="/meals" element={<Meals/>}/>
+            <Route  path="/createmeal"  element={<RestaurantProtectedRoute> <CreateMeal /></RestaurantProtectedRoute>  }/>
+            <Route  path="/signup" element={<AuthForm/>} />
+            <Route  path="/resignup" element={<RestaurantSignup />} />
+            <Route  path="/restaurantslist" element={<RestaurantsList />} />
+            <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
+            <Route  path="/client" element={<Meals/>}/>
+            <Route path="/editclient" element={<ClientProtectedRoute><EditUserProfile /></ClientProtectedRoute> }/>
+            <Route  path="/editrestaurant" element={ <RestaurantProtectedRoute><EditRestaurantProfile/></RestaurantProtectedRoute>}/>
+          </Routes>
           
-          
-        </Routes>
-        
-    </BrowserRouter>
-    
+      </BrowserRouter>
+      
   );
 }
 
