@@ -3,18 +3,60 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
 import "./SinglePageRestaurant.css";
-
+import Meals from "../MealListings/Meals";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { GoClock } from "react-icons/go";
 import img from "../../../assets/images/rest-logo3.jpg";
-
+import MealCard from "../MealListings/MealCard";
+import MealPopUp from "../MealListings/MealPopUp";
+import { UserContext } from "../../context/UserContext";
+import { useContext } from "react";
 const SinglePageRestaurant = () => {
+    const { user, fetchUser } = useContext(UserContext);
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [popupLoading, setPopupLoading] = useState(false);
+  const [popupContent, setPopupContent] = useState(null);
+  const [openpopup, setOpenpopup] = useState(false);
+  const [orderquantity, setOrderquantity] = useState(1);
+  
 
+
+  const fetchMealDetails = async (mealId) => {
+    try {
+      setPopupLoading(true);
+      setPopupContent(null);
+  
+      const token = localStorage.getItem("authToken");
+      const response = await axios.get(
+        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      const meal = response.data.meal;
+    
+  
+      setPopupContent({
+        ...meal,
+        restaurant_name: restaurant?.name || "Unknown Restaurant",
+      });
+    } catch (error) {
+      console.error("Error fetching meal details:", error);
+      setPopupContent(null);
+    } finally {
+      setPopupLoading(false);
+    }
+  };
+  
   const fetchRestaurantDetails = async () => {
     try {
       const response = await axios.get(
@@ -48,6 +90,51 @@ const SinglePageRestaurant = () => {
       console.error("Error fetching restaurant meals:", error);
     }
   };
+  const handleDecrement = () => {
+    setOrderquantity((prev) => Math.max(prev - 1, 1)); // prevents going below 1
+  };
+  const handleIncrement = () => {
+    setOrderquantity((prev) =>
+      Math.min(prev + 1, popupContent.available_count)
+    ); // prevents going above available count
+  };
+  const handlePlaceOrder = () => {
+    
+    placeOrder(orderquantity, popupContent.id);
+  };
+
+  const placeOrder = async (orderQuantity, popupContentId) => {
+    try {
+      const token = localStorage.getItem("authToken");
+  
+      const response = await axios.post(
+        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        {
+          meal_id: popupContentId,
+          quantity: orderQuantity,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
+          },
+        }
+      );
+  
+      console.log("Order placed successfully:", response.data);
+      alert(`Order placed successfully!`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("You need to be logged in first to reserve a meal.");
+      } else {
+        console.error("Failed to place order:", error);
+      }
+      throw error;
+    }
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,11 +166,12 @@ const SinglePageRestaurant = () => {
   }
 
   return (
-    <div className="restaurant-page">
+    <div> 
+    <div className={`restaurant-page ${openpopup ? "blurred" : ""}`}  >
       <div className="restaurant-banner">
         <img src={img} alt="Restaurant" />
         <div className="restaurant-info-box">
-          <h1>{restaurant.name}</h1>
+          
           <p className="about">{restaurant.restaurant_info}</p>
           <p>
             <FaLocationDot /> {restaurant.address}
@@ -101,20 +189,37 @@ const SinglePageRestaurant = () => {
       <div className="meals-section">
         <h2>Meals from {restaurant.name}</h2>
         <div className="meals-grid">
-          {meals.map((meal) => (
-            <div className="meal-card" key={meal.id}>
-              <h4>{meal.name}</h4>
-              <p>{meal.description}</p>
-              <p>
-                <strong>Price:</strong> ${meal.price}
-              </p>
-              <p>
-                <strong>Quantity:</strong> {meal.available_quantity}
-              </p>
-            </div>
-          ))}
+          {meals.length > 0 ? (         
+            meals.map(meal => (
+              <MealCard key={meal.id}  meal={meal} onClick={() => {
+                setOpenpopup(true);
+                fetchMealDetails(meal.id);
+              }} />
+
+            ) )
+          ) : (
+            <p>No meals found</p>
+          )}
         </div>
       </div>
+      </div>
+      {openpopup &&  (
+  <MealPopUp
+    open={openpopup}
+    meal={popupContent}
+    onClose={() => {
+      setOpenpopup(false);
+      setOrderquantity(1);
+    }
+  }
+  orderQuantity={orderquantity}
+  setOrderquantity={setOrderquantity}
+  handleDecrement={handleDecrement}
+  handleIncrement={handleIncrement}
+  handlePlaceOrder={handlePlaceOrder}
+  loading={popupLoading}
+  />
+)}
     </div>
   );
 };

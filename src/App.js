@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import GuestProtectedRoute from "./components/protectedRoute/GuestProtectedRoute";
+import ClientProtectedRoute from "./components/protectedRoute/ClientProtectedRoute";
+import RestaurantProtectedRoute from "./components/protectedRoute/RestaurantProtectedRoute";
 import RestaurantSignup from "./components/Restaurant/Signup/RestaurantSignup";
 import Meals from "./components/Client/MealListings/Meals";
 import AuthForm from "./components/Login/AuthForm";
@@ -10,30 +13,54 @@ import RestaurantsList from "./components/Client/RestaurantsList/RestaurantsList
 import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePageRestaurant";
 import EditClientProfile from "./components/Client/EditProfile/EditClientProfile";
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
-import OrdersList from "./components/Client/Orders/OrdersList";
+import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar></Navbar>
-
+      <Navbar />
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/meals" element={<Meals />} />
-        <Route path="/createmeal" element={<CreateMeal />} />
+        <Route
+          path="/createmeal"
+          element={
+            <RestaurantProtectedRoute>
+              {" "}
+              <CreateMeal />
+            </RestaurantProtectedRoute>
+          }
+        />
         <Route path="/signup" element={<AuthForm />} />
         <Route path="/resignup" element={<RestaurantSignup />} />
         <Route path="/restaurantslist" element={<RestaurantsList />} />
         <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
         <Route path="/client" element={<Meals />} />
-        <Route path="/editclientprofile" element={<EditClientProfile />} />
         <Route
-          path="/editrestaurantprofile"
-          element={<EditRestaurantProfile />}
+          path="/editclient"
+          element={
+            <ClientProtectedRoute>
+              <EditClientProfile />
+            </ClientProtectedRoute>
+          }
         />
-
-        <Route path="/orderslist" element={<OrdersList />} />
+        <Route
+          path="/editrestaurant"
+          element={
+            <RestaurantProtectedRoute>
+              <EditRestaurantProfile />
+            </RestaurantProtectedRoute>
+          }
+        />
+        <Route
+          path="/restdash"
+          element={
+            <RestaurantProtectedRoute>
+              <RestaurantDashboard />
+            </RestaurantProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

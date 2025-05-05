@@ -84,6 +84,44 @@ function Navbar() {
             <a href="/meals">meals</a>
           </li>
           <li>{renderProfileIcon()}</li>
+          <li>
+            <a href="/">Home </a>
+          </li>
+
+          <li>
+            <a
+              onClick={() => navigate("/signup", { state: { isLogin: true } })}
+            >
+              Login
+            </a>
+          </li>
+
+          {user && user.role_id === 3 && (
+            <>
+              <li>
+                <a href="/createmeal">createmeal</a>
+              </li>
+              <li>
+                <a href="/restdash">Dashboard</a>
+              </li>
+            </>
+          )}
+          {user && (
+            <>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+              <li>
+                <a href="/editprofile">{renderProfileIcon()}</a>
+              </li>
+            </>
+          )}
+          <li>
+            <a href="/restaurantslist">restaurants</a>
+          </li>
+          <li>
+            <a href="/meals">meals</a>
+          </li>
         </ul>
       </nav>
     </div>

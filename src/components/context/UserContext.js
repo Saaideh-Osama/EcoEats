@@ -8,11 +8,8 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // user data
   const [loading, setLoading] = useState(true); // loading state
 
-
   
-<UserContext.Provider value={{ user, setUser, loading}}></UserContext.Provider>
-
- 
+  
     const fetchUser = async () => {
       const token = localStorage.getItem("authToken"); // or wherever you store your token
       if (!token) {
@@ -42,10 +39,17 @@ export const UserProvider = ({ children }) => {
 
  
 
-  return (
-    <UserContext.Provider value={{ user, setUser, loading,fetchUser }}>
-      {children}
-    </UserContext.Provider>
-   
-  );
+    return (
+      <UserContext.Provider
+        value={{
+          user,
+          setUser,
+          loading,
+          fetchUser,
+          isAuthenticated: !!user,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    )
 };
