@@ -1,0 +1,131 @@
+/* EditRestaurantProfile.css */
+
+/* Main container styling */
+.edit-profile {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .edit-profile h2 {
+    color: #2d3748;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  /* Form styling */
+  .edit-profile form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  /* Input field styling */
+  .edit-profile input,
+  .edit-profile textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
+  }
+  
+  .edit-profile input:focus,
+  .edit-profile textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    background-color: #ffffff;
+  }
+  
+  /* Full width elements */
+  .edit-profile textarea,
+  .edit-profile button {
+    grid-column: 1 / -1;
+  }
+  
+  .edit-profile textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  /* Button styling */
+  .edit-profile button {
+    background-color: #4299e1;
+    color: white;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+  }
+  
+  .edit-profile button:hover {
+    background-color: #3182ce;
+    transform: translateY(-1px);
+  }
+  
+  .edit-profile button:active {
+    transform: translateY(0);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .edit-profile form {
+      grid-template-columns: 1fr;
+    }
+    
+    .edit-profile {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+  }
+  
+  /* Loading state */
+  .loading-message {
+    text-align: center;
+    color: #4a5568;
+    font-size: 1.2rem;
+    padding: 2rem;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #e53e3e;
+    background-color: #fff5f5;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    grid-column: 1 / -1;
+  }
+  
+  /* Success message styling */
+  .success-message {
+    color: #38a169;
+    background-color: #f0fff4;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    grid-column: 1 / -1;
+  }
+  
+  /* Password field note */
+  .password-note {
+    font-size: 0.875rem;
+    color: #718096;
+    margin-top: -0.5rem;
+    grid-column: 1 / -1;
+  }

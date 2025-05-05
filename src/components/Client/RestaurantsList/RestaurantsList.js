@@ -59,12 +59,15 @@ const AllRestaurants = () => {
   return (
     <div>
       <div className="tabs">
-        <button className="tab " onClick={(e) => (window.location.href = "/")}>
+        <button
+          className="tab "
+          onClick={(e) => (window.location.href = "/orderslist")}
+        >
           Your Orders
         </button>
         <button
           className="tab "
-          onClick={(e) => (window.location.href = "/Meals")}
+          onClick={(e) => (window.location.href = "/meals")}
         >
           Meals
         </button>
