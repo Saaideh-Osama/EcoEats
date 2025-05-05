@@ -6,10 +6,11 @@ import { UserContext } from "../../context/UserContext"; // adjust path as neede
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
 import { MdRestaurant } from "react-icons/md";
-
+import MealCard from "./MealCard";
+import MealPopUp from "./MealPopUp";
 const Meals = () => {
   // State and refs for the popup
-  const popupRef = useRef(null);
+
   const [openpopup, setOpenPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [popupLoading, setPopupLoading] = useState(false);
@@ -119,6 +120,7 @@ const Meals = () => {
 
       const meal = response.data.meal;
       const restaurant = restaurants.find((r) => r.id === meal.restaurant_id);
+      
       setPopupContent({
         ...meal,
         restaurant_name: restaurant?.name || "Unknown Restaurant",
@@ -196,11 +198,13 @@ const Meals = () => {
   //place an order function
 
   const handlePlaceOrder = () => {
+    
     placeOrder(orderquantity, popupContent.id);
   };
 
   const placeOrder = async (orderQuantity, popupContentId) => {
     try {
+      console.log("Placing order:", orderQuantity, popupContentId);
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
         {
@@ -213,25 +217,17 @@ const Meals = () => {
       alert(`Order placed successfully! `);
       return response.data;
     } catch (error) {
-      console.error("Failed to place order:", error);
+      if (error.response && error.response.status === 401) {
+        alert("You need to be logged in first to reserve a meal.");
+      } else {
+        console.error("Failed to place order:", error);
+      }
       throw error;
     }
   };
 
   // This effect handles closing the popup when clicking outside of it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        setOpenPopup(false);
-      }
-    };
-    if (openpopup) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openpopup]);
+ 
 
   if (isLoading) {
     return (
@@ -254,7 +250,7 @@ const Meals = () => {
         <div className="tabs">
           <button
             className="tab "
-            onClick={(e) => (window.location.href = "/")}
+            onClick={(e) => (window.location.href = "/clientorders")}
           >
             Your Orders
           </button>
@@ -298,21 +294,12 @@ const Meals = () => {
             <h2 className="section-title">
               All <span id="category_name">{selectedCategory}</span> meals
             </h2>
-            <div className="grid">
+            <div className="grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
-                allMeals.map((meal) => (
-                  <div
-                    key={meal.id}
-                    className="card"
-                    onClick={() => {
-                      setOpenPopup(true);
-                    }}
-                  >
-                    <img src={meal.image} alt={meal.name} />
-                    <h3>{meal.name}</h3>
-                    <p>${meal.price}</p>
-                  </div>
-                ))
+                allMeals.map(meal => (<>
+                  <MealCard key={`all-${meal.id}`}  meal={meal} onClick={(e)=>fetchMealDetails(meal.id)} />
+</>
+                ) )
               ) : (
                 <p>No meals found</p>
               )}
@@ -321,22 +308,13 @@ const Meals = () => {
         )}
 
         <h2 className="section-title">Recommended for you</h2>
-        <div className="grid">
+        <div className="grid" onClick={() => setOpenPopup(true)}> 
           {recommendedMeals.length > 0 ? (
-            recommendedMeals.map((meal) => (
-              <div
-                className="card"
-                key={meal.id}
-                onClick={() => {
-                  setOpenPopup(true);
-                  fetchMealDetails(meal.id);
-                }}
-              >
-                <img src={meal.image} alt={meal.name} />
-                <h3>{meal.name}</h3>
-                <p>JOD{meal.price}</p>
-              </div>
-            ))
+            recommendedMeals.map(meal => (<>
+              <MealCard key={`recommended-${meal.id}`} meal={meal} onClick={(e)=>fetchMealDetails(meal.id)} />
+              
+</>
+            ) )
           ) : (
             <p>No recommended meals found</p>
           )}
@@ -349,20 +327,10 @@ const Meals = () => {
             </h2>
             <div className="grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
-                allMeals.map((meal) => (
-                  <div
-                    key={meal.id}
-                    className="card"
-                    onClick={() => {
-                      setOpenPopup(true);
-                      fetchMealDetails(meal.id);
-                    }}
-                  >
-                    <img src={meal.image} alt={meal.name} />
-                    <h3>{meal.name}</h3>
-                    <p>${meal.price}</p>
-                  </div>
-                ))
+                allMeals.map(meal => (<>
+                  <MealCard key={`all-${meal.id}`}  meal={meal} onClick={(e)=>fetchMealDetails(meal.id)} />
+</>
+                ) )
               ) : (
                 <p>No meals found</p>
               )}
@@ -370,79 +338,24 @@ const Meals = () => {
           </>
         )}
       </div>
-
-      {openpopup && (
-        <div id="popup-overlay">
-          <div id="popup-content" ref={popupRef}>
-            {popupLoading || !popupContent ? (
-              <p>Loading...</p>
-            ) : (
-              <>
-                <div id="image-container">
-                  <img src={popupContent.image} alt={popupContent.name} />
-                </div>
-                <h3 className="meal-title">{popupContent.name}</h3>
-                <div className="restaurant-info">
-                  <MdRestaurant className="restaurant-icon" />
-                  <span> {popupContent.restaurant_name}</span>
-                </div>
-                <hr className="separator" />
-
-                <div className="ingredients-section">
-                  <span className="ingredients-label">ingredient:</span>
-                  <p className="ingredients-text">{popupContent.description}</p>
-                </div>
-                <div className="price-quantity-section">
-                  <div className="quantity-controls">
-                    <span className="quantity-label">quantity:</span>
-                    <button onClick={handleDecrement}>-</button>
-                    <span className="quantity-value">{orderquantity}</span>
-                    <button onClick={handleIncrement}>+</button>
-                  </div>
-                  <div className="price">
-                    {(popupContent.price * orderquantity).toFixed(2)} JOD
-                  </div>
-                </div>
-                <p
-                  style={{
-                    backgroundColor:
-                      popupContent.contains_chicken === 0 &&
-                      popupContent.contains_meat === 0
-                        ? "orange"
-                        : "gray",
-                    padding: "4px 12px",
-                    borderRadius: "6px",
-                    color: "#333",
-                    fontWeight: "bold",
-                    width: "fit-content",
-                    top: " 220px",
-                    right: "24px",
-                    position: "absolute",
-                  }}
-                >
-                  {popupContent.contains_chicken === 0 &&
-                  popupContent.contains_meat === 0
-                    ? "Vegetarian"
-                    : "Contains Meat or Chicken"}
-                </p>
-                <div className="order-btn-container">
-                  <button id="orderBTN" >order</button>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setOpenPopup(false);
-                    setOrderquantity(1);
-                  }}t
-                  id="close-popup"
-                >
-                  <MdOutlineClose />
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {openpopup &&  (
+  <MealPopUp
+    open={openpopup}
+    meal={popupContent}
+    onClose={() => {
+      setOpenPopup(false);
+      setOrderquantity(1);
+    }
+  }
+  orderQuantity={orderquantity}
+  setOrderquantity={setOrderquantity}
+  handleDecrement={handleDecrement}
+  handleIncrement={handleIncrement}
+  handlePlaceOrder={handlePlaceOrder}
+  loading={popupLoading}
+  />
+)}
+   
     </div>
   );
 };

@@ -14,7 +14,7 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    window.location.href = "/login";
+    navigate("/signup", { state: { isLogin: true } })
   };
 
   const renderProfileIcon = () => {
@@ -33,7 +33,8 @@ function Navbar() {
           
           <li><a onClick={() => navigate("/signup", { state: { isLogin: true } })}>Login</a></li>
           
-          {user&& user.role_id === 3 && <li><a href='/createmeal'>createmeal</a></li>}          
+          {user&& user.role_id === 3 && <><li><a href='/createmeal'>createmeal</a></li>
+          <li><a href='/restdash'>Dashboard</a></li></>}          
           {user &&<><li><button onClick={handleLogout}>Logout</button></li>
           <li>
           <a href='/editprofile'>

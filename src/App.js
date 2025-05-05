@@ -13,6 +13,7 @@ import RestaurantsList from "./components/Client/RestaurantsList/RestaurantsList
 import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePageRestaurant";
 import EditUserProfile from "./components/Client/EditProfile/EditUserProfile";
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
+import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
             <Route  path="/client" element={<Meals/>}/>
             <Route path="/editclient" element={<ClientProtectedRoute><EditUserProfile /></ClientProtectedRoute> }/>
             <Route  path="/editrestaurant" element={ <RestaurantProtectedRoute><EditRestaurantProfile/></RestaurantProtectedRoute>}/>
+            <Route  path="/restdash" element={ <RestaurantProtectedRoute><RestaurantDashboard/></RestaurantProtectedRoute>}/>
+          
           </Routes>
           
       </BrowserRouter>
