@@ -14,6 +14,7 @@ import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePage
 import EditClientProfile from "./components/Client/EditProfile/EditClientProfile";
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
+import OrdersList from "./components/Client/Orders/OrdersList";
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
@@ -42,6 +43,14 @@ function App() {
           element={
             <ClientProtectedRoute>
               <EditClientProfile />
+            </ClientProtectedRoute>
+          }
+        />
+        <Route
+          path="/orderslist"
+          element={
+            <ClientProtectedRoute>
+              <OrdersList />
             </ClientProtectedRoute>
           }
         />

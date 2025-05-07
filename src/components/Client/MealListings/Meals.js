@@ -248,7 +248,7 @@ const Meals = () => {
         <div className="tabs">
           <button
             className="tab "
-            onClick={(e) => (window.location.href = "/clientorders")}
+            onClick={(e) => (window.location.href = "/orderslist")}
           >
             Your Orders
           </button>
