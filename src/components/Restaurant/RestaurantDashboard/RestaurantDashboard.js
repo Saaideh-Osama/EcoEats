@@ -13,12 +13,23 @@ const RestaurantDashboard = () => {
 
   const handleDelete = async (mealId) => {
     try {
-      await axios.delete(`YOUR_API_URL/meals/${mealId}`);
+      const token = localStorage.getItem("authToken");
+      await axios.post(
+        `https://4399-91-186-255-241.ngrok-free.app/api/delete-meal/${mealId}`,
+        {}, // <- POST body is empty
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
       setMeals((prevMeals) => prevMeals.filter((meal) => meal.id !== mealId));
     } catch (err) {
       console.error("Failed to delete meal", err);
     }
   };
+  
 
   const fetchMeals = async () => {
     try {
@@ -187,6 +198,7 @@ const RestaurantDashboard = () => {
         .filter((meal) => meal.available_count > 0)
         .map((meal) => (
           <div key={meal.id} className="meal-with-delete">
+            
             <MealCard meal={meal} onClick={() => console.log("View or edit", meal.id)} />
             <button onClick={() => handleDelete(meal.id)}>Delete</button>
           </div>

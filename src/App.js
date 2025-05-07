@@ -14,6 +14,7 @@ import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePage
 import EditClientProfile from "./components/Client/EditProfile/EditClientProfile";
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
+import AdminDashboard from "./components/Admin/AdminDashboard";
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
@@ -23,44 +24,16 @@ function App() {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/meals" element={<Meals />} />
-        <Route
-          path="/createmeal"
-          element={
-            <RestaurantProtectedRoute>
-              {" "}
-              <CreateMeal />
-            </RestaurantProtectedRoute>
-          }
-        />
+        <Route path="/createmeal" element={<RestaurantProtectedRoute><CreateMeal /> </RestaurantProtectedRoute>}/>
         <Route path="/signup" element={<AuthForm />} />
         <Route path="/resignup" element={<RestaurantSignup />} />
         <Route path="/restaurantslist" element={<RestaurantsList />} />
         <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
         <Route path="/client" element={<Meals />} />
-        <Route
-          path="/editclient"
-          element={
-            <ClientProtectedRoute>
-              <EditClientProfile />
-            </ClientProtectedRoute>
-          }
-        />
-        <Route
-          path="/editrestaurant"
-          element={
-            <RestaurantProtectedRoute>
-              <EditRestaurantProfile />
-            </RestaurantProtectedRoute>
-          }
-        />
-        <Route
-          path="/restdash"
-          element={
-            <RestaurantProtectedRoute>
-              <RestaurantDashboard />
-            </RestaurantProtectedRoute>
-          }
-        />
+        <Route path="/editclient" element={<ClientProtectedRoute> <EditClientProfile />  </ClientProtectedRoute>}  />
+      <Route path="/editrestaurant" element={<RestaurantProtectedRoute><EditRestaurantProfile /></RestaurantProtectedRoute>}/>
+        <Route path="/restdash" element={<RestaurantProtectedRoute><RestaurantDashboard /></RestaurantProtectedRoute>}  />
+        <Route path="/admin" element={<AdminDashboard />}/> 
       </Routes>
     </BrowserRouter>
   );
