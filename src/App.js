@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import GuestProtectedRoute from "./components/protectedRoute/GuestProtectedRoute";
 import ClientProtectedRoute from "./components/protectedRoute/ClientProtectedRoute";
@@ -15,26 +15,37 @@ import EditClientProfile from "./components/Client/EditProfile/EditClientProfile
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
 import AdminDashboard from "./components/Admin/AdminDashboard";
-// <Route  path="/createmeal" element={<CreateMeal/>}/>
 
-function App() {
+// Wrapper to use useLocation hook
+const AppWrapper = () => {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Navbar />
+    <>
+      {/* Conditionally render Navbar based on the current route */}
+      {location.pathname !== "/admin" && <Navbar />}
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/meals" element={<Meals />} />
-        <Route path="/createmeal" element={<RestaurantProtectedRoute><CreateMeal /> </RestaurantProtectedRoute>}/>
+        <Route path="/createmeal" element={<CreateMeal />} />
         <Route path="/signup" element={<AuthForm />} />
         <Route path="/resignup" element={<RestaurantSignup />} />
         <Route path="/restaurantslist" element={<RestaurantsList />} />
         <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
         <Route path="/client" element={<Meals />} />
-        <Route path="/editclient" element={<ClientProtectedRoute> <EditClientProfile />  </ClientProtectedRoute>}  />
-      <Route path="/editrestaurant" element={<RestaurantProtectedRoute><EditRestaurantProfile /></RestaurantProtectedRoute>}/>
-        <Route path="/restdash" element={<RestaurantProtectedRoute><RestaurantDashboard /></RestaurantProtectedRoute>}  />
-        <Route path="/admin" element={<AdminDashboard />}/> 
+        <Route path="/editclient" element={<EditClientProfile />} />
+        <Route path="/editrestaurant" element={<EditRestaurantProfile />} />
+        <Route path="/restdash" element={<RestaurantDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
+    </>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppWrapper />
     </BrowserRouter>
   );
 }

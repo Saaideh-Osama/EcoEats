@@ -74,8 +74,8 @@ const handleLogin = async (e) => {
       console.log("Login Successful", response.data);
       alert("Login successful!");
       localStorage.setItem("authToken", response.data.token);
-      console.log("before refreshUser");
-       
+      
+      
       if (response.data.role_id === 2) {
         window.location.href = "/meals"; // Redirect to client page
       }
