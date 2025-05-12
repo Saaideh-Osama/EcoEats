@@ -28,24 +28,24 @@ function Home() {
   return (
     <div id="home-page">
       <div className="vid-overlay-content">
-        <img src={img} className="logo"></img>
+        <img src={img} className="home_logo"></img>
 
-        <div className="bar">
-          <button className=" link active">our impact</button>
+        <div className="home_bar">
+          <button className=" home_link home_active">our impact</button>
           <button
-            className="link"
+            className="home_link"
             onClick={(e) => (window.location.href = "res_home")}
           >
             for restaurants
           </button>
         </div>
-        <div className="actions">
-          <button className="logout-btn" onClick={handleLogout}>
+        <div className="home_actions">
+          <button className="home_logout_btn" onClick={handleLogout}>
             Logout
           </button>
           {!user && (
             <button
-              className="login-btn"
+              className="home_login_btn"
               onClick={() => navigate("/signup", { state: { isLogin: true } })}
             >
               Login
@@ -58,9 +58,9 @@ function Home() {
         <source src={video} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="landing-container">
+      <div className="home_landing_container">
         {/* Left Column - Text Content */}
-        <div className="left-content">
+        <div className="home_left_content">
           <div id="planet">
             <p>SAVE MONEY, FOOD,</p>
             <p>
@@ -68,7 +68,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="description">
+          <div className="home_description">
             <p>
               At ecoBites, our mission is to make great food more accessible by
               offering it at half the price or less, rescuing surplus food
@@ -83,8 +83,8 @@ function Home() {
         </div>
 
         {/* Right Column - Image and Button */}
-        <div className="right-content">
-          <img src={off} alt="50% OFF" className="promo-img" />
+        <div className="home_right_content">
+          <img src={off} alt="50% OFF" className="home_promo_img" />
           <button
             onClick={() => navigate("/signup", { state: { isSignup: true } })}
             id="client-button"
@@ -93,71 +93,71 @@ function Home() {
           </button>
         </div>
       </div>
-      <div className="steps">
+      <div className="home_steps">
         <h2>
           Easy as <span>1,2,3</span>
         </h2>
-        <div className="steps-grid">
-          <div className="step">
+        <div className="home_steps_grid">
+          <div className="home_step">
             <img src={res} />
             <p>browse the meals</p>
           </div>
-          <div className="step">
+          <div className="home_step">
             <img src={meal} alt="Step 2" />
             <p>Choose Your favorite meal</p>
           </div>
-          <div className="step">
+          <div className="home_step">
             <img src={order} alt="Step 3" />
             <p>Pick up your order</p>
           </div>
         </div>
       </div>
-      <div className="feedback">
+      <div className="home_feedback">
         <h1>said about us!</h1>
-        <div className="card-slider">
-          <div className="card">
+        <div className="home_card_slider">
+          <div className="home_card">
             <p>
               " never thought I could find affordable meals that are also
               helping reduce food waste. This app changed the way I eat and
               think about leftovers."<span>, University Student</span>{" "}
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "I love how easy it is to find vegetarian-friendly meals. The app
               even prioritizes them for me—it’s thoughtful and practical!"
               <span>– Lina, Vegetarian User</span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "Sometimes I find meals from my favorite places for half the
               price. It’s like a hidden gem every time!"
               <span>– Khaled, Foodie </span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "Being a single mom on a tight budget, this app has been a
               blessing. Healthy meals without breaking the bank."
               <span>– Noor, Mother of Two</span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "This app helped me save money and discover meals I wouldn’t have
               tried otherwise."
               <span>– Omar, Recent Graduate</span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "As a busy mom, I appreciate the convenience and knowing I’m
               reducing waste."
               <span>– Dalia,</span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "Being a single mom on a tight budget, this app has been a
               blessing. Healthy meals without breaking the bank."
@@ -166,11 +166,11 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="cards-section">
-        <div class="container">
-          <div class="last_card">
+      <div className="home_cards_section">
+        <div class="home_container">
+          <div class="home_last_card">
             <img src={food} alt="" />
-            <div class="btncontent">
+            <div class="home_btncontent">
               <h3>order food</h3>
               <p>delicious meals in affordable price </p>
               <button onClick={(e) => (window.location.href = "/meals")}>
@@ -179,9 +179,9 @@ function Home() {
             </div>
           </div>
 
-          <div class="last_card">
+          <div class="home_last_card">
             <img src={veg} alt="" />
-            <div class="btncontent">
+            <div class="home_btncontent">
               <h3>vegan food </h3>
               <p>huge collection of the best vegan restaurants </p>
               <button

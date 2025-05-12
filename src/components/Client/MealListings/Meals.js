@@ -253,7 +253,7 @@ const Meals = () => {
 
   if (isLoading) {
     return (
-      <div className="loading">
+      <div className="meals_loading">
         {" "}
         <RotatingLines
           strokeColor="grey"
@@ -268,20 +268,20 @@ const Meals = () => {
 
   return (
     <div>
-      <div className={`container ${openpopup ? "blurred" : ""}`}>
+      <div className={`meals_container ${openpopup ? "meals_blurred" : ""}`}>
         {/* Centered Tabs */}
-        <div className="tabs-container">
-          <div className="tabs">
+        <div className="meals_container">
+          <div className="meals_tabs">
             <button
-              className="tab"
+              className="meals_tab"
               onClick={(e) => (window.location.href = "/orderslist")}
             >
               Your Orders
             </button>
-            <button className="tab active">Meals</button>
+            <button className="meals_tab_active">Meals</button>
             <button
-              className="tab"
-              onClick={(e) => (window.location.href = "/shawarmalist")}
+              className="meals_tab"
+              onClick={(e) => (window.location.href = "/restaurantslist")}
             >
               Restaurant
             </button>
@@ -289,14 +289,14 @@ const Meals = () => {
         </div>
 
         {/* Horizontal Categories */}
-        <div className="categories-container">
-          <div className="category-grid">
+        <div className="meals_categories_container">
+          <div className="meals_category_grid">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`category-button ${
-                  selectedCategory === category.id ? "active" : ""
+                className={`meals_category_button ${
+                  selectedCategory === category.id ? "cat_active" : ""
                 }`}
               >
                 <img src={category.icon} alt={category.name} />
@@ -307,18 +307,18 @@ const Meals = () => {
         </div>
 
         {/* Centered Promo Image */}
-        <div className="promo-container">
-          <div className="promo-img">
-            <img src={offer} alt="Special offer" />
+        <div className="meals_promo_container">
+          <div className="meals_promo_img">
+            <img src={offer} alt="meals_Special_offer" />
           </div>
         </div>
 
         {selectedCategory && (
           <>
-            <h2 className="section-title">
-              All <span id="category_name">{selectedCategory}</span> meals
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">{selectedCategory}</span> meals
             </h2>
-            <div className="grid" onClick={() => setOpenPopup(true)}>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
                 allMeals.map((meal) => (
                   <>
@@ -336,8 +336,8 @@ const Meals = () => {
           </>
         )}
 
-        <h2 className="section-title">Recommended for you</h2>
-        <div className="grid" onClick={() => setOpenPopup(true)}>
+        <h2 className="meals_section_title">Recommended for you</h2>
+        <div className="meals_grid" onClick={() => setOpenPopup(true)}>
           {recommendedMeals.length > 0 ? (
             recommendedMeals.map((meal) => (
               <>
@@ -355,10 +355,10 @@ const Meals = () => {
 
         {!selectedCategory && (
           <>
-            <h2 className="section-title">
-              All <span id="category_name">meals</span>
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">meals</span>
             </h2>
-            <div className="grid" onClick={() => setOpenPopup(true)}>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
                 allMeals.map((meal) => (
                   <>

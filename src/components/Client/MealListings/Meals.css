@@ -1,23 +1,23 @@
 
-.container {
+.meals_container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
 
-.tabs-container {
+.meals_tabs-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-.tabs {
+.meals_tabs {
   display: flex;
   gap: 24px;
 }
 
-.tab {
+.meals_tab {
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 500;
@@ -29,28 +29,28 @@
   color: #333;
 }
 
-.tab.active {
+.meals_tab.active {
   border-bottom: 2px solid orange;
   font-weight: 600;
   color: #000;
 }
 
 
-.categories-container {
+.meals_categories_container {
   width: 100%;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
 }
 
-.category-grid {
+.meals_category_grid {
   display: flex;
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-.category-button {
+.meals_category_button {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,40 +64,41 @@
   transition: all 0.3s ease;
 }
 
-.category-button:hover {
+.meals_category_button:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transform: translateY(-2px);
 }
 
-.category-button.active {
+.meals_category_button.cat_active {
   border-color: orange;
 }
 
-.category-button img {
+.meals_category_button img {
   width: 40px;
   height: 40px;
   margin-bottom: 8px;
 }
 
-.category-button span {
+.meals_category_button span {
   font-size: 14px;
   text-align: center;
 }
 
 
-.promo-container {
+.meals_promo_container {
   display: flex;
   justify-content: center;
   margin-bottom: 40px;
 }
 
-.promo-img {
+.meals_promo_img {
   width: 100%;
   max-width: 800px;
 }
 
-.promo-img img {
+.meals_promo_img img {
   width: 100%;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+

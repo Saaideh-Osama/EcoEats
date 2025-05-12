@@ -24,24 +24,24 @@ function ResHome() {
   return (
     <>
       <div className="vid-overlay-content">
-        <img src={logo} className="logo"></img>
+        <img src={logo} className="home_logo"></img>
 
-        <div className="bar">
+        <div className="home_bar">
           <button
-            className=" link "
+            className=" home_link "
             onClick={(e) => (window.location.href = "/")}
           >
             our impact{" "}
           </button>
-          <button className="link active">for restaurants</button>
+          <button className="home_link home_active">for restaurants</button>
         </div>
-        <div className="actions">
-          <button className="logout-btn" onClick={handleLogout}>
+        <div className="home_actions">
+          <button className="home_logout_btn" onClick={handleLogout}>
             Logout
           </button>
           {!user && (
             <button
-              className="login-btn"
+              className="home_login_btn"
               onClick={() => navigate("/signup", { state: { isLogin: true } })}
             >
               Login
@@ -98,10 +98,10 @@ function ResHome() {
         </div>
       </div>
 
-      <div className="feedback">
+      <div className="home_feedback">
         <h1>most requested </h1>
-        <div className="card-slider">
-          <div className="card">
+        <div className="home_card_slider">
+          <div className="home_card">
             <p>
               "Do I need to handle delivery?"
               <span>
@@ -110,7 +110,8 @@ function ResHome() {
               </span>{" "}
             </p>
           </div>
-          <div className="card">
+
+          <div className="home_card">
             <p>
               "How is this different from food donation?",
               <span>
@@ -120,7 +121,7 @@ function ResHome() {
               </span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "What happens when someone reserves a meal?"
               <span>
@@ -131,7 +132,7 @@ function ResHome() {
             </p>
           </div>
 
-          <div className="card">
+          <div className="home_card">
             <p>
               "What happens when a meal runs out?"
               <span>
@@ -140,7 +141,7 @@ function ResHome() {
               </span>
             </p>
           </div>
-          <div className="card">
+          <div className="home_card">
             <p>
               "Can I delete a meal?",
               <span>– sure!</span>
