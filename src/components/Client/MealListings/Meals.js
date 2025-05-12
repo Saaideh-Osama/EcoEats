@@ -8,6 +8,15 @@ import { RotatingLines } from "react-loader-spinner";
 
 import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
+import pizza from "../../../assets/images/pizza.png";
+import beef from "../../../assets/images/beef.png";
+import chk from "../../../assets/images/chk.png";
+import pasta from "../../../assets/images/pasta.png";
+
+import shaw from "../../../assets/images/shaw.png";
+import salad from "../../../assets/images/salad.png";
+import offer from "../../../assets/images/add.jpg";
+
 const Meals = () => {
   // State and refs for the popup
 
@@ -26,6 +35,21 @@ const Meals = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [orderquantity, setOrderquantity] = useState(1); // let's say minimum is 1
   const [restaurants, setRestaurants] = useState([]);
+
+  // Add this near the top of your component, right after the imports and before the Meals function
+  const categories = [
+    {
+      id: null,
+      name: "All",
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png",
+    },
+    { id: "shawarma", name: "shawarma", icon: shaw },
+    { id: "burger", name: "burger", icon: beef },
+    { id: "Chicken Sandwich", name: "Chicken Sandwich", icon: chk },
+    { id: "salad", name: "salad", icon: salad },
+    { id: "pasta", name: "pasta", icon: pasta },
+    { id: "pizza", name: "pizza", icon: pizza },
+  ];
 
   // order quantity handlers
   const handleDecrement = () => {
@@ -173,7 +197,7 @@ const Meals = () => {
   // USE EFFECTS
   // ----------------------------
 
-  // Initial fetch: restaurants and set isVegetarian if user exists
+  // Initial fetch: shawarma and set isVegetarian if user exists
   useEffect(() => {
     fetchRestaurants();
     if (user) {
@@ -229,7 +253,7 @@ const Meals = () => {
 
   if (isLoading) {
     return (
-      <div className="loading">
+      <div className="meals_loading">
         {" "}
         <RotatingLines
           strokeColor="grey"
@@ -244,55 +268,57 @@ const Meals = () => {
 
   return (
     <div>
-      <div className={`container ${openpopup ? "blurred" : ""}`}>
-        <div className="tabs">
-          <button
-            className="tab "
-            onClick={(e) => (window.location.href = "/clientorders")}
-          >
-            Your Orders
-          </button>
-
-          <button className="tab active">Meals</button>
-          <button
-            className="tab"
-            onClick={(e) => (window.location.href = "/restaurantslist")}
-          >
-            Restaurant
-          </button>
+      <div className={`meals_container ${openpopup ? "meals_blurred" : ""}`}>
+        {/* Centered Tabs */}
+        <div className="meals_container">
+          <div className="meals_tabs">
+            <button
+              className="meals_tab"
+              onClick={(e) => (window.location.href = "/orderslist")}
+            >
+              Your Orders
+            </button>
+            <button className="meals_tab_active">Meals</button>
+            <button
+              className="meals_tab"
+              onClick={(e) => (window.location.href = "/restaurantslist")}
+            >
+              Restaurant
+            </button>
+          </div>
         </div>
 
-        <div className="buttons">
-          <button
-            className={!selectedCategory ? "btn active" : "btn"}
-            onClick={() => setSelectedCategory(null)}
-          >
-            All
-          </button>
-          {[
-            "shawarma",
-            "burger",
-            "pasta",
-            "salad",
-            "pizza",
-            "chicken-sandwich",
-          ].map((category) => (
-            <button
-              key={category}
-              className={selectedCategory === category ? "btn active" : "btn"}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
+        {/* Horizontal Categories */}
+        <div className="meals_categories_container">
+          <div className="meals_category_grid">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`meals_category_button ${
+                  selectedCategory === category.id ? "cat_active" : ""
+                }`}
+              >
+                <img src={category.icon} alt={category.name} />
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Centered Promo Image */}
+        <div className="meals_promo_container">
+          <div className="meals_promo_img">
+            <img src={offer} alt="meals_Special_offer" />
+          </div>
         </div>
 
         {selectedCategory && (
           <>
-            <h2 className="section-title">
-              All <span id="category_name">{selectedCategory}</span> meals
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">{selectedCategory}</span> meals
             </h2>
-            <div className="grid" onClick={() => setOpenPopup(true)}>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
                 allMeals.map((meal) => (
                   <>
@@ -310,8 +336,8 @@ const Meals = () => {
           </>
         )}
 
-        <h2 className="section-title">Recommended for you</h2>
-        <div className="grid" onClick={() => setOpenPopup(true)}>
+        <h2 className="meals_section_title">Recommended for you</h2>
+        <div className="meals_grid" onClick={() => setOpenPopup(true)}>
           {recommendedMeals.length > 0 ? (
             recommendedMeals.map((meal) => (
               <>
@@ -329,10 +355,10 @@ const Meals = () => {
 
         {!selectedCategory && (
           <>
-            <h2 className="section-title">
-              All <span id="category_name">meals</span>
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">meals</span>
             </h2>
-            <div className="grid" onClick={() => setOpenPopup(true)}>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
               {allMeals.length > 0 ? (
                 allMeals.map((meal) => (
                   <>

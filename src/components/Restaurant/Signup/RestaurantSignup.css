@@ -205,9 +205,9 @@
   .button-container {
     grid-column: 1 / -1;
     display: flex;
-    justify-content: center; /* محاذاة الأزرار في المنتصف */
-    align-items: center; /* محاذاة العناصر رأسياً */
-    gap: 15px;  /* المسافة بين الأزرار */
+    justify-content: center; 
+    align-items: center; 
+    gap: 15px;  
   }
   
   .login-link {

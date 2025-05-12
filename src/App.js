@@ -15,6 +15,7 @@ import EditClientProfile from "./components/Client/EditProfile/EditClientProfile
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
 import AdminDashboard from "./components/Admin/AdminDashboard";
+import ResHome from "./components/Home/ResHome";
 
 // Wrapper to use useLocation hook
 const AppWrapper = () => {
@@ -26,6 +27,8 @@ const AppWrapper = () => {
       {location.pathname !== "/admin" && <Navbar />}
       <Routes>
         <Route index path="/" element={<Home />} />
+        <Route index path="res_home" element={<ResHome />} />
+
         <Route path="/meals" element={<Meals />} />
         <Route path="/createmeal" element={<CreateMeal />} />
         <Route path="/signup" element={<AuthForm />} />

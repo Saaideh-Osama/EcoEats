@@ -1,5 +1,6 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { MdOutlineClose, MdRestaurant } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const MealPopup = ({
   open,
@@ -12,16 +13,13 @@ const MealPopup = ({
   handlePlaceOrder,
   loading,
 }) => {
-  
-
-  
- 
+  const navigate = useNavigate();
 
   if (!open) return null;
 
   return (
-    <div id="popup-overlay" >
-      <div id="popup-content"  >
+    <div id="popup-overlay">
+      <div id="popup-content">
         {loading || !meal ? (
           <p>Loading...</p>
         ) : (
@@ -42,13 +40,27 @@ const MealPopup = ({
             <div className="price-quantity-section">
               <div className="quantity-controls">
                 <span className="quantity-label">Quantity:</span>
-                <button onClick={(e)=>{ e.stopPropagation(); handleDecrement();}}>-</button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDecrement();
+                  }}
+                >
+                  -
+                </button>
                 <span className="quantity-value">{orderQuantity}</span>
-                <button onClick={(e) => { e.stopPropagation(); handleIncrement(); }}>+</button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleIncrement();
+                  }}
+                >
+                  +
+                </button>
               </div>
               <div className="price">
-                    {(meal.price * orderQuantity).toFixed(2)} JOD
-                  </div>
+                {(meal.price * orderQuantity).toFixed(2)} JOD           
+              </div>
             </div>
             <p
               style={{
@@ -71,11 +83,22 @@ const MealPopup = ({
                 : "Contains Meat or Chicken"}
             </p>
             <div className="order-btn-container">
-            <button id="orderBTN" onClick={(e) => { 
-              console.log("Order button clicked"); handlePlaceOrder();e.stopPropagation();  // Optional, only if overlay logic interferes
-    }}>
-  Order
-</button>
+              <button
+                id="orderBTN"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  console.log("Order button clicked");
+
+                  try {
+                    await handlePlaceOrder(); // Wait for successful order
+                    navigate("/orderslist"); // Navigate after success
+                  } catch (error) {
+                    console.error("Order failed:", error);
+                  }
+                }}
+              >
+                Order
+              </button>
             </div>
             <button onClick={onClose} id="close-popup">
               <MdOutlineClose />
