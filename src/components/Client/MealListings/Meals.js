@@ -3,7 +3,7 @@ import axios from "axios";
 
 import "./Meals.css"; // adjust path as needed
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
-
+import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
 
 import MealCard from "./MealCard";
@@ -268,7 +268,7 @@ const Meals = () => {
 
   return (
     <div>
-      <div className={`meals_container ${openpopup ? "meals_blurred" : ""}`}>
+      <div className={`container ${openpopup ? "blurred" : ""}`}>
         {/* Centered Tabs */}
         <div className="meals_container">
           <div className="meals_tabs">
@@ -278,7 +278,7 @@ const Meals = () => {
             >
               Your Orders
             </button>
-            <button className="meals_tab_active">Meals</button>
+            <button className="meals_tab meals_active">Meals</button>
             <button
               className="meals_tab"
               onClick={(e) => (window.location.href = "/restaurantslist")}
@@ -376,7 +376,10 @@ const Meals = () => {
           </>
         )}
       </div>
-      {openpopup && (
+      {openpopup && (<>
+        
+           
+        
         <MealPopUp
           open={openpopup}
           meal={popupContent}
@@ -391,7 +394,7 @@ const Meals = () => {
           handlePlaceOrder={handlePlaceOrder}
           loading={popupLoading}
         />
-      )}
+      </>)}
     </div>
   );
 };

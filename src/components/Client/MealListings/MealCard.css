@@ -7,5 +7,6 @@
     transition: transform 0.3s;
     cursor: pointer;
     max-width: 300px; 
-    height: 300px;
+    height: fit-content;
+    
 }

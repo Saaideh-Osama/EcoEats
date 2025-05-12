@@ -1,81 +1,12 @@
 .orders-wrapper {
-<<<<<<< HEAD
     padding: 20px;
     font-family: sans-serif;
     background-color: #f3f2f7;
-=======
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #2c3e50;
-}
-
-h2 {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 0.5rem;
-}
-
-.orders-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.all-meals-container {
-  margin-top: 3rem;
-}
-
-.sold-out-meals,
-.available-meals {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.meal-with-delete {
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  padding: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.meal-with-delete:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-}
-
-.meal-with-delete button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #e74c3c;
-  color: white;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.meal-with-delete button:hover {
-  background-color: #c0392b;
-}
-
-@media (max-width: 768px) {
-  .orders-wrapper {
-    padding: 1rem;
->>>>>>> 867b020abd46fa437db336bc0ea057ce35a56b88
   }
 
   h2 {
     font-size: 1.5rem;
   }
-<<<<<<< HEAD
   
   .orders-grid {
     display: flex;
@@ -120,6 +51,3 @@ align-items: center;
 row-gap: 7vw;
 column-gap: 3vw;
   }
-=======
-}
->>>>>>> 867b020abd46fa437db336bc0ea057ce35a56b88

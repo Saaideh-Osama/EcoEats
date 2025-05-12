@@ -4,12 +4,7 @@ import Order from "./Order";
 import ConfirmModal from "../../Alerts/ConfirmModal";
 import AlertModal from "../../Alerts/AlertModal";
 import "./RestaurantDashboard.css";
-<<<<<<< HEAD
 import Meal from "./Meal";
-=======
-import SoldOutMeal from "./SoldOutMeal";
-import MealCard from "../../Client/MealListings/MealCard";
->>>>>>> 867b020abd46fa437db336bc0ea057ce35a56b88
 
 const RestaurantDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -24,7 +19,6 @@ const [selectedMeal, setSelectedMeal] = useState(null);
 
   const [loadingMeals, setLoadingMeals] = useState(true);
 
-<<<<<<< HEAD
 
   const confirmDelete = (meal) => {
   setSelectedMeal(meal);
@@ -34,26 +28,6 @@ const [selectedMeal, setSelectedMeal] = useState(null);
 };
 
   
-=======
-  const handleDelete = async (mealId) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.post(
-        `https://4399-91-186-255-241.ngrok-free.app/api/delete-meal/${mealId}`,
-        {}, // <- POST body is empty
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-      setMeals((prevMeals) => prevMeals.filter((meal) => meal.id !== mealId));
-    } catch (err) {
-      console.error("Failed to delete meal", err);
-    }
-  };
->>>>>>> 867b020abd46fa437db336bc0ea057ce35a56b88
 
   const fetchMeals = async () => {
     try {
@@ -224,7 +198,6 @@ const handleConfirmAction = async () => {
         ))}
       </div>
       <div>
-<<<<<<< HEAD
      
       {loadingMeals ? (
   <p>Loading meals...</p>
@@ -280,49 +253,6 @@ const handleConfirmAction = async () => {
   />
 )}
 
-=======
-        <h2>Meals with Zero Quantity</h2>
-        {loadingMeals ? (
-          <p>Loading meals...</p>
-        ) : meals.length === 0 ? (
-          <p>No meals available.</p>
-        ) : (
-          <div className="all-meals-container">
-            {/* Section for Sold Out Meals */}
-            <h2>Sold Out Meals</h2>
-            <div className="sold-out-meals">
-              {meals
-                .filter((meal) => meal.available_count === 0)
-                .map((meal) => (
-                  <SoldOutMeal
-                    key={meal.id}
-                    meal={meal}
-                    onQuantityUpdate={updateMealQuantity}
-                  />
-                ))}
-            </div>
-
-            {/* Section for Available Meals */}
-            <h2>Available Meals</h2>
-            <div className="available-meals">
-              {meals
-                .filter((meal) => meal.available_count > 0)
-                .map((meal) => (
-                  <div key={meal.id} className="meal-with-delete">
-                    <MealCard
-                      meal={meal}
-                      onClick={() => console.log("View or edit", meal.id)}
-                    />
-                    <button onClick={() => handleDelete(meal.id)}>
-                      Delete
-                    </button>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-      </div>
->>>>>>> 867b020abd46fa437db336bc0ea057ce35a56b88
     </div>
     
   );

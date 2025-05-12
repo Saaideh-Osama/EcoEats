@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RestaurantsList.css";
 import { RotatingLines } from "react-loader-spinner";
-import Meals from "../MealListings/Meals";
 
 // Import the CSS file for styling
 import RestaurantCard from "./RestaurantCard"; // Import the RestaurantCard component
