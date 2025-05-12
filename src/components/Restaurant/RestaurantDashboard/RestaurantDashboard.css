@@ -1,6 +1,7 @@
 .orders-wrapper {
     padding: 20px;
     font-family: sans-serif;
+    background-color: #f3f2f7;
   }
   
   .orders-wrapper h2 {
@@ -31,3 +32,22 @@
     font-size: 14px;
   }
   
+  #all-meals-container{
+    margin-top: 5vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   row-gap: 7vw;
+    background-color: #f3f2f7;
+  }
+  #available-meals, #sold-out-meals{
+    width: 100%;
+display: flex;
+flex-wrap: wrap;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+row-gap: 7vw;
+column-gap: 3vw;
+  }

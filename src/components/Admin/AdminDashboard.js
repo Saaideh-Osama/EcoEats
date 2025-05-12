@@ -73,7 +73,7 @@ const AdminDashboard = () => {
       await axios.post(`${API_BASE}/admin/approve-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant approved.")
+      setAlertMessage("Restaurant approved Successfully.")
     }, "restaurant", restaurant);
   };
 
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
       await axios.post(`${API_BASE}/admin/unapprove-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant approved.")
+      setAlertMessage("Restaurant Unapproved Successfully.")
     }, "restaurant", restaurant);
   };
 
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
       await axios.post(`${API_BASE}/delete-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant approved.")
+      setAlertMessage("Restaurant deleted Successfully.")
     }, "restaurant", restaurant);
   };
 
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
     confirmAction(async () => {
       await axios.post(`${API_BASE}/delete-client/${id}`, {}, axiosConfig);
       await fetchClients();
-      setAlertMessage("Restaurant approved.")
+      setAlertMessage("Client deleted Successfully.")
     }, "client", client);
   };
 
@@ -223,7 +223,7 @@ const AdminDashboard = () => {
     } "${modalData.item.name}" (ID: ${modalData.item.id})?`}
     onConfirm={handleModalConfirm}
     onCancel={handleModalCancel}
-  />
+  /> 
 )}
 
 {alertMessage && (

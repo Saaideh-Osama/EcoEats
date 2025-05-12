@@ -1,34 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Order from "./Order";
+import ConfirmModal from "../../Alerts/ConfirmModal";
+import AlertModal from "../../Alerts/AlertModal";
 import "./RestaurantDashboard.css";
-import SoldOutMeal from "./SoldOutMeal";
-import MealCard from "../../Client/MealListings/MealCard";
+import Meal from "./Meal";
+
 const RestaurantDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [meals, setMeals] = useState([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+const [showAlertModal, setShowAlertModal] = useState(false);
+const [alertMessage, setAlertMessage] = useState("");
+const [confirmMessage, setConfirmMessage] = useState("");
+const [actionType, setActionType] = useState(null);
+const [selectedMeal, setSelectedMeal] = useState(null);
+
   const [loadingMeals, setLoadingMeals] = useState(true);
 
 
-  const handleDelete = async (mealId) => {
-    try {
-      const token = localStorage.getItem("authToken");
-      await axios.post(
-        `https://4399-91-186-255-241.ngrok-free.app/api/delete-meal/${mealId}`,
-        {}, // <- POST body is empty
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-      setMeals((prevMeals) => prevMeals.filter((meal) => meal.id !== mealId));
-    } catch (err) {
-      console.error("Failed to delete meal", err);
-    }
-  };
+  const confirmDelete = (meal) => {
+  setSelectedMeal(meal);
+  setConfirmMessage(`Are you sure you want to delete meal "${meal.name}" (ID: ${meal.id})?`);
+  setActionType("delete");
+  setShowConfirmModal(true);
+};
+
   
 
   const fetchMeals = async () => {
@@ -53,12 +51,21 @@ const RestaurantDashboard = () => {
     }
   };
 
-  const updateMealQuantity = async (mealId, newQuantity) => {
-    try {
-      const token = localStorage.getItem("authToken");
+ const confirmUpdate = (meal, newQuantity) => {
+  setSelectedMeal({ ...meal, newQuantity });
+  setConfirmMessage(`Confirm updating "${meal.name}" (ID: ${meal.id}) to quantity ${newQuantity}?`);
+  setActionType("update");
+  setShowConfirmModal(true);
+};
+const handleConfirmAction = async () => {
+  if (!selectedMeal) return;
 
-      const response = await axios.post(
-        `https://4399-91-186-255-241.ngrok-free.app/api/updateMealQuantity/${mealId}/${newQuantity}`,
+  try {
+    const token = localStorage.getItem("authToken");
+
+    if (actionType === "delete") {
+      await axios.post(
+        `https://4399-91-186-255-241.ngrok-free.app/api/delete-meal/${selectedMeal.id}`,
         {},
         {
           headers: {
@@ -67,22 +74,43 @@ const RestaurantDashboard = () => {
           },
         }
       );
-
-      // Update the meal in local state
+      setMeals((prev) => prev.filter((meal) => meal.id !== selectedMeal.id));
+      setAlertMessage(`Meal "${selectedMeal.name}" (ID: ${selectedMeal.id}) was deleted successfully.`);
+    } else if (actionType === "update") {
+      const { id, newQuantity } = selectedMeal;
+      const response = await axios.post(
+        `https://4399-91-186-255-241.ngrok-free.app/api/updateMealQuantity/${id}/${newQuantity}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
       const updatedMeal = response.data.meal;
       setMeals((prev) =>
         prev.map((meal) => (meal.id === updatedMeal.id ? updatedMeal : meal))
       );
-    } catch (err) {
-      console.error("Error updating meal quantity:", err);
+      setAlertMessage(`Meal "${updatedMeal.name}" (ID: ${updatedMeal.id}) updated to quantity ${updatedMeal.available_count}.`);
     }
-  };
+  } catch (err) {
+    console.error("Error executing action:", err);
+    setAlertMessage("An error occurred. Please try again.");
+  } finally {
+    setShowConfirmModal(false);
+    setShowAlertModal(true);
+    setSelectedMeal(null);
+    setActionType(null);
+  }
+};
+
 
   useEffect(() => {
     fetchMeals();
   }, []);
 
-  const soldoutmeals = meals.filter((meal) => meal.available_count === 0);
+  
   const fetchReservedOrders = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -170,46 +198,65 @@ const RestaurantDashboard = () => {
         ))}
       </div>
       <div>
-      <h2>Meals with Zero Quantity</h2>
+     
       {loadingMeals ? (
   <p>Loading meals...</p>
 ) : meals.length === 0 ? (
   <p>No meals available.</p>
 ) : (
-  <div className="all-meals-container">
+  <div id="all-meals-container">
     {/* Section for Sold Out Meals */}
-    <h2>Sold Out Meals</h2>
-    <div className="sold-out-meals">
-      {meals
+     <div id="available-meals-header">
+      <h2>Sold out Meals</h2></div>
+    <div id="sold-out-meals">
+     
+     {meals
         .filter((meal) => meal.available_count === 0)
         .map((meal) => (
-          <SoldOutMeal
+          <Meal
             key={meal.id}
             meal={meal}
-            onQuantityUpdate={updateMealQuantity}
+           onQuantityUpdate={(id, newQty) => confirmUpdate(meal, newQty)}
+ 
           />
         ))}
     </div>
 
     {/* Section for Available Meals */}
-    <h2>Available Meals</h2>
-    <div className="available-meals">
+    <div id="available-meals-header">
+      <h2>Available Meals</h2></div>
+    <div id="available-meals">
       {meals
         .filter((meal) => meal.available_count > 0)
         .map((meal) => (
-          <div key={meal.id} className="meal-with-delete">
-            
-            <MealCard meal={meal} onClick={() => console.log("View or edit", meal.id)} />
-            <button onClick={() => handleDelete(meal.id)}>Delete</button>
-          </div>
+
+            <Meal meal={meal}  onDelete={() => confirmDelete(meal)} />
+
         ))}
     </div>
   </div>
 )}
 
     </div>
+     {showConfirmModal && (
+  <ConfirmModal
+    message={confirmMessage}
+    onConfirm={handleConfirmAction}
+    onCancel={() => setShowConfirmModal(false)}
+  />
+)}
+
+{showAlertModal && (
+  <AlertModal
+    message={alertMessage}
+    onClose={() => setShowAlertModal(false)}
+  />
+)}
+
     </div>
+    
   );
+ 
 };
 
 export default RestaurantDashboard;
