@@ -13,7 +13,7 @@ import MealPopUp from "../MealListings/MealPopUp";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 const SinglePageRestaurant = () => {
-    const { user, fetchUser } = useContext(UserContext);
+  const { user, fetchUser } = useContext(UserContext);
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [meals, setMeals] = useState([]);
@@ -22,14 +22,12 @@ const SinglePageRestaurant = () => {
   const [popupContent, setPopupContent] = useState(null);
   const [openpopup, setOpenpopup] = useState(false);
   const [orderquantity, setOrderquantity] = useState(1);
-  
-
 
   const fetchMealDetails = async (mealId) => {
     try {
       setPopupLoading(true);
       setPopupContent(null);
-  
+
       const token = localStorage.getItem("authToken");
       const response = await axios.get(
         `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
@@ -41,10 +39,9 @@ const SinglePageRestaurant = () => {
           },
         }
       );
-  
+
       const meal = response.data.meal;
-    
-  
+
       setPopupContent({
         ...meal,
         restaurant_name: restaurant?.name || "Unknown Restaurant",
@@ -56,7 +53,7 @@ const SinglePageRestaurant = () => {
       setPopupLoading(false);
     }
   };
-  
+
   const fetchRestaurantDetails = async () => {
     try {
       const response = await axios.get(
@@ -99,14 +96,13 @@ const SinglePageRestaurant = () => {
     ); // prevents going above available count
   };
   const handlePlaceOrder = () => {
-    
     placeOrder(orderquantity, popupContent.id);
   };
 
   const placeOrder = async (orderQuantity, popupContentId) => {
     try {
       const token = localStorage.getItem("authToken");
-  
+
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
         {
@@ -117,11 +113,11 @@ const SinglePageRestaurant = () => {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true"
+            "ngrok-skip-browser-warning": "true",
           },
         }
       );
-  
+
       console.log("Order placed successfully:", response.data);
       alert(`Order placed successfully!`);
       return response.data;
@@ -134,7 +130,6 @@ const SinglePageRestaurant = () => {
       throw error;
     }
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,60 +161,61 @@ const SinglePageRestaurant = () => {
   }
 
   return (
-    <div> 
-    <div className={`restaurant-page ${openpopup ? "blurred" : ""}`}  >
-      <div className="restaurant-banner">
-        <img src={img} alt="Restaurant" />
-        <div className="restaurant-info-box">
-          
-          <p className="about">{restaurant.restaurant_info}</p>
-          <p>
-            <FaLocationDot /> {restaurant.address}
-          </p>
-          <p>
-            <FaPhoneAlt /> {restaurant.phone_number}
-          </p>
-          <p>
-            <GoClock /> {restaurant.working_hours_from} -{" "}
-            {restaurant.working_hours_to}
-          </p>
+    <div>
+      <div className={`restaurant-page ${openpopup ? "blurred" : ""}`}>
+        <div className="restaurant-banner">
+          <img src={restaurant.image} alt="Restaurant" />
+          <div className="restaurant-info-box">
+            <p className="about">{restaurant.restaurant_info}</p>
+            <p>
+              <FaLocationDot /> {restaurant.address}
+            </p>
+            <p>
+              <FaPhoneAlt /> {restaurant.phone_number}
+            </p>
+            <p>
+              <GoClock /> {restaurant.working_hours_from} -{" "}
+              {restaurant.working_hours_to}
+            </p>
+          </div>
+        </div>
+
+        <div className="meals-section">
+          <h2>Meals from {restaurant.name}</h2>
+          <div className="meals-grid">
+            {meals.length > 0 ? (
+              meals.map((meal) => (
+                <MealCard
+                  key={meal.id}
+                  meal={meal}
+                  onClick={() => {
+                    setOpenpopup(true);
+                    fetchMealDetails(meal.id);
+                  }}
+                />
+              ))
+            ) : (
+              <p>No meals found</p>
+            )}
+          </div>
         </div>
       </div>
-
-      <div className="meals-section">
-        <h2>Meals from {restaurant.name}</h2>
-        <div className="meals-grid">
-          {meals.length > 0 ? (         
-            meals.map(meal => (
-              <MealCard key={meal.id}  meal={meal} onClick={() => {
-                setOpenpopup(true);
-                fetchMealDetails(meal.id);
-              }} />
-
-            ) )
-          ) : (
-            <p>No meals found</p>
-          )}
-        </div>
-      </div>
-      </div>
-      {openpopup &&  (
-  <MealPopUp
-    open={openpopup}
-    meal={popupContent}
-    onClose={() => {
-      setOpenpopup(false);
-      setOrderquantity(1);
-    }
-  }
-  orderQuantity={orderquantity}
-  setOrderquantity={setOrderquantity}
-  handleDecrement={handleDecrement}
-  handleIncrement={handleIncrement}
-  handlePlaceOrder={handlePlaceOrder}
-  loading={popupLoading}
-  />
-)}
+      {openpopup && (
+        <MealPopUp
+          open={openpopup}
+          meal={popupContent}
+          onClose={() => {
+            setOpenpopup(false);
+            setOrderquantity(1);
+          }}
+          orderQuantity={orderquantity}
+          setOrderquantity={setOrderquantity}
+          handleDecrement={handleDecrement}
+          handleIncrement={handleIncrement}
+          handlePlaceOrder={handlePlaceOrder}
+          loading={popupLoading}
+        />
+      )}
     </div>
   );
 };

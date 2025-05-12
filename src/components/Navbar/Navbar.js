@@ -14,7 +14,7 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    window.location.href = "/login";
+    navigate("/signup", { state: { isLogin: true } });
   };
 
   const renderProfileIcon = () => {

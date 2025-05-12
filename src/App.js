@@ -14,7 +14,9 @@ import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePage
 import EditClientProfile from "./components/Client/EditProfile/EditClientProfile";
 import EditRestaurantProfile from "./components/Restaurant/EditRestaurantProfile/EditRestaurantProfile";
 import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/RestaurantDashboard";
-import OrdersList from "./components/Client/Orders/OrdersList";
+import AdminDashboard from "./components/Admin/AdminDashboard";
+import ResHome from "./components/Home/ResHome";
+
 // <Route  path="/createmeal" element={<CreateMeal/>}/>
 
 function App() {
@@ -23,13 +25,14 @@ function App() {
       <Navbar />
       <Routes>
         <Route index path="/" element={<Home />} />
+        <Route index path="res_home" element={<ResHome />} />
+
         <Route path="/meals" element={<Meals />} />
         <Route
           path="/createmeal"
           element={
             <RestaurantProtectedRoute>
-              {" "}
-              <CreateMeal />
+              <CreateMeal />{" "}
             </RestaurantProtectedRoute>
           }
         />
@@ -42,15 +45,8 @@ function App() {
           path="/editclient"
           element={
             <ClientProtectedRoute>
-              <EditClientProfile />
-            </ClientProtectedRoute>
-          }
-        />
-        <Route
-          path="/orderslist"
-          element={
-            <ClientProtectedRoute>
-              <OrdersList />
+              {" "}
+              <EditClientProfile />{" "}
             </ClientProtectedRoute>
           }
         />
@@ -70,6 +66,7 @@ function App() {
             </RestaurantProtectedRoute>
           }
         />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

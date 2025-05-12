@@ -8,6 +8,15 @@ import { RotatingLines } from "react-loader-spinner";
 
 import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
+import pizza from "../../../assets/images/pizza.png";
+import beef from "../../../assets/images/beef.png";
+import chk from "../../../assets/images/chk.png";
+import pasta from "../../../assets/images/pasta.png";
+
+import shaw from "../../../assets/images/shaw.png";
+import salad from "../../../assets/images/salad.png";
+import offer from "../../../assets/images/add.jpg";
+
 const Meals = () => {
   // State and refs for the popup
 
@@ -26,6 +35,21 @@ const Meals = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [orderquantity, setOrderquantity] = useState(1); // let's say minimum is 1
   const [restaurants, setRestaurants] = useState([]);
+
+  // Add this near the top of your component, right after the imports and before the Meals function
+  const categories = [
+    {
+      id: null,
+      name: "All",
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png",
+    },
+    { id: "shawarma", name: "shawarma", icon: shaw },
+    { id: "burger", name: "burger", icon: beef },
+    { id: "Chicken Sandwich", name: "Chicken Sandwich", icon: chk },
+    { id: "salad", name: "salad", icon: salad },
+    { id: "pasta", name: "pasta", icon: pasta },
+    { id: "pizza", name: "pizza", icon: pizza },
+  ];
 
   // order quantity handlers
   const handleDecrement = () => {
@@ -173,7 +197,7 @@ const Meals = () => {
   // USE EFFECTS
   // ----------------------------
 
-  // Initial fetch: restaurants and set isVegetarian if user exists
+  // Initial fetch: shawarma and set isVegetarian if user exists
   useEffect(() => {
     fetchRestaurants();
     if (user) {
@@ -245,46 +269,48 @@ const Meals = () => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-        <div className="tabs">
-          <button
-            className="tab "
-            onClick={(e) => (window.location.href = "/orderslist")}
-          >
-            Your Orders
-          </button>
-
-          <button className="tab active">Meals</button>
-          <button
-            className="tab"
-            onClick={(e) => (window.location.href = "/restaurantslist")}
-          >
-            Restaurant
-          </button>
+        {/* Centered Tabs */}
+        <div className="tabs-container">
+          <div className="tabs">
+            <button
+              className="tab"
+              onClick={(e) => (window.location.href = "/orderslist")}
+            >
+              Your Orders
+            </button>
+            <button className="tab active">Meals</button>
+            <button
+              className="tab"
+              onClick={(e) => (window.location.href = "/shawarmalist")}
+            >
+              Restaurant
+            </button>
+          </div>
         </div>
 
-        <div className="buttons">
-          <button
-            className={!selectedCategory ? "btn active" : "btn"}
-            onClick={() => setSelectedCategory(null)}
-          >
-            All
-          </button>
-          {[
-            "shawarma",
-            "burger",
-            "pasta",
-            "salad",
-            "pizza",
-            "chicken-sandwich",
-          ].map((category) => (
-            <button
-              key={category}
-              className={selectedCategory === category ? "btn active" : "btn"}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </button>
-          ))}
+        {/* Horizontal Categories */}
+        <div className="categories-container">
+          <div className="category-grid">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`category-button ${
+                  selectedCategory === category.id ? "active" : ""
+                }`}
+              >
+                <img src={category.icon} alt={category.name} />
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Centered Promo Image */}
+        <div className="promo-container">
+          <div className="promo-img">
+            <img src={offer} alt="Special offer" />
+          </div>
         </div>
 
         {selectedCategory && (
