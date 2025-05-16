@@ -17,6 +17,7 @@ import RestaurantDashboard from "./components/Restaurant/RestaurantDashboard/Res
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import ResHome from "./components/Home/ResHome";
 import OrdersList from "./components/Client/Orders/OrdersList";
+import AlertModal from "./components/Alerts/AlertModal";
 
 // Wrapper to use useLocation hook
 const AppWrapper = () => {
@@ -31,6 +32,7 @@ const AppWrapper = () => {
         <Route index path="res_home" element={<ResHome />} />
         <Route path="/meals" element={<Meals />} />
         <Route path="/createmeal" element={<CreateMeal />} />
+        <Route path="/alertsuccess" type='success' element={<AlertModal />} />
         <Route path="/signup" element={<AuthForm />} />
         <Route path="/resignup" element={<RestaurantSignup />} />
         <Route path="/restaurantslist" element={<RestaurantsList />} />

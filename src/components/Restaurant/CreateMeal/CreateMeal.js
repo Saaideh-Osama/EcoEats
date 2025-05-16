@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./CreateMeal.css";
-
+import AlertModal from "../../Alerts/AlertModal";
 function CreateMeal({ onMealCreated }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [available_count, setAvailable_count] = useState("");
   const [price, setPrice] = useState("");
+  const [original_price, setOriginalprice] = useState("");
   const [description, setDescription] = useState("");
   const [contains_meat, setContains_meat] = useState(0);
   const [contains_chicken, setContains_chicken] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [image, setImage] = useState(null);
-
+ const [alert, setAlert] = useState({ show: false, message: '', type: '' });
   const ngrokURL = "https://4399-91-186-255-241.ngrok-free.app/api/create/meals";
 
   const handleChange = (event) => {
@@ -23,61 +24,70 @@ function CreateMeal({ onMealCreated }) {
 
   const handleFileChange = (event) => {
     setImage(event.target.files[0]);
-  console.log("Selected file:", event.target.files[0]);
-  console.log("Image state:", image);
+  
   };
 
-  const handleSubmit = async (event) => {
+ const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    event.preventDefault();
-    
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      setError("You must be logged in to submit a meal.");
-      setLoading(false);
-      return;
-    }
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    setError("You must be logged in to submit a meal.");
+    setLoading(false);
+    return;
+  }
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("category", category);
+  formData.append("available_count", available_count);
+  formData.append("price", price);
+  formData.append("original_price", original_price);
+  formData.append("description", description);
+  formData.append("contains_meat", contains_meat);
+  formData.append("contains_chicken", contains_chicken);
+  formData.append("image", image);
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("available_count", available_count);
-    formData.append("price", price);
-    formData.append("description", description);
-    formData.append("contains_meat", contains_meat);
-    formData.append("contains_chicken", contains_chicken);
-    formData.append("image", image);
-    
-    console.log("Form submitted with values:", formData);
-    console.log("Image file:", image);
-    try {
-      const response = await axios.post(ngrokURL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  try {
+    const response = await axios.post(ngrokURL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      alert("Meal submitted successfully!");
-      // Reset fields
-      setName("");
-      setCategory("");
-      setAvailable_count("");
-      setPrice("");
-      setDescription("");
-      setContains_meat(1);
-      setContains_chicken(1);
-      setImage(null);
-      if (onMealCreated) onMealCreated(); // Optional callback
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to submit meal");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setAlert({
+      show: true,
+      message: `Meal "${name}" created with ${available_count} servings.`,
+      type: "success",
+    });
+
+    // Reset fields
+    setName("");
+    setCategory("");
+    setAvailable_count("");
+    setPrice("");
+    setDescription("");
+    setOriginalprice("");
+    setContains_meat(0);
+    setContains_chicken(0);
+    setImage(null);
+    if (onMealCreated) onMealCreated();
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Failed to submit meal");
+    setAlert({
+      show: true,
+      message: err.response?.data?.message || "Failed to submit meal",
+      type: "error",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div id="create-meal-container">
@@ -133,6 +143,16 @@ function CreateMeal({ onMealCreated }) {
           />
         </div>
 
+        <div className="input-group">
+          <label>Meal Original price:</label>
+           <input
+            type="number"
+            className="create-meal-input"
+            value={original_price}
+            onChange={(e) => setOriginalprice(e.target.value)}
+            required
+          />
+        </div>
         <div className="input-group">
           <label>Meal Description:</label>
           <textarea
@@ -201,6 +221,15 @@ function CreateMeal({ onMealCreated }) {
         </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
+     
+ {alert.show && (
+  <AlertModal 
+    key={Date.now()} // forces remount each time
+    message={alert.message} 
+    type={alert.type} 
+    onClose={() => setAlert({ show: false, message: '', type: '' })}
+  />
+)}
     </div>
   );
 }

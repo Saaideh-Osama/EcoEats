@@ -87,11 +87,9 @@ const MealPopup = ({
                 id="orderBTN"
                 onClick={async (e) => {
                   e.stopPropagation();
-                  console.log("Order button clicked");
-
                   try {
                     await handlePlaceOrder(); // Wait for successful order
-                    navigate("/orderslist"); // Navigate after success
+                     // Navigate after success
                   } catch (error) {
                     console.error("Order failed:", error);
                   }
@@ -100,12 +98,13 @@ const MealPopup = ({
                 Order
               </button>
             </div>
-            <button onClick={onClose} id="close-popup">
-              <MdOutlineClose />
-            </button>
+            
           </>
         )}
       </div>
+      <button onClick={onClose} id="close-popup">
+              <MdOutlineClose />
+            </button>
     </div>
   );
 };

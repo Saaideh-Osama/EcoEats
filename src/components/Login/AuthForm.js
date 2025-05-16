@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { userContext } from "../context/UserContext";
 import { useContext } from "react"; 
+import AlertModal from '../Alerts/AlertModal';
 import './AuthForm.css';
 
 const AuthForm = () => {
@@ -15,6 +16,7 @@ const AuthForm = () => {
   const [is_vegetarian, setIsVegetarian] = useState('');
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [alert, setAlert] = useState({ show: false, message: '', type: '' });
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^(078|077|079)\d{7}$/;
   const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
@@ -61,9 +63,7 @@ const AuthForm = () => {
 const handleLogin = async (e) => {
   e.preventDefault();
   if (isLogin) {
-  try {
-    
-      // Login API call
+    try {
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/login",
         {
@@ -72,35 +72,48 @@ const handleLogin = async (e) => {
         }
       );
       console.log("Login Successful", response.data);
-      alert("Login successful!");
+
+      setAlert({
+        show: true,
+        message: "Login successful!",
+        type: "success"
+      });
+
       localStorage.setItem("authToken", response.data.token);
-      
-      
-      if (response.data.role_id === 2) {
-        window.location.href = "/meals"; // Redirect to client page
-      }
-      else if (response.data.role_id === 1) {
-        window.location.href = "/admin"; // Redirect to admin page
-      } 
-      else if (response.data.role_id === 3) {
-        window.location.href = "/createmeal"; // Redirect to chef page
-    }
-    else {
-        alert("Invalid role ID. Please contact support.");
-      }
-    }
-    catch (err) {
+
+      setTimeout(() => {
+        if (response.data.role_id === 2) {
+          window.location.href = "/meals";
+        } else if (response.data.role_id === 1) {
+          window.location.href = "/admin";
+        } else if (response.data.role_id === 3) {
+          window.location.href = "/createmeal";
+        } else {
+          setAlert({
+            show: true,
+            message: "Invalid role ID. Please contact support.",
+            type: "error"
+          });
+        }
+      }, 2000); // small delay to show alert
+    } catch (err) {
       console.error("Error", err.response?.data || err.message);
-      setErrors(prev => ({ 
-        ...prev, 
+      setErrors(prev => ({
+        ...prev,
         form: err.response?.data?.message || 
-        (isLogin ? "Login failed. Please try again." : "Signup failed. Please try again.") 
+              (isLogin ? "Login failed. Please try again." : "Signup failed. Please try again.")
       }));
+      setAlert({
+        show: true,
+        message: err.response?.data?.message || "Login failed. Please try again.",
+        type: "error"
+      });
     } finally {
       setIsSubmitting(false);
     }
+  }
+};
 
-}}
 
   
   
@@ -135,45 +148,69 @@ const handleLogin = async (e) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    if(isSignup){
-      try{
-        // Signup API call
-        const response = await axios.post(
-          "https://4399-91-186-255-241.ngrok-free.app/api/clients/register",
-          {
-            ...formData,
-            role_id: 2
-          },
-          {
-            headers: {
-              "Content-Type": "application/json"
-            }
+ const handleSignup = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) {
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  if (isSignup) {
+    try {
+      const response = await axios.post(
+        "https://4399-91-186-255-241.ngrok-free.app/api/clients/register",
+        {
+          ...formData,
+          role_id: 2
+        },
+        {
+          headers: {
+            "Content-Type": "application/json"
           }
-        );
-        console.log("Signup Successful", response.data);
-        alert("Signup successful! You can now log in.");
-        
-      }
-     catch (err) {
-      console.error("Error", err.response?.data || err.message);
-      setErrors(prev => ({ 
-        ...prev, 
-        form: err.response?.data?.message || 
-        (isLogin ? "Login failed. Please try again." : "Signup failed. Please try again.") 
+        }
+      );
+      console.log("Signup Successful", response.data);
+
+      setAlert({
+        show: true,
+        message: "Signup successful! You can now log in.",
+        type: "success"
+      });
+
+      // Optionally switch to login form after a delay
+      setTimeout(() => {
+        setIsLogin(true);
+        setIsSignup(false);
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          phone: '',
+          is_vegetarian: ''
+        });
+      }, 2000);
+
+    } catch (err) {
+      console.error("Signup error", err.response?.data || err.message);
+
+      setAlert({
+        show: true,
+        message: err.response?.data?.message || "Signup failed. Please try again.",
+        type: "error"
+      });
+
+      setErrors(prev => ({
+        ...prev,
+        form: err.response?.data?.message || "Signup failed. Please try again."
       }));
     } finally {
       setIsSubmitting(false);
-    }}
-  };
+    }
+  }
+};
+
 
   return (
     <div className="page">
@@ -345,6 +382,15 @@ const handleLogin = async (e) => {
 
         
       </div>
+      {alert.show && (
+  <AlertModal 
+    key={Date.now()} // forces remount each time
+    message={alert.message} 
+    type={alert.type} 
+    onClose={() => setAlert({ show: false, message: '', type: '' })}
+  />
+)}
+
     </div>
   );
 };

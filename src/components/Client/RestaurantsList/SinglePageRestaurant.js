@@ -12,6 +12,9 @@ import MealCard from "../MealListings/MealCard";
 import MealPopUp from "../MealListings/MealPopUp";
 import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
+import AlertModal from "../../Alerts/AlertModal";
+import ConfirmModal from "../../Alerts/ConfirmModal";
+
 const SinglePageRestaurant = () => {
   const { user, fetchUser } = useContext(UserContext);
   const { id } = useParams();
@@ -22,6 +25,11 @@ const SinglePageRestaurant = () => {
   const [popupContent, setPopupContent] = useState(null);
   const [openpopup, setOpenpopup] = useState(false);
   const [orderquantity, setOrderquantity] = useState(1);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(""); // "success" or "error"
+  const [showAlert, setShowAlert] = useState(false);
+
 
   const fetchMealDetails = async (mealId) => {
     try {
@@ -95,41 +103,47 @@ const SinglePageRestaurant = () => {
       Math.min(prev + 1, popupContent.available_count)
     ); // prevents going above available count
   };
-  const handlePlaceOrder = () => {
-    placeOrder(orderquantity, popupContent.id);
+  const handlePlaceOrder = (e) => {
+     
+    setShowConfirm(true);
   };
 
-  const placeOrder = async (orderQuantity, popupContentId) => {
-    try {
-      const token = localStorage.getItem("authToken");
+const placeOrder = async (e) => {
+ 
+  try {
+    console.log("Placing order...");
+    const token = localStorage.getItem("authToken");
 
-      const response = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
-        {
-          meal_id: popupContentId,
-          quantity: orderQuantity,
+    const response = await axios.post(
+      "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+      {
+        meal_id: popupContent.id,
+        quantity: orderquantity,
+      },
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
         },
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-
-      console.log("Order placed successfully:", response.data);
-      alert(`Order placed successfully!`);
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        alert("You need to be logged in first to reserve a meal.");
-      } else {
-        console.error("Failed to place order:", error);
       }
-      throw error;
+    );
+
+    setShowConfirm(false); // hide confirmation
+    setAlertMessage(`Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`);
+    setAlertType("success");
+    setShowAlert(true);
+  } catch (error) {
+    setShowConfirm(false);
+    if (error.response?.status === 401) {
+      setAlertMessage("You need to be logged in first to reserve a meal.");
+    } else {
+      setAlertMessage("Failed to place order. Please try again.");
     }
-  };
+    setAlertType("error");
+    setShowAlert(true);
+  }
+};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -214,6 +228,23 @@ const SinglePageRestaurant = () => {
           handleIncrement={handleIncrement}
           handlePlaceOrder={handlePlaceOrder}
           loading={popupLoading}
+        />
+      )}
+       {showConfirm && (
+        <ConfirmModal
+          message={`Are you sure you want to order ${orderquantity} x "${popupContent?.name}"?`}
+          show={showConfirm}
+          onConfirm={placeOrder}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+
+      {/* Alert Modal */}
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlert(false)}
         />
       )}
     </div>

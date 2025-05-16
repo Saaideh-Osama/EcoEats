@@ -2,11 +2,17 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { UserContext } from "../../context/UserContext";
+import AlertModal from "../../Alerts/AlertModal"; // adjust path as needed
+import ConfirmModal from "../../Alerts/ConfirmModal"; // adjust path as needed
 
 const EditClientProfile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("success"); // 'success' or 'error'
+  const [showAlertModal, setShowAlertModal] = useState(false);
+
   const { user, fetchUser } = useContext(UserContext);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,7 +27,6 @@ const EditClientProfile = () => {
     is_vegetarian: "0",
   });
 
-  // Initialize form data when user context is available
   useEffect(() => {
     if (user) {
       setFormData({
@@ -29,7 +34,7 @@ const EditClientProfile = () => {
         email: user.email || "",
         phone: user.phone_number || "",
         is_vegetarian: user.is_vegetarian ? "1" : "0",
-        password: "", // Never pre-fill password
+        password: "",
       });
     }
   }, [user]);
@@ -74,16 +79,23 @@ const EditClientProfile = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSuccessMessage("");
-
     if (!validateForm()) {
+      // Show alert modal for validation errors (first error)
+      const firstError = Object.values(errors)[0] || "Validation error";
+      setAlertMessage(firstError);
+      setAlertType("error");
+      setShowAlertModal(true);
       return;
     }
+    setShowConfirmModal(true);
+  };
 
+  const confirmSave = async () => {
+    setShowConfirmModal(false);
     setIsSaving(true);
-
+    setErrors({});
     try {
       const payload = {
         name: formData.name,
@@ -91,10 +103,7 @@ const EditClientProfile = () => {
         phone_number: formData.phone,
         is_vegetarian: formData.is_vegetarian === "1",
       };
-
-      if (formData.password) {
-        payload.password = formData.password;
-      }
+      if (formData.password) payload.password = formData.password;
 
       await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/client/edit",
@@ -108,15 +117,22 @@ const EditClientProfile = () => {
         }
       );
 
-      setSuccessMessage("Profile updated successfully!");
-      fetchUser(); // Refresh user data
+      fetchUser();
+      setAlertMessage("Your profile was updated successfully.");
+      setAlertType("success");
+      setShowAlertModal(true);
     } catch (error) {
-      console.error("Error updating profile", error);
       setErrors({
         submit:
           error.response?.data?.message ||
           "Failed to update profile. Please try again.",
       });
+      setAlertMessage(
+        error.response?.data?.message ||
+          "Failed to update profile. Please try again."
+      );
+      setAlertType("error");
+      setShowAlertModal(true);
     } finally {
       setIsSaving(false);
     }
@@ -134,17 +150,37 @@ const EditClientProfile = () => {
 
   return (
     <ProfileContainer>
+      {isSaving && (
+        <SpinnerOverlay>
+          <SpinnerAlert>Saving your changes...</SpinnerAlert>
+        </SpinnerOverlay>
+      )}
+
+      {showConfirmModal && (
+        <ConfirmModal
+          message="Are you sure you want to save the changes?"
+          onConfirm={confirmSave}
+          onCancel={() => setShowConfirmModal(false)}
+        />
+      )}
+
+      {showAlertModal && (
+        <AlertModal
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlertModal(false)}
+        />
+      )}
+
       <ProfileCard>
         <Title>Edit Profile</Title>
 
-        {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
         {errors.submit && <ErrorMessage>{errors.submit}</ErrorMessage>}
 
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label htmlFor="name">Full Name</Label>
             <Input
-              type="text"
               id="name"
               name="name"
               value={formData.name}
@@ -157,7 +193,6 @@ const EditClientProfile = () => {
           <FormGroup>
             <Label htmlFor="phone">Phone Number</Label>
             <Input
-              type="tel"
               id="phone"
               name="phone"
               value={formData.phone}
@@ -171,7 +206,6 @@ const EditClientProfile = () => {
           <FormGroup>
             <Label htmlFor="email">Email</Label>
             <Input
-              type="email"
               id="email"
               name="email"
               value={formData.email}
@@ -184,9 +218,9 @@ const EditClientProfile = () => {
           <FormGroup>
             <Label htmlFor="password">New Password</Label>
             <Input
-              type="password"
               id="password"
               name="password"
+              type="password"
               value={formData.password}
               onChange={handleChange}
               $hasError={!!errors.password}
@@ -209,7 +243,7 @@ const EditClientProfile = () => {
           </FormGroup>
 
           <SubmitButton type="submit" disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save Changes"}
+            Save Changes
           </SubmitButton>
         </Form>
       </ProfileCard>
@@ -217,13 +251,19 @@ const EditClientProfile = () => {
   );
 };
 
+// Styled components remain the same as your original code ...
+
+
+
+
+
 // Styled Components
 const ProfileContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f7fa;
+  background: #f5f7fa;
   padding: 2rem;
 `;
 
@@ -232,13 +272,13 @@ const ProfileCard = styled.div`
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   padding: 2.5rem;
-  width: 100%;
   max-width: 500px;
+  width: 100%;
 `;
 
 const Title = styled.h2`
-  color: #2d3748;
   font-size: 1.75rem;
+  color: #2d3748;
   margin-bottom: 1.5rem;
   text-align: center;
 `;
@@ -246,30 +286,26 @@ const Title = styled.h2`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+ 
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 `;
 
 const Label = styled.label`
-  color: #4a5568;
   font-size: 0.875rem;
   font-weight: 500;
+  color: #4a5568;
 `;
 
-const Input = styled.input.attrs((props) => ({
-  type: props.type || "text",
-}))`
-  padding: 0.75rem 1rem;
+const Input = styled.input`
+  padding: 0.75rem;
   border: 1px solid ${(props) => (props.$hasError ? "#e53e3e" : "#e2e8f0")};
+  background: ${(props) => (props.$hasError ? "#fff5f5" : "white")};
   border-radius: 8px;
   font-size: 1rem;
-  transition: all 0.2s;
-  background-color: ${(props) => (props.$hasError ? "#fff5f5" : "white")};
 
   &:focus {
     outline: none;
@@ -278,19 +314,13 @@ const Input = styled.input.attrs((props) => ({
       ${(props) =>
         props.$hasError ? "rgba(229, 62, 62, 0.2)" : "rgba(66, 153, 225, 0.2)"};
   }
-
-  &::placeholder {
-    color: #a0aec0;
-  }
 `;
 
 const Select = styled.select`
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
-  background-color: white;
-  cursor: pointer;
 
   &:focus {
     outline: none;
@@ -300,23 +330,22 @@ const Select = styled.select`
 `;
 
 const SubmitButton = styled.button`
-  background-color: #4299e1;
+  margin-top: 0.5rem;
+  background: #4299e1;
   color: white;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 0.5rem;
 
   &:hover {
-    background-color: #3182ce;
+    background: #3182ce;
   }
 
   &:disabled {
-    background-color: #a0aec0;
+    background: #a0aec0;
     cursor: not-allowed;
   }
 `;
@@ -326,28 +355,84 @@ const ErrorText = styled.span`
   font-size: 0.75rem;
 `;
 
-const SuccessMessage = styled.div`
-  color: #38a169;
-  background-color: #f0fff4;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-`;
-
 const ErrorMessage = styled.div`
+  background: #fff5f5;
   color: #e53e3e;
-  background-color: #fff5f5;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
-  font-size: 0.875rem;
 `;
 
 const LoadingMessage = styled.div`
-  color: #4a5568;
   text-align: center;
+  color: #4a5568;
   padding: 2rem;
+`;
+
+const SpinnerOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const SpinnerAlert = styled.div`
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  color: #2d3748;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+`;
+
+const ModalCard = styled.div`
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+
+  h3 {
+    font-size: 1.25rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #4a5568;
+    margin-bottom: 1rem;
+  }
+
+  button {
+    background: #4299e1;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      background: #3182ce;
+    }
+  }
 `;
 
 export default EditClientProfile;

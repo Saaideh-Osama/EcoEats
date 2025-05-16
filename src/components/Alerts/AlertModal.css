@@ -15,7 +15,7 @@
   
   .alert-box {
     background-color: white;
-    padding: 20px;
+    padding: 5vw;
     border-radius: 8px;
     text-align: center;
     width: 300px;
@@ -31,18 +31,52 @@
     justify-content: center;
   }
   
-  .alert-btn {
-    background-color: #007BFF;
-    color: white;
-    border: none;
+  .alert-button {
+   
+    color: rgb(1, 1, 1);
+    border: 1px solid #585f67;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
   }
-  
+  .success {
+    background-color: #28a745;
+  }
+  .error {
+    background-color: #dc3545;
+  }
   .alert-btn:hover {
     background-color: #0056b3;
   }
-  
+ .path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash 2s ease-out forwards; /* changed from 1s to 2s */
+}
+
+.path.check {
+  animation-delay: 0.6s; /* optional: delay adjusted to match slower speed */
+}
+
+.path.line {
+  animation-delay: 0.6s;
+}
+
+
+
+.circle {
+  animation-delay: 0s;
+}
+
+.check,
+.line {
+  animation-delay: 0.4s;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
