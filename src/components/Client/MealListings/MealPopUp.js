@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useContext, useState } from "react";
 import { MdOutlineClose, MdRestaurant } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
+import CustomAlert from "../../Alerts/CustomAlert";
+import "./MealPopup.css";
 
 const MealPopup = ({
   open,
@@ -14,6 +17,8 @@ const MealPopup = ({
   loading,
 }) => {
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const [showAlert, setShowAlert] = useState(false);
 
   if (!open) return null;
 
@@ -32,6 +37,8 @@ const MealPopup = ({
               <MdRestaurant className="restaurant-icon" />
               <span> {meal.restaurant_name}</span>
             </div>
+            <p class="meals-left-info">Left: {meal.available_count}</p>
+
             <hr className="separator" />
             <div className="ingredients-section">
               <span className="ingredients-label">Ingredients:</span>
@@ -82,16 +89,20 @@ const MealPopup = ({
                 ? "Vegetarian"
                 : "Contains Meat or Chicken"}
             </p>
+
             <div className="order-btn-container">
               <button
                 id="orderBTN"
                 onClick={async (e) => {
                   e.stopPropagation();
-                  console.log("Order button clicked");
+
+                  if (!user) {
+                    setShowAlert(true);
+                    return;
+                  }
 
                   try {
-                    await handlePlaceOrder(); // Wait for successful order
-                    navigate("/orderslist"); // Navigate after success
+                    await handlePlaceOrder();
                   } catch (error) {
                     console.error("Order failed:", error);
                   }
@@ -100,12 +111,18 @@ const MealPopup = ({
                 Order
               </button>
             </div>
-            <button onClick={onClose} id="close-popup">
-              <MdOutlineClose />
-            </button>
+            {showAlert && (
+              <CustomAlert
+                message="You must be logged in to place an order."
+                onClose={() => setShowAlert(false)}
+              />
+            )}
           </>
         )}
       </div>
+      <button onClick={onClose} id="close-popup">
+        <MdOutlineClose />
+      </button>
     </div>
   );
 };

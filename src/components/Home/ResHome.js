@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import { useNavigate } from "react-router";
 import { UserContext } from "../context/UserContext";
 import logo from "../../assets/images/test.png";
@@ -11,15 +11,35 @@ import "./ResHome.css";
 function ResHome() {
   const navigate = useNavigate();
   const { user, fetchUser } = useContext(UserContext);
+  
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState('success'); // or 'error'
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
     fetchUser();
   }, []);
 
   const handleLogout = () => {
+  setConfirmAction(() => () => {
+    // Confirmed!
     localStorage.removeItem("authToken");
-    window.location.href = "/";
-  };
+
+    // Show alert
+    setAlertMessage("You have logged out successfully.");
+    setAlertType("success");
+    setShowAlertModal(true);
+
+    // Redirect after short delay
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1500);
+  });
+
+  setShowConfirmModal(true); // Show the confirmation modal
+};
 
   return (
     <>
@@ -36,9 +56,9 @@ function ResHome() {
           <button className="home_link home_active">for restaurants</button>
         </div>
         <div className="home_actions">
-          <button className="home_logout_btn" onClick={handleLogout}>
+         {user && (<button className="home_logout_btn" onClick={handleLogout}>
             Logout
-          </button>
+          </button>)}
           {!user && (
             <button
               className="home_login_btn"
@@ -51,7 +71,7 @@ function ResHome() {
       </div>
       <div className="img_part">
         <img src={img} className="background-image" alt="ecoBites promo" />
-        <div className="content">
+        <div className="ResHome-content">
           <h3>Why Join Us?</h3>
           <p>
             Our mission is to support restaurants and make the most out of every

@@ -1,36 +1,34 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./CreateMeal.css";
-
+import AlertModal from "../../Alerts/AlertModal";
 function CreateMeal({ onMealCreated }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [available_count, setAvailable_count] = useState("");
   const [price, setPrice] = useState("");
+  const [original_price, setOriginalprice] = useState("");
   const [description, setDescription] = useState("");
   const [contains_meat, setContains_meat] = useState(0);
   const [contains_chicken, setContains_chicken] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [image, setImage] = useState(null);
-
-  const ngrokURL = "https://4399-91-186-255-241.ngrok-free.app/api/create/meals";
+  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
+  const ngrokURL =
+    "https://4399-91-186-255-241.ngrok-free.app/api/create/meals";
 
   const handleChange = (event) => {
     setCategory(event.target.value);
-    
   };
 
   const handleFileChange = (event) => {
     setImage(event.target.files[0]);
-  console.log("Selected file:", event.target.files[0]);
-  console.log("Image state:", image);
   };
 
   const handleSubmit = async (event) => {
-
     event.preventDefault();
-    
+
     setLoading(true);
     setError(null);
 
@@ -40,19 +38,17 @@ function CreateMeal({ onMealCreated }) {
       setLoading(false);
       return;
     }
-
     const formData = new FormData();
     formData.append("name", name);
     formData.append("category", category);
     formData.append("available_count", available_count);
     formData.append("price", price);
+    formData.append("original_price", original_price);
     formData.append("description", description);
     formData.append("contains_meat", contains_meat);
     formData.append("contains_chicken", contains_chicken);
     formData.append("image", image);
-    
-    console.log("Form submitted with values:", formData);
-    console.log("Image file:", image);
+
     try {
       const response = await axios.post(ngrokURL, formData, {
         headers: {
@@ -61,19 +57,30 @@ function CreateMeal({ onMealCreated }) {
         },
       });
 
-      alert("Meal submitted successfully!");
+      setAlert({
+        show: true,
+        message: `Meal "${name}" created with ${available_count} servings.`,
+        type: "success",
+      });
+
       // Reset fields
       setName("");
       setCategory("");
       setAvailable_count("");
       setPrice("");
       setDescription("");
-      setContains_meat(1);
-      setContains_chicken(1);
+      setOriginalprice("");
+      setContains_meat(0);
+      setContains_chicken(0);
       setImage(null);
-      if (onMealCreated) onMealCreated(); // Optional callback
+      if (onMealCreated) onMealCreated();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to submit meal");
+      setAlert({
+        show: true,
+        message: err.response?.data?.message || "Failed to submit meal",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -81,7 +88,11 @@ function CreateMeal({ onMealCreated }) {
 
   return (
     <div id="create-meal-container">
-      <form id="create-meal-form" encType="multipart/form-data" onSubmit={handleSubmit}>
+      <form
+        id="create-meal-form"
+        encType="multipart/form-data"
+        onSubmit={handleSubmit}
+      >
         <div className="input-group">
           <label>Meal Name:</label>
           <input
@@ -134,6 +145,16 @@ function CreateMeal({ onMealCreated }) {
         </div>
 
         <div className="input-group">
+          <label>Meal Original price:</label>
+          <input
+            type="number"
+            className="create-meal-input"
+            value={original_price}
+            onChange={(e) => setOriginalprice(e.target.value)}
+            required
+          />
+        </div>
+        <div className="input-group">
           <label>Meal Description:</label>
           <textarea
             className="create-meal-input"
@@ -143,18 +164,26 @@ function CreateMeal({ onMealCreated }) {
           ></textarea>
         </div>
 
-        <div className="input-group" style={{ display: "flex", flexDirection: "column", rowGap: "10px" }}>
+        <div
+          className="input-group"
+          style={{ display: "flex", flexDirection: "column", rowGap: "10px" }}
+        >
           <div className="checkbox-wrapper-33">
             <label className="checkbox">
               <p className="checkbox__textwrapper">Contains Meat</p>
               <input
                 className="checkbox__trigger visuallyhidden"
                 type="checkbox"
-                
                 onChange={(e) => setContains_meat(e.target.checked ? 1 : 0)}
               />
               <span className="checkbox__symbol">
-                <svg aria-hidden="true" className="icon-checkbox" width="28" height="28" viewBox="0 0 28 28">
+                <svg
+                  aria-hidden="true"
+                  className="icon-checkbox"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 28 28"
+                >
                   <path d="M4 14l8 7L24 7"></path>
                 </svg>
               </span>
@@ -167,13 +196,16 @@ function CreateMeal({ onMealCreated }) {
               <input
                 className="checkbox__trigger visuallyhidden"
                 type="checkbox"
-                
-                onChange={(e) => setContains_chicken(e.target.checked ? 1 : 0)
-                  
-                }
+                onChange={(e) => setContains_chicken(e.target.checked ? 1 : 0)}
               />
               <span className="checkbox__symbol">
-                <svg aria-hidden="true" className="icon-checkbox" width="28" height="28" viewBox="0 0 28 28">
+                <svg
+                  aria-hidden="true"
+                  className="icon-checkbox"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 28 28"
+                >
                   <path d="M4 14l8 7L24 7"></path>
                 </svg>
               </span>
@@ -191,16 +223,32 @@ function CreateMeal({ onMealCreated }) {
             <img
               src={URL.createObjectURL(image)}
               alt="Preview"
-              style={{ maxWidth: "100%", maxHeight: "200px", borderRadius: "8px" }}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "200px",
+                borderRadius: "8px",
+              }}
             />
           </div>
         )}
 
         <button type="submit" className="create-meal-btn" disabled={loading}>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.5 2a.5.5 0 0 0-1 0v10a1 1 0 0 0 1 1V22a1 1 0 0 0 2 0v-9a1 1 0 0 0 1-1V2a.5.5 0 0 0-1 0v10h-1V2zm7.5 0a1 1 0 0 0-1 1v5h-.5a.5.5 0 0 0 0 1H13v13a1 1 0 0 0 2 0V9h.5a.5.5 0 0 0 0-1H15V3a1 1 0 0 0-1-1z" />
+          </svg>
           {loading ? "Submitting..." : "Submit Meal"}
         </button>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
+
+      {alert.show && (
+        <AlertModal
+          key={Date.now()} // forces remount each time
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert({ show: false, message: "", type: "" })}
+        />
+      )}
     </div>
   );
 }

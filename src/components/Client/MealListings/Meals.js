@@ -3,9 +3,10 @@ import axios from "axios";
 
 import "./Meals.css"; // adjust path as needed
 import { UserContext } from "../../context/UserContext"; // adjust path as needed
-
+import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
-
+import AlertModal from "../../Alerts/AlertModal";
+import ConfirmModal from "../../Alerts/ConfirmModal";
 import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
 import pizza from "../../../assets/images/pizza.png";
@@ -30,6 +31,10 @@ const Meals = () => {
   const [recommendedMeals, setRecommendedMeals] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true); // local loading state
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState(""); // "success" or "error"
+  const [showAlert, setShowAlert] = useState(false);
 
   const [allMeals, setAllMeals] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -137,7 +142,7 @@ const Meals = () => {
           headers: {
             Accept: "application/json",
             "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -221,40 +226,51 @@ const Meals = () => {
 
   //place an order function
 
-  const handlePlaceOrder = () => {
-    placeOrder(orderquantity, popupContent.id);
+  const handlePlaceOrder = (e) => {
+    setShowConfirm(true);
   };
 
-  const placeOrder = async (orderQuantity, popupContentId) => {
+  const placeOrder = async (e) => {
     try {
-      console.log("Placing order:", orderQuantity, popupContentId);
+      console.log("Placing order...");
+      const token = localStorage.getItem("authToken");
+
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
         {
-          meal_id: popupContentId,
-          quantity: orderQuantity,
+          meal_id: popupContent.id,
+          quantity: orderquantity,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
         }
       );
 
-      console.log("Order placed successfully:", response.data);
-      alert(`Order placed successfully! `);
-      return response.data;
+      setShowConfirm(false); // hide confirmation
+      setAlertMessage(
+        `Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`
+      );
+      setAlertType("success");
+      setShowAlert(true);
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        alert("You need to be logged in first to reserve a meal.");
+      setShowConfirm(false);
+      if (error.response?.status === 401) {
+        setAlertMessage("You need to be logged in first to reserve a meal.");
       } else {
-        console.error("Failed to place order:", error);
+        setAlertMessage("Failed to place order. Please try again.");
       }
-      throw error;
+      setAlertType("error");
+      setShowAlert(true);
     }
   };
-
-  // This effect handles closing the popup when clicking outside of it
 
   if (isLoading) {
     return (
       <div className="meals_loading">
-        {" "}
         <RotatingLines
           strokeColor="grey"
           strokeWidth="5"
@@ -265,11 +281,10 @@ const Meals = () => {
       </div>
     );
   }
-
   return (
     <div>
-      <div className={`meals_container ${openpopup ? "meals_blurred" : ""}`}>
-        {/* Centered Tabs */}
+      <div className={`container ${openpopup ? "blurred" : ""}`}>
+        {/* CFentered Tabs */}
         <div className="meals_container">
           <div className="meals_tabs">
             <button
@@ -278,7 +293,7 @@ const Meals = () => {
             >
               Your Orders
             </button>
-            <button className="meals_tab_active">Meals</button>
+            <button className="meals_tab meals_active">Meals</button>
             <button
               className="meals_tab"
               onClick={(e) => (window.location.href = "/restaurantslist")}
@@ -336,23 +351,26 @@ const Meals = () => {
           </>
         )}
 
-        <h2 className="meals_section_title">Recommended for you</h2>
-        <div className="meals_grid" onClick={() => setOpenPopup(true)}>
-          {recommendedMeals.length > 0 ? (
-            recommendedMeals.map((meal) => (
-              <>
+        <h2 className="meals_section_title">Picks for you</h2>
+
+        <div
+          className="meals_horizontal_scroll"
+          onClick={() => setOpenPopup(true)}
+        >
+          <div className="meals_scroll_container">
+            {recommendedMeals.length > 0 ? (
+              recommendedMeals.map((meal) => (
                 <MealCard
                   key={`recommended-${meal.id}`}
                   meal={meal}
                   onClick={(e) => fetchMealDetails(meal.id)}
                 />
-              </>
-            ))
-          ) : (
-            <p>No recommended meals found</p>
-          )}
+              ))
+            ) : (
+              <p>No recommended meals found</p>
+            )}
+          </div>
         </div>
-
         {!selectedCategory && (
           <>
             <h2 className="meals_section_title">
@@ -377,19 +395,38 @@ const Meals = () => {
         )}
       </div>
       {openpopup && (
-        <MealPopUp
-          open={openpopup}
-          meal={popupContent}
-          onClose={() => {
-            setOpenPopup(false);
-            setOrderquantity(1);
-          }}
-          orderQuantity={orderquantity}
-          setOrderquantity={setOrderquantity}
-          handleDecrement={handleDecrement}
-          handleIncrement={handleIncrement}
-          handlePlaceOrder={handlePlaceOrder}
-          loading={popupLoading}
+        <>
+          <MealPopUp
+            open={openpopup}
+            meal={popupContent}
+            onClose={() => {
+              setOpenPopup(false);
+              setOrderquantity(1);
+            }}
+            orderQuantity={orderquantity}
+            setOrderquantity={setOrderquantity}
+            handleDecrement={handleDecrement}
+            handleIncrement={handleIncrement}
+            handlePlaceOrder={handlePlaceOrder}
+            loading={popupLoading}
+          />
+        </>
+      )}
+      {showConfirm && (
+        <ConfirmModal
+          message={`Are you sure you want to order ${orderquantity} x "${popupContent?.name}"?`}
+          show={showConfirm}
+          onConfirm={placeOrder}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+
+      {/* Alert Modal */}
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlert(false)}
         />
       )}
     </div>

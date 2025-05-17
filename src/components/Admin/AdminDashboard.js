@@ -4,8 +4,7 @@ import axios from 'axios';
 import ConfirmModal from '../Alerts/ConfirmModal';
 import AlertModal from '../Alerts/AlertModal';
 import { RiUser3Line } from "react-icons/ri";
-import { FaBuildingCircleCheck } from "react-icons/fa6";
-import { FaBuildingCircleXmark } from "react-icons/fa6";
+import { FaBuildingCircleCheck, FaBuildingCircleXmark } from "react-icons/fa6";
 
 const API_BASE = 'https://4399-91-186-255-241.ngrok-free.app/api';
 
@@ -17,6 +16,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [modalData, setModalData] = useState(null);
   const [alertMessage, setAlertMessage] = useState(null);
+  const [alertType, setAlertType] = useState("success");
+
 
   const axiosConfig = {
     headers: {
@@ -32,7 +33,6 @@ const AdminDashboard = () => {
       await fetchClients();
       setLoading(false);
     };
-
     loadData();
   }, []);
 
@@ -63,59 +63,59 @@ const AdminDashboard = () => {
     }
   };
 
-  const confirmAction = (actionFn, itemType, item) => {
-    setModalData({ actionFn, itemType, item });
+  const confirmAction = (actionFn, itemType, item, successMsg) => {
+    setModalData({ actionFn, itemType, item, successMsg });
   };
 
-  const approveRestaurant = async (id) => {
+  const approveRestaurant = (id) => {
     const restaurant = unapprovedRestaurants.find(r => r.id === id);
     confirmAction(async () => {
       await axios.post(`${API_BASE}/admin/approve-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant approved Successfully.")
-    }, "restaurant", restaurant);
+    }, "restaurant", restaurant, "Restaurant approved successfully.");
   };
 
-  const unapproveRestaurant = async (id) => {
+  const unapproveRestaurant = (id) => {
     const restaurant = approvedRestaurants.find(r => r.id === id);
     confirmAction(async () => {
       await axios.post(`${API_BASE}/admin/unapprove-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant Unapproved Successfully.")
-    }, "restaurant", restaurant);
+    }, "restaurant", restaurant, "Restaurant unapproved successfully.");
   };
 
-  const deleteRestaurant = async (id) => {
+  const deleteRestaurant = (id) => {
     const list = activeTab === "approved" ? approvedRestaurants : unapprovedRestaurants;
     const restaurant = list.find(r => r.id === id);
     confirmAction(async () => {
       await axios.post(`${API_BASE}/delete-restaurant/${id}`, {}, axiosConfig);
       await fetchApprovedRestaurants();
       await fetchUnapprovedRestaurants();
-      setAlertMessage("Restaurant deleted Successfully.")
-    }, "restaurant", restaurant);
+    }, "restaurant", restaurant, "Restaurant deleted successfully.");
   };
 
-  const deleteClient = async (id) => {
+  const deleteClient = (id) => {
     const client = clients.find(c => c.id === id);
     confirmAction(async () => {
       await axios.post(`${API_BASE}/delete-client/${id}`, {}, axiosConfig);
       await fetchClients();
-      setAlertMessage("Client deleted Successfully.")
-    }, "client", client);
+    }, "client", client, "Client deleted successfully.");
   };
 
   const handleModalConfirm = async () => {
-    await modalData.actionFn(); // Run the confirmed action
-    setModalData(null);         // Close the modal afterward
+    await modalData.actionFn();
+    setModalData(null);
+    setAlertMessage(modalData.successMsg);
+    setAlertType("success");
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 3000);
   };
-  
+
   const handleModalCancel = () => {
-    setModalData(null);         // Just close the modal
+    setModalData(null);
   };
-  
 
   return (
     <div id='adminDashboardPage'>
@@ -124,6 +124,7 @@ const AdminDashboard = () => {
         <input type="search" id="site-search" name="q" />
         <button>Search</button>
       </div>
+
       <div id='tabContainer'>
         <button className={activeTab === "users" ? "tab active" : "tab"} onClick={() => setActiveTab("users")}>
           <div className='iconContainer'><RiUser3Line /></div>Users
@@ -139,100 +140,90 @@ const AdminDashboard = () => {
       <div className="tab-content">
         {activeTab === "users" && (
           <><h2>All Users</h2>
-            <div className='mappingContainer'>
-              <ul className='responsive-table' id='usersTable'>
-                <li className="table-header">
-                  <div className="col col-1">Name</div>
-                  <div className="col col-2">Email </div>
-                
-                  <div className="col col-4">Diet system</div>
-                  <div className="col col-5">Actions</div>
+            <ul className='responsive-table' id='usersTable'>
+              <li className="table-header">
+                <div className="col col-1">Name</div>
+                <div className="col col-2">Email</div>
+                <div className="col col-4">Diet system</div>
+                <div className="col col-5">Actions</div>
+              </li>
+              {clients.map((client) => (
+                <li key={client.id} className="table-row">
+                  <div>{client.name}</div>
+                  <div>{client.email}</div>
+                  <div>{client.is_vegetarian ? "vegetarian" : "non-vegetarian"}</div>
+                  <div className="actions">
+                    <button onClick={() => deleteClient(client.id)} id='delete'>Delete</button>
+                    <button id='suspend'>Suspend</button>
+                  </div>
                 </li>
-                {clients.map((client) => (
-                  <li key={client.id} className="table-row">
-                    <div>{client.name}</div>
-                    <div>{client.email}</div>
-                    
-                    <div>{client.is_vegetarian ? "vegetarian" : "non-vegetarian"}</div>
-                    <div className="actions">
-                      <button onClick={() => deleteClient(client.id)} id='delete'>Delete</button>
-                      <button id='suspend'>Suspend</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div></>)
+              ))}
+            </ul>
+          </>)
         }
 
         {loading ? <p>Loading...</p> : activeTab === "approved" && (
           <><h2>Approved Restaurants</h2>
-            <div className='mappingContainer'>
-              <ul className='responsive-table'>
-                <li className="table-header">
-                  <div className="col col-1">License</div>
-                  <div className="col col-2">ID</div>
-                  <div className="col col-3">Name</div>
-                  <div className="col col-4">Actions</div>
+            <ul className='responsive-table'>
+              <li className="table-header">
+                <div className="col col-1">License</div>
+                <div className="col col-2">ID</div>
+                <div className="col col-3">Name</div>
+                <div className="col col-4">Actions</div>
+              </li>
+              {approvedRestaurants.map((restaurant) => (
+                <li key={restaurant.id} className="table-row">
+                  <div><img src={restaurant.license} alt="License" id='rest_lic' /></div>
+                  <div>{restaurant.id}</div>
+                  <div>{restaurant.name}</div>
+                  <div>
+                    <button onClick={() => deleteRestaurant(restaurant.id)} id='delete'>Delete</button>
+                    <button onClick={() => unapproveRestaurant(restaurant.id)} id='unapprove'>Unapprove</button>
+                  </div>
                 </li>
-                {approvedRestaurants.map((restaurant) => (
-                  <li key={restaurant.id} className="table-row">
-                    <div><img src={restaurant.license} alt="License" id='rest_lic' /></div>
-                    <div>{restaurant.id}</div>
-                    <div>{restaurant.name}</div>
-                    <div>
-                      <button onClick={() => deleteRestaurant(restaurant.id)} id='delete'>Delete</button>
-                      <button onClick={() => unapproveRestaurant(restaurant.id)} id='unapprove'>Unapprove</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div></>)
+              ))}
+            </ul></>)
         }
 
         {activeTab === "unapproved" && (
           <><h2>Unapproved Restaurants</h2>
-            <div className='mappingContainer'>
-              <ul className='responsive-table'>
-                <li className="table-header">
-                  <div className="col col-1">License</div>
-                  <div className="col col-2">ID</div>
-                  <div className="col col-3">Name</div>
-                  <div className="col col-4">Actions</div>
+            <ul className='responsive-table'>
+              <li className="table-header">
+                <div className="col col-1">License</div>
+                <div className="col col-2">ID</div>
+                <div className="col col-3">Name</div>
+                <div className="col col-4">Actions</div>
+              </li>
+              {unapprovedRestaurants.map((restaurant) => (
+                <li key={restaurant.id} className="table-row">
+                  <div><img src={restaurant.license} alt="License" id='rest_lic' /></div>
+                  <div>{restaurant.id}</div>
+                  <div>{restaurant.name}</div>
+                  <div>
+                    <button onClick={() => deleteRestaurant(restaurant.id)} id='delete'>Delete</button>
+                    <button onClick={() => approveRestaurant(restaurant.id)} id='approve'>Approve</button>
+                  </div>
                 </li>
-                {unapprovedRestaurants.map((restaurant) => (
-                  <li key={restaurant.id} className="table-row">
-                    <div><img src={restaurant.license} alt="License" id='rest_lic' /></div>
-                    <div>{restaurant.id}</div>
-                    <div>{restaurant.name}</div>
-                    <div>
-                      <button onClick={() => deleteRestaurant(restaurant.id)} id='delete'>Delete</button>
-                      <button onClick={() => approveRestaurant(restaurant.id)} id='approve'>Approve</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div></>)
+              ))}
+            </ul></>)
         }
       </div>
 
-      {/* Confirmation Modal */}
       {modalData && (
-  <ConfirmModal
-    message={`Are you sure you want to ${
-      modalData.itemType === "restaurant" ? "approve" : "perform this action on"
-    } "${modalData.item.name}" (ID: ${modalData.item.id})?`}
-    onConfirm={handleModalConfirm}
-    onCancel={handleModalCancel}
-  /> 
-)}
+        <ConfirmModal
+          message={`Are you sure you want to perform this action on "${modalData.item.name}" (ID: ${modalData.item.id})?`}
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
 
-{alertMessage && (
-  <AlertModal
-    message={alertMessage}
-    onClose={() => setAlertMessage(null)}
-  />
-)}
-
+      {alertMessage && (
+        <AlertModal
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setAlertMessage(null)}
+        />
+      )}
     </div>
   );
 };

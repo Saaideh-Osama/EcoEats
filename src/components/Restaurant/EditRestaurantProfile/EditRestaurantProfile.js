@@ -3,9 +3,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import "./EditRestaurantProfile.css"; // Add your CSS file for styling
 import axios from "axios";
-
+import AlertModal from "../../Alerts/AlertModal"; // Adjust the import path as necessary
 const EditRestaurantProfile = () => {
   const { user, loading } = useContext(UserContext);
+   const [alert, setAlert] = useState({ show: false, message: '', type: '' });
   const [formData, setFormData] = useState({
     name: "",
     phone_number: "",
@@ -52,7 +53,12 @@ const EditRestaurantProfile = () => {
           },
         }
       );
-      alert("Profile updated successfully");
+      setAlert({
+        show: true,
+        message: "data updated successfully",
+        type: "success"
+      });
+
     } catch (error) {
       console.error("Update failed:", error);
       alert("Something went wrong while updating");
@@ -125,6 +131,14 @@ const EditRestaurantProfile = () => {
 
         <button type="submit">Save Changes</button>
       </form>
+       {alert.show && (
+  <AlertModal 
+    key={Date.now()} // forces remount each time
+    message={alert.message} 
+    type={alert.type} 
+    onClose={() => setAlert({ show: false, message: '', type: '' })}
+  />
+)}
     </div>
   );
 };

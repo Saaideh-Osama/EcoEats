@@ -197,11 +197,11 @@ function RestaurantSignup() {
                   className="res-signup-btn"
                   onClick={() => setStep(1)}
                   style={{
-                    backgroundColor: " rgba(188, 178, 210, 0.9)",
-                    color: "white",
+                    backgroundColor: " white",
+                    color: "#0066a0",
                     borderRadius: "10px",
                     borderStyle: "solid",
-                    borderColor: "navy",
+                    borderColor: "#0066a0",
                     boxShadow: "0 10px 20px -6px rgba(22, 33, 79, 0.5)",
                     fontSize: "1rem",
                     fontWeight: "bold",

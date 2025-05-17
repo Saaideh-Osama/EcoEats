@@ -46,13 +46,13 @@ function Navbar() {
           </li>
           {!user && (
             <li>
-              <button
+              <a
                 onClick={() =>
                   navigate("/signup", { state: { isLogin: true } })
                 }
               >
                 Login
-              </button>
+              </a>
             </li>
           )}
           {(!user || user.role_id === 2) && (

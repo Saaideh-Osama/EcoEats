@@ -1,11 +1,17 @@
 import "./MealCard.css";
+
 const MealCard = ({ meal, onClick }) => (
-  <div className="meals_card" onClick={() => onClick(meal.id)} key={meal.id}>
-    <div> {meal.id}</div>
-    <img src={meal.image} alt={meal.name} />
-    <h3>{meal.name}</h3>
-    <h3>{meal.available_count}</h3>
-    <p>JOD{meal.price}</p>
+  <div
+    className="xmeal_card_unq"
+    onClick={() => onClick(meal.id)}
+    key={meal.id}
+  >
+    <img className="xmeal_img_sq" src={meal.image} alt={meal.name} />
+    <h4 className="xmeal_title_txt">{meal.name}</h4>
+    <div className="xmeal_price_box">
+      <span className="xmeal_price_new">JOD {meal.price}</span>
+      <span className="xmeal_price_old">JOD {meal.original_price}</span>
+    </div>
   </div>
 );
 

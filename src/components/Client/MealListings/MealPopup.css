@@ -1,0 +1,173 @@
+#popup-overlay {
+  background-color: #f8f9fa;
+  width: 30vw;
+  height: 90vh;
+  position: fixed;
+  top: 5%;
+  left: 35%;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 3vw;
+  overflow-y: auto;
+}
+
+#close-popup {
+  background-color: rgb(207, 13, 45);
+  color: white;
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 4px;
+}
+
+#popup-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  direction: ltr;
+  padding: 10px 0;
+}
+
+#image-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+#popup-overlay img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px; /* صورة مربعة بحواف بسيطة */
+}
+
+.meal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 12px auto 0 auto;
+  text-align: center;
+  width: 100%;
+  color: #333;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid #b9b7b7;
+  margin: 12px auto;
+  width: 90%;
+}
+
+.ingredients-section {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.ingredients-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.ingredients-text {
+  margin: 0;
+  font-style: italic;
+  color: #444;
+}
+
+.price-quantity-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity-label {
+  font-weight: bold;
+  color: #666;
+}
+
+.quantity-value {
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 1.4rem;
+  color: orange;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+.restaurant-info {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.restaurant-icon {
+  color: navy;
+  font-size: 1.2rem;
+}
+
+.order-btn-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+#orderBTN {
+  background-color: navy;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 70%;
+  font-size: 1rem;
+}
+.meals-left-info {
+  font-size: 1rem;
+  color: #888;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: left;
+  width: 100%;
+}
