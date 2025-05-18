@@ -81,7 +81,7 @@ const AuthForm = () => {
 
         setTimeout(() => {
           if (response.data.role_id === 2) {
-            window.location.href = "/meals";
+            window.location.href = "/clientmain";
           } else if (response.data.role_id === 1) {
             window.location.href = "/admin";
           } else if (response.data.role_id === 3) {

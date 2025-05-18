@@ -38,44 +38,32 @@ const OrdersList = () => {
 
   return (
     <>
-      <div className="tabs">
-        <button className="tab active">Your Orders</button>
-        <button
-          className="tab"
-          onClick={(e) => (window.location.href = "/Meals")}
-        >
-          Meals
-        </button>
-        <button
-          className="tab"
-          onClick={(e) => (window.location.href = "/Restaurant")}
-        >
-          Restaurant
-        </button>
-      </div>
+      
 
-      <div className="orders-container">
-        <section className="current-orders">
-          <h2>Upcoming Orders</h2>
+      <div className="client-orders-container">
+       <h2>Upcoming Orders</h2>
+        <section className="client-current-orders">
           {currentOrders.length > 0 ? (
             currentOrders.map((order) => (
               <OrderCard
                 key={`current-${order.meal_id}-${order.pickup_time}`}
                 order={order}
+                status="waiting pickup"
               />
             ))
           ) : (
             <p>No upcoming orders found.</p>
           )}
         </section>
-
-        <section className="past-orders">
           <h2>Past Orders</h2>
+
+        <section className="client-past-orders">
           {pastOrders.length > 0 ? (
             pastOrders.map((order) => (
               <OrderCard
                 key={`past-${order.meal_id}-${order.pickup_time}`}
                 order={order}
+                
               />
             ))
           ) : (

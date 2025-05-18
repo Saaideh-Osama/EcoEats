@@ -18,6 +18,7 @@ import AdminDashboard from "./components/Admin/AdminDashboard";
 import ResHome from "./components/Home/ResHome";
 import OrdersList from "./components/Client/Orders/OrdersList";
 import AlertModal from "./components/Alerts/AlertModal";
+import ClientDashboard from "./components/Client/ClientDashboard";
 
 // Wrapper to use useLocation hook
 const AppWrapper = () => {
@@ -40,6 +41,7 @@ const AppWrapper = () => {
         <Route path="/client" element={<Meals />} />
         <Route path="/orderslist" element={<OrdersList />} />
         <Route path="/editclient" element={<EditClientProfile />} />
+        <Route path="/clientmain" element={<ClientDashboard />} />
         <Route path="/editrestaurant" element={<EditRestaurantProfile />} />
         <Route path="/restdash" element={<RestaurantDashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />

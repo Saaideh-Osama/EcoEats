@@ -1,21 +1,35 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { FaUserCircle } from "react-icons/fa";
 import "../Navbar/Navbar.css";
-
+import AlertModal from "../Alerts/AlertModal";
+import ConfirmModal from "../Alerts/ConfirmModal";
 function Navbar() {
   const navigate = useNavigate();
   const { user, fetchUser } = useContext(UserContext);
-
+ const [showConfirm, setShowConfirm] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   useEffect(() => {
     fetchUser();
   }, []);
 
   const handleLogout = () => {
+    setShowConfirm(true); // Ask for confirmation first
+  };
+
+  const confirmLogout = () => {
+    // Proceed with logout
     localStorage.removeItem("authToken");
+    setShowConfirm(false);
+    setShowAlert(true); // Show success alert
     navigate("/signup", { state: { isLogin: true } });
   };
+
+  const cancelLogout = () => {
+    setShowConfirm(false);
+  };
+
 
   const renderProfileIcon = () => {
     if (!user) return null;
@@ -61,7 +75,7 @@ function Navbar() {
                 <a href="/restaurantslist">Restaurants</a>
               </li>
               <li>
-                <a href="/meals">Meals</a>
+                <a href="/clientmain">Browse</a>
               </li>
             </>
           )}
@@ -87,6 +101,21 @@ function Navbar() {
           )}
         </ul>
       </nav>
+       {showConfirm && (
+        <ConfirmModal
+          message="Are you sure you want to logout?"
+          onConfirm={confirmLogout}
+          onCancel={cancelLogout}
+        />
+      )}
+
+      {showAlert && (
+        <AlertModal
+          type="success"
+          message="You have been logged out successfully."
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 }

@@ -165,26 +165,12 @@
   }
   
   /* Tabs */
-  .tabs {
-    display: flex;
-    margin: 30px 0 20px;
-    border-bottom: 1px solid #ddd;
-  }
+ .meals_promo_img > img{
+    width: 20vw;
+    height: 20vw;
+    margin-left: 20vw;
+ }
   
-  .meals_tab {
-    padding: 10px 25px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    color: #666;
-  }
-  
-  .meals_active {
-    color: #ff6b6b;
-    border-bottom: 2px solid #ff6b6b;
-    font-weight: bold;
-  }
   
   
   .meals_buttons {

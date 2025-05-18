@@ -53,6 +53,7 @@ const AllRestaurants = () => {
   }
 
   return (
+<<<<<<< Updated upstream
     <>
       <div className="meals_tabs">
         <button
@@ -70,6 +71,11 @@ const AllRestaurants = () => {
         </button>
       </div>
       <h1 className="all-res">All Restaurants</h1>
+=======
+    <div>
+      
+      <h1>All Restaurants</h1>
+>>>>>>> Stashed changes
       <div id="restaurant-card-container">
         {restaurants.map((restaurant) => (
           <RestaurantCard

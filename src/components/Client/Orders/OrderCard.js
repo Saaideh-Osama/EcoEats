@@ -15,29 +15,36 @@ const OrderCard = ({ order }) => {
   };
 
   // Determine if order is upcoming or past
-  const isUpcoming = new Date(order.pickup_time) >= new Date();
+  const status = order.status;
 
   return (
-    <div className={`order-card ${isUpcoming ? "upcoming" : "past"}`}>
-      <div className="order-header">
-        <h3>{order.meal.name}</h3>
-        <span className="order-time">{formatDateTime(order.pickup_time)}</span>
+    <div className={`client-order-card ${status ==="reserved"? "reserved" : "Picked-Up"}`}>
+      <div className="client-order-meal-info">
+        <p><strong> Order details</strong></p>
+        <p>{order.meal.name}</p>
+      <button className={`status ${status === 'reserved' ? 'status-reserved' : 'status-not-reserved'}`}>
+   {status}
+</button>
+      <p>
+          Total:  {order.total_price} JOD
+        </p>
       </div>
 
-      <div className="order-details">
-        <p>
-          <strong>Restaurant:</strong> {order.restaurant.name}
-        </p>
+      <div className="client-order-details">
+        
         <p>
           <strong>Quantity:</strong> {order.quantity}
         </p>
-        <p>
-          <strong>Total Price:</strong> ${order.total_price}
-        </p>
+        
+        <p className="client-order-time">pickup-time:{formatDateTime(order.pickup_time)}</p>
+
       </div>
 
-      <div className="restaurant-info">
+      <div className="client-order-restaurant-info">
         <h4>Restaurant Details:</h4>
+        <p>
+          <strong>Name:</strong> {order.restaurant.name}
+        </p>
         <p>
           <strong>Address:</strong> {order.restaurant.address}
         </p>
@@ -46,11 +53,7 @@ const OrderCard = ({ order }) => {
         </p>
       </div>
 
-      <div className="order-status">
-        <span className={`status-badge ${isUpcoming ? "upcoming" : "past"}`}>
-          {isUpcoming ? "Upcoming" : "Completed"}
-        </span>
-      </div>
+      
     </div>
   );
 };

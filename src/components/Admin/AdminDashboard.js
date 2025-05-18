@@ -12,11 +12,18 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("approved");
   const [approvedRestaurants, setApprovedRestaurants] = useState([]);
   const [unapprovedRestaurants, setUnapprovedRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState({
+  unapproveRestaurant: [],
+  approvedRestaurants: [],
+});
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalData, setModalData] = useState(null);
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState("success");
+  const [showAlert, setShowAlert] = useState("success");
+  const [searchQuery, setSearchQuery] = useState('');
+
 
 
   const axiosConfig = {
@@ -25,6 +32,35 @@ const AdminDashboard = () => {
       authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   };
+
+const handleSearch = (e) => {
+  const query = e.target.value.toLowerCase();
+  setSearchQuery(query);
+
+  if (query.trim() === '') {
+    fetchApprovedRestaurants();
+    fetchUnapprovedRestaurants();
+    fetchClients();
+    return;
+  }
+
+  if (activeTab === 'users') {
+    const filtered = clients.filter(client =>
+      client.name.toLowerCase().includes(query)
+    );
+    setClients(filtered);
+  } else {
+    const filteredApproved = approvedRestaurants.filter(r =>
+      r.name.toLowerCase().includes(query)
+    );
+    const filteredUnapproved = unapprovedRestaurants.filter(r =>
+      r.name.toLowerCase().includes(query)
+    );
+    setApprovedRestaurants(filteredApproved);
+    setUnapprovedRestaurants(filteredUnapproved);
+  }
+};
+
 
   useEffect(() => {
     const loadData = async () => {
@@ -35,6 +71,13 @@ const AdminDashboard = () => {
     };
     loadData();
   }, []);
+
+const handleLogout = () => {
+  confirmAction(() => {
+    localStorage.removeItem("authToken");
+    window.location.href = "/"; // or redirect to your login route
+  }, "session", { id: "", name: "your session" }, "Logged out successfully.");
+};
 
   const fetchApprovedRestaurants = async () => {
     try {
@@ -121,8 +164,9 @@ const AdminDashboard = () => {
     <div id='adminDashboardPage'>
       <div id='searchBar'>
         <label htmlFor="site-search">Search </label>
-        <input type="search" id="site-search" name="q" />
-        <button>Search</button>
+        <input    type="text"  placeholder={`Search ${activeTab}`}  value={searchQuery}  onChange={handleSearch}  className="search-input" />
+        
+        < button id='logout' onClick={handleLogout}>logout</button>
       </div>
 
       <div id='tabContainer'>
@@ -137,9 +181,9 @@ const AdminDashboard = () => {
         </button>
       </div>
 
-      <div className="tab-content">
+      <div className="admin-tab-content">
         {activeTab === "users" && (
-          <><h2>All Users</h2>
+          <>
             <ul className='responsive-table' id='usersTable'>
               <li className="table-header">
                 <div className="col col-1">Name</div>
@@ -163,7 +207,7 @@ const AdminDashboard = () => {
         }
 
         {loading ? <p>Loading...</p> : activeTab === "approved" && (
-          <><h2>Approved Restaurants</h2>
+          <>
             <ul className='responsive-table'>
               <li className="table-header">
                 <div className="col col-1">License</div>
@@ -186,7 +230,7 @@ const AdminDashboard = () => {
         }
 
         {activeTab === "unapproved" && (
-          <><h2>Unapproved Restaurants</h2>
+          <>
             <ul className='responsive-table'>
               <li className="table-header">
                 <div className="col col-1">License</div>
@@ -209,21 +253,7 @@ const AdminDashboard = () => {
         }
       </div>
 
-      {modalData && (
-        <ConfirmModal
-          message={`Are you sure you want to perform this action on "${modalData.item.name}" (ID: ${modalData.item.id})?`}
-          onConfirm={handleModalConfirm}
-          onCancel={handleModalCancel}
-        />
-      )}
-
-      {alertMessage && (
-        <AlertModal
-          message={alertMessage}
-          type={alertType}
-          onClose={() => setAlertMessage(null)}
-        />
-      )}
+     
     </div>
   );
 };
