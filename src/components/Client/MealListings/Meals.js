@@ -237,14 +237,7 @@ const Meals = () => {
   const placeOrder = async (e) => {
     try {
       console.log("Placing order...");
-
       const token = localStorage.getItem("authToken");
-      if (!popupContent?.id || orderquantity < 1) {
-        setAlertMessage("Invalid meal or quantity.");
-        setAlertType("error");
-        setShowAlert(true);
-        return;
-      }
 
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
@@ -276,157 +269,158 @@ const Meals = () => {
       } else {
         setAlertMessage("Failed to place order. Please try again.");
       }
+      setAlertType("error");
+      setShowAlert(true);
     }
+  };
 
-    if (isLoading) {
-      return (
-        <div className="meals_loading">
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
-            visible={true}
-          />
-        </div>
-      );
-    }
+  if (isLoading) {
     return (
-      <div>
-        <div className={`container ${openpopup ? "blurred" : ""}`}>
-          {/* CFentered Tabs */}
-          <div className="meals_container"></div>
-
-          {/* Horizontal Categories */}
-          <div className="meals_categories_container">
-            <div className="meals_category_grid">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`meals_category_button ${
-                    selectedCategory === category.id ? "cat_active" : ""
-                  }`}
-                >
-                  <img src={category.icon} alt={category.name} />
-                  <span>{category.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Centered Promo Image */}
-          <div className="meals_promo_container">
-            <div className="meals_promo_img">
-              <img src={offer} alt="meals_Special_offer" />
-            </div>
-          </div>
-
-          {selectedCategory && (
-            <>
-              <h2 className="meals_section_title">
-                All <span id="meals_category_name">{selectedCategory}</span>{" "}
-                meals
-              </h2>
-              <div className="meals_grid" onClick={() => setOpenPopup(true)}>
-                {allMeals.length > 0 ? (
-                  allMeals.map((meal) => (
-                    <>
-                      <MealCard
-                        key={`all-${meal.id}`}
-                        meal={meal}
-                        onClick={(e) => fetchMealDetails(meal.id)}
-                      />
-                    </>
-                  ))
-                ) : (
-                  <p>No meals found</p>
-                )}
-              </div>
-            </>
-          )}
-
-          <h2 className="meals_section_title">Picks for you</h2>
-
-          <div
-            className="meals_horizontal_scroll"
-            onClick={() => setOpenPopup(true)}
-          >
-            <div className="meals_scroll_container">
-              {recommendedMeals.length > 0 ? (
-                recommendedMeals.map((meal) => (
-                  <MealCard
-                    key={`recommended-${meal.id}`}
-                    meal={meal}
-                    onClick={(e) => fetchMealDetails(meal.id)}
-                  />
-                ))
-              ) : (
-                <p>No recommended meals found</p>
-              )}
-            </div>
-          </div>
-          {!selectedCategory && (
-            <>
-              <h2 className="meals_section_title">
-                All <span id="meals_category_name">meals</span>
-              </h2>
-              <div className="meals_grid" onClick={() => setOpenPopup(true)}>
-                {allMeals.length > 0 ? (
-                  allMeals.map((meal) => (
-                    <>
-                      <MealCard
-                        key={`all-${meal.id}`}
-                        meal={meal}
-                        onClick={(e) => fetchMealDetails(meal.id)}
-                      />
-                    </>
-                  ))
-                ) : (
-                  <p>No meals found</p>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-        {openpopup && (
-          <>
-            <MealPopUp
-              open={openpopup}
-              meal={popupContent}
-              onClose={() => {
-                setOpenPopup(false);
-                setOrderquantity(1);
-              }}
-              orderQuantity={orderquantity}
-              setOrderquantity={setOrderquantity}
-              handleDecrement={handleDecrement}
-              handleIncrement={handleIncrement}
-              handlePlaceOrder={handlePlaceOrder}
-              loading={popupLoading}
-            />
-          </>
-        )}
-        {showConfirm && (
-          <ConfirmModal
-            message={confirmationMessage}
-            show={showConfirm}
-            onConfirm={placeOrder}
-            onCancel={() => setShowConfirm(false)}
-          />
-        )}
-
-        {/* Alert Modal */}
-        {showAlert && (
-          <AlertModal
-            message={alertMessage}
-            type={alertType}
-            onClose={() => setShowAlert(false)}
-          />
-        )}
+      <div className="meals_loading">
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
       </div>
     );
-  };
+  }
+  return (
+    <div>
+      <div className={`container ${openpopup ? "blurred" : ""}`}>
+        {/* CFentered Tabs */}
+        <div className="meals_container"></div>
+
+        {/* Horizontal Categories */}
+        <div className="meals_categories_container">
+          <div className="meals_category_grid">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setSelectedCategory(category.id)}
+                className={`meals_category_button ${
+                  selectedCategory === category.id ? "cat_active" : ""
+                }`}
+              >
+                <img src={category.icon} alt={category.name} />
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Centered Promo Image */}
+        <div className="meals_promo_container">
+          <div className="meals_promo_img">
+            <img src={offer} alt="meals_Special_offer" />
+          </div>
+        </div>
+
+        {selectedCategory && (
+          <>
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">{selectedCategory}</span> meals
+            </h2>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
+              {allMeals.length > 0 ? (
+                allMeals.map((meal) => (
+                  <>
+                    <MealCard
+                      key={`all-${meal.id}`}
+                      meal={meal}
+                      onClick={(e) => fetchMealDetails(meal.id)}
+                    />
+                  </>
+                ))
+              ) : (
+                <p>No meals found</p>
+              )}
+            </div>
+          </>
+        )}
+
+        <h2 className="meals_section_title">Picks for you</h2>
+
+        <div
+          className="meals_horizontal_scroll"
+          onClick={() => setOpenPopup(true)}
+        >
+          <div className="meals_scroll_container">
+            {recommendedMeals.length > 0 ? (
+              recommendedMeals.map((meal) => (
+                <MealCard
+                  key={`recommended-${meal.id}`}
+                  meal={meal}
+                  onClick={(e) => fetchMealDetails(meal.id)}
+                />
+              ))
+            ) : (
+              <p>No recommended meals found</p>
+            )}
+          </div>
+        </div>
+        {!selectedCategory && (
+          <>
+            <h2 className="meals_section_title">
+              All <span id="meals_category_name">meals</span>
+            </h2>
+            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
+              {allMeals.length > 0 ? (
+                allMeals.map((meal) => (
+                  <>
+                    <MealCard
+                      key={`all-${meal.id}`}
+                      meal={meal}
+                      onClick={(e) => fetchMealDetails(meal.id)}
+                    />
+                  </>
+                ))
+              ) : (
+                <p>No meals found</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+      {openpopup && (
+        <>
+          <MealPopUp
+            open={openpopup}
+            meal={popupContent}
+            onClose={() => {
+              setOpenPopup(false);
+              setOrderquantity(1);
+            }}
+            orderQuantity={orderquantity}
+            setOrderquantity={setOrderquantity}
+            handleDecrement={handleDecrement}
+            handleIncrement={handleIncrement}
+            handlePlaceOrder={handlePlaceOrder}
+            loading={popupLoading}
+          />
+        </>
+      )}
+      {showConfirm && (
+        <ConfirmModal
+          message={confirmationMessage}
+          show={showConfirm}
+          onConfirm={placeOrder}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+
+      {/* Alert Modal */}
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          type={alertType}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
+    </div>
+  );
 };
 
 export default Meals;

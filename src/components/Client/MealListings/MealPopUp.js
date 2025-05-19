@@ -94,6 +94,13 @@ const MealPopup = ({
               <button
                 id="orderBTN"
                 onClick={async (e) => {
+                  e.stopPropagation();
+
+                  if (!user) {
+                    setShowAlert(true);
+                    return;
+                  }
+
                   try {
                     await handlePlaceOrder();
                   } catch (error) {
