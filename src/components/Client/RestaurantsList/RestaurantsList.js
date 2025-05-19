@@ -53,29 +53,9 @@ const AllRestaurants = () => {
   }
 
   return (
-<<<<<<< Updated upstream
-    <>
-      <div className="meals_tabs">
-        <button
-          className="meals_tab"
-          onClick={(e) => (window.location.href = "/orderslist")}
-        >
-          Your Orders
-        </button>
-        <button className="meals_tab meals_active">Meals</button>
-        <button
-          className="meals_tab"
-          onClick={(e) => (window.location.href = "/restaurantslist")}
-        >
-          Restaurant
-        </button>
-      </div>
-      <h1 className="all-res">All Restaurants</h1>
-=======
     <div>
       
       <h1>All Restaurants</h1>
->>>>>>> Stashed changes
       <div id="restaurant-card-container">
         {restaurants.map((restaurant) => (
           <RestaurantCard
@@ -91,8 +71,7 @@ const AllRestaurants = () => {
           />
         ))}
       </div>
-    </>
-  );
-};
+      </div>
+     );};
 
 export default AllRestaurants;

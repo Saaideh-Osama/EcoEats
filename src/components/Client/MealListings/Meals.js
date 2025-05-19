@@ -227,7 +227,6 @@ const Meals = () => {
 
   //place an order function
 
-<<<<<<< Updated upstream
   const handlePlaceOrder = (e) => {
     setShowConfirm(true);
   };
@@ -236,24 +235,6 @@ const Meals = () => {
     try {
       console.log("Placing order...");
       const token = localStorage.getItem("authToken");
-=======
-   const handlePlaceOrder = (e) => {
-    setConfirmationMessage(`Are you sure you want to order ${orderquantity} x "${popupContent?.name}"?`);
-  setShowConfirm(true); 
-  };
-
- const placeOrder = async (e) => {
-  try {
-    console.log("Placing order...");
-
-    const token = localStorage.getItem("authToken");
-    if (!popupContent?.id || orderquantity < 1) {
-      setAlertMessage("Invalid meal or quantity.");
-      setAlertType("error");
-      setShowAlert(true);
-      return;
-    }
->>>>>>> Stashed changes
 
       const response = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
@@ -270,7 +251,6 @@ const Meals = () => {
         }
       );
 
-<<<<<<< Updated upstream
       setShowConfirm(false); // hide confirmation
       setAlertMessage(
         `Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`
@@ -286,21 +266,6 @@ const Meals = () => {
       }
       setAlertType("error");
       setShowAlert(true);
-=======
-    setShowConfirm(false); // hide confirmation
-    setAlertMessage(`Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`);
-    setAlertType("success");
-    setShowAlert(true);
-
-  } catch (error) {
-    console.error("Order API error:", error);
-
-    setShowConfirm(false);
-    if (error.response?.status === 401) {
-      setAlertMessage("You need to be logged in first to reserve a meal.");
-    } else {
-      setAlertMessage("Failed to place order. Please try again.");
->>>>>>> Stashed changes
     }
   };
 
