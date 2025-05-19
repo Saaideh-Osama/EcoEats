@@ -94,17 +94,6 @@ const MealPopup = ({
               <button
                 id="orderBTN"
                 onClick={async (e) => {
-<<<<<<< Updated upstream
-                  e.stopPropagation();
-
-                  if (!user) {
-                    setShowAlert(true);
-                    return;
-                  }
-
-=======
-                  
->>>>>>> Stashed changes
                   try {
                     await handlePlaceOrder();
                   } catch (error) {
