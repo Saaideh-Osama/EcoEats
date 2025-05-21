@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RestaurantsList.css";
 import { RotatingLines } from "react-loader-spinner";
-import RestaurantCard from "./RestaurantCard"; // Import the RestaurantCard component
+import RestaurantCard from "./RestaurantCard";
 
-const AllRestaurants = () => {
+const AllRestaurants = ({ active }) => {
   const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false
   const [error, setError] = useState(null);
+  const [loadedOnce, setLoadedOnce] = useState(false);
 
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           "https://4399-91-186-255-241.ngrok-free.app/api/get/restaurants",
           {
@@ -21,9 +23,8 @@ const AllRestaurants = () => {
             },
           }
         );
-
-        // ✅ Just use the data directly — assuming backend returns valid image URLs
         setRestaurants(response.data.restaurants);
+        setLoadedOnce(true);
       } catch (err) {
         setError(err.message || "Something went wrong!");
       } finally {
@@ -31,8 +32,10 @@ const AllRestaurants = () => {
       }
     };
 
-    fetchRestaurants();
-  }, []);
+    if (active && !loadedOnce) {
+      fetchRestaurants();
+    }
+  }, [active, loadedOnce]);
 
   if (loading) {
     return (
@@ -54,7 +57,6 @@ const AllRestaurants = () => {
 
   return (
     <div>
-      
       <h1>All Restaurants</h1>
       <div id="restaurant-card-container">
         {restaurants.map((restaurant) => (
@@ -63,7 +65,7 @@ const AllRestaurants = () => {
             id={restaurant.id}
             name={restaurant.name}
             address={restaurant.address}
-            image={restaurant.image} // ✅ Use direct image URL
+            image={restaurant.image}
             phone_number={restaurant.phone_number}
             Working_hours_from={restaurant.working_hours_from}
             Working_hours_to={restaurant.working_hours_to}
@@ -71,7 +73,8 @@ const AllRestaurants = () => {
           />
         ))}
       </div>
-      </div>
-     );};
+    </div>
+  );
+};
 
 export default AllRestaurants;

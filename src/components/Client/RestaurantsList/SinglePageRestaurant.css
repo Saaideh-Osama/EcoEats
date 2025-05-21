@@ -17,8 +17,13 @@
   .restaurant-banner img {
     width: 40%;
     margin: auto;
-    height:    80%;
+    height:100%;
     object-fit: fill;
+    border-radius: 50%;
+  }
+  .restaurant-banner img:hover {
+   
+     box-shadow: 0 0 7px 1px steelblue;
   }
   
   .restaurant-info-box {
@@ -34,8 +39,8 @@
     max-width: 500px; /* حجم أصغر */
     z-index: 1000;
     height: auto; /* ليأخذ حجم المحتوى فقط */
+    border:1px steelblue solid;
   }
-  
   
   .restaurant-info-box h1 {
     margin-top: 0;
@@ -51,17 +56,24 @@
   .restaurant-info-box .about {
     color: gray;
     margin-top: 0.5rem;
+    
+  }
+  #phoneIcon{
+color: rgb(41, 172, 44);
+  }
+  #locationIcon{
+    color: rgb(224, 50, 50);
+  }
+  #clockIcon{
+    color: steelblue;
   }
   
-  .restaurant-info-box svg {
-    color:rgb(191, 189, 189);
-    font-size: 0.8srem;
-  }
   
   
   .meals-section {
     margin-top: 80px;
     padding: 2rem;
+    
   }
   
   .meals-grid {

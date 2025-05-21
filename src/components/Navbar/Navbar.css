@@ -5,64 +5,84 @@
     
 }
 
-#navbar {
-    background: #fff;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.navbar{
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr  7vw;
+  align-items: center;
+  column-gap: 20vw;
+  padding: 0 30px;
+  height: 110px;
+  z-index: 1000;
+  color: white;
+  font-weight: 700;
+  background-color: #007FC8;
+  backdrop-filter: blur(8px);
+  margin-bottom: 5vh;
+}
+#logo-link:hover{
+ background-color: transparent;
+  color: inherit;
+}
+#logo-home{
+   font-family: 'Cinzel Decorative', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #1E3A8A, #7f95ca);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.3s ease;    
+}
+#logo-home:hover {
+  transform: scale(1.05);
 }
 
-nav {
-    min-width: 98vw;
-    background: #ffffff;
-    
-    border-bottom: 1px rgb(186, 182, 182) groove;
+.navbar a {
+    user-select: none;      /* Prevent text selection */
+  outline: none;          /* Remove focus outline (optional) */
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+.navbar a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+.active {
+  border-bottom: white 2px solid;
+  color: #eeebe6;
+
 }
 
-nav ul {
-    padding: 0;
-    margin: 0;
+
+.logout-button {
+  background-color: #d9534f;
+  color: white;
+  padding: 10px;
+  border: none;
+  margin-top: 20px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-nav ul li {
-    list-style: none;
-    display: inline-block;
-    padding: 3px 8px;
-    margin: 10px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #333333;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
-    transition: color 0.5s, opacity 0.5s;
+.logout-button:hover {
+  background-color: #c9302c;
 }
 
-nav ul li::after {
-    content: "";
-    background: #FFB15F;
-    width: 100%;
-    height: 100%;
-    border-radius: 30px;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-    opacity: 0;
-    transition: top 0.5s, opacity 0.5s;
-}
-nav ul li a {
-    text-decoration: none;
-    color: #333333;
-}
-
-nav ul li:hover {
-    color: #fff;
-}
-
-nav ul li:hover::after {
-    top: 50%;
-    opacity: 1;
+.settings {
+  cursor: pointer;
+  font-size: 24px;
+  margin-left: auto;
 }

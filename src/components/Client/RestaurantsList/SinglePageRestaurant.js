@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
 import "./SinglePageRestaurant.css";
@@ -14,7 +14,7 @@ import { UserContext } from "../../context/UserContext";
 import { useContext } from "react";
 import AlertModal from "../../Alerts/AlertModal";
 import ConfirmModal from "../../Alerts/ConfirmModal";
-
+import Navbar from "../../Navbar/Navbar";
 const SinglePageRestaurant = () => {
   const { user, fetchUser } = useContext(UserContext);
   const { id } = useParams();
@@ -29,8 +29,12 @@ const SinglePageRestaurant = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(""); // "success" or "error"
   const [showAlert, setShowAlert] = useState(false);
+const [activeTab, setActiveTab] = useState("");
 
 
+
+
+  const navigate = useNavigate();
   const fetchMealDetails = async (mealId) => {
     try {
       setPopupLoading(true);
@@ -176,19 +180,21 @@ const placeOrder = async (e) => {
 
   return (
     <div>
+     <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+
       <div className={`restaurant-page ${openpopup ? "blurred" : ""}`}>
         <div className="restaurant-banner">
           <img src={restaurant.image} alt="Restaurant" />
           <div className="restaurant-info-box">
             <p className="about">{restaurant.restaurant_info}</p>
             <p>
-              <FaLocationDot /> {restaurant.address}
+              <FaLocationDot id="locationIcon"/> {restaurant.address}
             </p>
             <p>
-              <FaPhoneAlt /> {restaurant.phone_number}
+              <FaPhoneAlt id="phoneIcon"/> {restaurant.phone_number}
             </p>
             <p>
-              <GoClock /> {restaurant.working_hours_from} -{" "}
+              <GoClock id="clockIcon"/> {restaurant.working_hours_from} -{" "}
               {restaurant.working_hours_to}
             </p>
           </div>
