@@ -8,7 +8,7 @@ import Meals from "./components/Client/MealListings/Meals";
 import AuthForm from "./components/Login/AuthForm";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./components/Home/Home";
-import CreateMeal from "./components/Restaurant/CreateMeal/CreateMeal";
+import CreateMeal from "./components/Restaurant/RestaurantDashboard/CreateMeal";
 import RestaurantsList from "./components/Client/RestaurantsList/RestaurantsList";
 import SinglePageRestaurant from "./components/Client/RestaurantsList/SinglePageRestaurant";
 import EditClientProfile from "./components/Client/EditProfile/EditClientProfile";
@@ -27,7 +27,7 @@ const AppWrapper = () => {
   return (
     <>
       {/* Conditionally render Navbar based on the current route */}
-      {location.pathname !== "/admin" && <Navbar />}
+     
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route index path="res_home" element={<ResHome />} />

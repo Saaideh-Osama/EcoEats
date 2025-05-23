@@ -11,43 +11,22 @@ import order from "../../assets/images/order.jpg";
 import veg from "../../assets/images/veg.jpg";
 import food from "../../assets/images/food.jpeg";
 import { UserContext } from "../context/UserContext";
-import { useContext, useEffect,useState } from "react";
-import ConfirmModal from "../Alerts/ConfirmModal";
-import AlertModal from "../Alerts/AlertModal";
+import { useContext, useEffect } from "react";
+
 function Home() {
+ 
   const navigate = useNavigate();
   const { user, fetchUser } = useContext(UserContext);
-const [showConfirmModal, setShowConfirmModal] = useState(false);
-const [showAlertModal, setShowAlertModal] = useState(false);
-const [alertMessage, setAlertMessage] = useState('');
-const [alertType, setAlertType] = useState('success'); // or 'error'
-const [confirmAction, setConfirmAction] = useState(null);
+
   useEffect(() => {
     fetchUser();
+
   }, []);
 
-  const handleLogout = () => {
-  setConfirmAction(() => () => {
-    // Confirmed!
-    localStorage.removeItem("authToken");
-
-    // Show alert
-    setAlertMessage("You have logged out successfully.");
-    setAlertType("success");
-    setShowAlertModal(true);
-
-    // Redirect after short delay
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1500);
-  });
-
-  setShowConfirmModal(true); // Show the confirmation modal
-};
 
 
   return (
-    <div id="home-page">
+    <div id="home-page" >
       <div className="vid-overlay-content">
         <img src={img} className="home_logo"></img>
 
@@ -61,9 +40,12 @@ const [confirmAction, setConfirmAction] = useState(null);
           </button>
         </div>
         <div className="home_actions">
-         {user&& (<button className="home_logout_btn" onClick={handleLogout}>
-            Logout
-          </button>)}
+         {user&& user.role_id === 3?(<button className="home_logout_btn" onClick={()  => navigate("/restdash")}>
+            Manage Meals
+          </button>): (<button className="home_logout_btn" onClick={()  => navigate("/clientmain")}>
+            Browse Meals
+          </button>) }
+         
           {!user && (
             <button
               className="home_login_btn"
@@ -214,24 +196,7 @@ const [confirmAction, setConfirmAction] = useState(null);
           </div>
         </div>
       </div>
-      {showConfirmModal && (
-  <ConfirmModal
-    message="Are you sure you want to logout?"
-    onConfirm={() => {
-      setShowConfirmModal(false);
-      if (confirmAction) confirmAction();
-    }}
-    onCancel={() => setShowConfirmModal(false)}
-  />
-)}
-
-{showAlertModal && (
-  <AlertModal
-    message={alertMessage}
-    type={alertType}
-    onClose={() => setShowAlertModal(false)}
-  />
-)}
+      
     </div>
   );
 }

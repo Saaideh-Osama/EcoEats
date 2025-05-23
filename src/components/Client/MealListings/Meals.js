@@ -1,54 +1,45 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
-import "./Meals.css"; // adjust path as needed
-import { UserContext } from "../../context/UserContext"; // adjust path as needed
+import "./Meals.css";
+import { UserContext } from "../../context/UserContext";
 import { MdOutlineClose } from "react-icons/md";
 import { RotatingLines } from "react-loader-spinner";
 import AlertModal from "../../Alerts/AlertModal";
 import ConfirmModal from "../../Alerts/ConfirmModal";
 import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
+
 import pizza from "../../../assets/images/pizza.png";
-import beef from "../../../assets/images/beef.png";
+import beef from "../../../assets/images/beef.png"; 
 import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
-
 import shaw from "../../../assets/images/shaw.png";
 import salad from "../../../assets/images/salad.png";
 import offer from "../../../assets/images/add.jpg";
-
+// ... imports unchanged
 const Meals = () => {
-  // State and refs for the popup
-
   const [openpopup, setOpenPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [popupLoading, setPopupLoading] = useState(false);
-
-  //fetch user information to recommend meals based on the user diet
-  const { user, fetchUser } = useContext(UserContext);
-  const [isVegetarian, setIsVegetarian] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
+  const [allMeals, setAllMeals] = useState([]);
   const [recommendedMeals, setRecommendedMeals] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [orderquantity, setOrderquantity] = useState(1);
 
-  const [isLoading, setIsLoading] = useState(true); // local loading state
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState(""); // "success" or "error"
+  const [alertType, setAlertType] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
-  const [allMeals, setAllMeals] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [orderquantity, setOrderquantity] = useState(1); // let's say minimum is 1
-  const [restaurants, setRestaurants] = useState([]);
+  const { user, fetchUser } = useContext(UserContext);
+  const [isVegetarian, setIsVegetarian] = useState(null);
 
-  // Add this near the top of your component, right after the imports and before the Meals function
   const categories = [
-    {
-      id: null,
-      name: "All",
-      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png",
-    },
+    { id: null, name: "All", icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png" },
     { id: "shawarma", name: "shawarma", icon: shaw },
     { id: "burger", name: "burger", icon: beef },
     { id: "Chicken Sandwich", name: "Chicken Sandwich", icon: chk },
@@ -57,165 +48,132 @@ const Meals = () => {
     { id: "pizza", name: "pizza", icon: pizza },
   ];
 
-  // order quantity handlers
-  const handleDecrement = () => {
-    setOrderquantity((prev) => Math.max(prev - 1, 1)); // prevents going below 1
-  };
-  const handleIncrement = () => {
-    setOrderquantity((prev) =>
-      Math.min(prev + 1, popupContent.available_count)
-    ); // prevents going above available count
-  };
+useEffect(() => {
+  if (showAlert) {
+    const timer = setTimeout(() => {
+      setShowAlert(false);
+    }, 2000); // 2 seconds
 
-  // ----------------------------
-  // API FETCH FUNCTIONS
-  // ----------------------------
+    return () => clearTimeout(timer); // cleanup
+  }
+}, [showAlert]);
 
-  // Fetch restaurant names and IDs
+
+  const handleDecrement = () => setOrderquantity((prev) => Math.max(prev - 1, 1));
+  const handleIncrement = () => setOrderquantity((prev) => Math.min(prev + 1, popupContent?.available_count || 1));
+
   const fetchRestaurants = async () => {
     try {
-      const response = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names",
-        {
-          headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-      setRestaurants(response.data.restaurants);
-    } catch (error) {
-      console.error("Error fetching restaurants:", error);
-      setRestaurants([]);
+      const res = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names", {
+        headers: {
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+      setRestaurants(res.data.restaurants);
+    } catch (err) {
+      console.error("Error fetching restaurants:", err);
     }
   };
 
-  // Fetch all meals
   const fetchAllMeals = async () => {
     try {
-      const response = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/all-meals",
-        {
-          headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-      setAllMeals(response.data.meals);
-    } catch (error) {
-      console.error("Error fetching all meals:", error);
-      setAllMeals([]);
+      const res = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/all-meals", {
+        headers: {
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+      setAllMeals(res.data.meals);
+    } catch (err) {
+      console.error("Error fetching all meals:", err);
     }
   };
 
-  // Fetch recommended meals based on diet
   const fetchRecommendedMeals = async () => {
+    if (isVegetarian === null) return;
     try {
       const endpoint = isVegetarian
         ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
         : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
-
-      const response = await axios.get(endpoint, {
+      const res = await axios.get(endpoint, {
         headers: {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
-      setRecommendedMeals(response.data.meals);
-    } catch (error) {
-      console.error("Error fetching recommended meals:", error);
-      setRecommendedMeals([]);
+      setRecommendedMeals(res.data.meals);
+    } catch (err) {
+      console.error("Error fetching recommended meals:", err);
     }
   };
 
-  // Fetch meal details for pop-up
   const fetchMealDetails = async (mealId) => {
     try {
       setPopupLoading(true);
-      setPopupContent(null);
+      const res = await axios.get(`https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`, {
+        headers: {
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
 
-      const token = localStorage.getItem("authToken");
-      const response = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const meal = response.data.meal;
+      const meal = res.data.meal;
       const restaurant = restaurants.find((r) => r.id === meal.restaurant_id);
 
-      setPopupContent({
-        ...meal,
-        restaurant_name: restaurant?.name || "Unknown Restaurant",
-      });
-    } catch (error) {
-      console.error("Error fetching meal details:", error);
-      setPopupContent(null);
+      setPopupContent({ ...meal, restaurant_name: restaurant?.name || "Unknown" });
+      setOpenPopup(true);
+    } catch (err) {
+      console.error("Error fetching meal details:", err);
     } finally {
       setPopupLoading(false);
     }
   };
 
-  // Fetch meals by selected category
   const fetchMealsByCategory = async (category) => {
     try {
-      const token = localStorage.getItem("authToken");
-      const response = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setAllMeals(response.data.meals);
-    } catch (error) {
-      console.error("Error fetching meals by category:", error);
-      setAllMeals([]);
+      const res = await axios.get(`https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+      setAllMeals(res.data.meals);
+    } catch (err) {
+      console.error("Error fetching meals by category:", err);
     }
   };
 
-  // Fetch everything (user first, then meals)
-  const fetchEverything = async () => {
-    try {
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      }
-
-      await fetchUser();
-    } finally {
-      await Promise.all([fetchAllMeals(), fetchRecommendedMeals()]);
-      setIsLoading(false);
-    }
-  };
-
-  // ----------------------------
-  // USE EFFECTS
-  // ----------------------------
-
-  // Initial fetch: shawarma and set isVegetarian if user exists
   useEffect(() => {
-    fetchRestaurants();
-    if (user) {
-      setIsVegetarian(user.is_vegetarian);
-    }
+    const init = async () => {
+      await fetchUser();
+      await fetchRestaurants();
+    };
+    init();
+  }, []);
+
+  useEffect(() => {
+    if (user) setIsVegetarian(user.is_vegetarian);
   }, [user]);
 
-  // Fetch recommended meals when diet preference changes
   useEffect(() => {
-    fetchEverything();
-  }, [isVegetarian]);
+    const loadMeals = async () => {
+      setIsLoading(true);
+      if (selectedCategory) {
+        await fetchMealsByCategory(selectedCategory);
+      } else {
+        await fetchAllMeals();
+      }
+      await fetchRecommendedMeals();
+      setIsLoading(false);
+    };
+    if (isVegetarian !== null) loadMeals();
+  }, [selectedCategory, isVegetarian]);
 
+<<<<<<< HEAD
   // Fetch meals based on selected category
   useEffect(() => {
     if (selectedCategory) {
@@ -231,44 +189,46 @@ const Meals = () => {
     setConfirmationMessage(
       `Are you sure you want to order ${orderquantity} x "${popupContent?.name}"?`
     );
+=======
+  const handlePlaceOrder = () => {
+    setConfirmationMessage(`Are you sure you want to order ${orderquantity} x ${popupContent?.name}?`);
+>>>>>>> 8f9626387be6c53303f9e3a7cb8634bfc21277b9
     setShowConfirm(true);
   };
 
-  const placeOrder = async (e) => {
+  const placeOrder = async () => {
     try {
-      console.log("Placing order...");
-      const token = localStorage.getItem("authToken");
-
-      const response = await axios.post(
+      const res = await axios.post(
         "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
-        {
-          meal_id: popupContent.id,
-          quantity: orderquantity,
-        },
+        { meal_id: popupContent.id, quantity: orderquantity },
         {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
             "ngrok-skip-browser-warning": "true",
           },
         }
       );
 
-      setShowConfirm(false); // hide confirmation
-      setAlertMessage(
-        `Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`
-      );
+      setShowConfirm(false);
+      setAlertMessage(`Order placed: ${orderquantity} x ${popupContent.name}`);
       setAlertType("success");
       setShowAlert(true);
+<<<<<<< HEAD
     } catch (error) {
       console.error("Order API error:", error);
 
+=======
+      setOpenPopup(false); // Optional: auto-close popup
+      setOrderquantity(1);
+    } catch (err) {
+>>>>>>> 8f9626387be6c53303f9e3a7cb8634bfc21277b9
       setShowConfirm(false);
-      if (error.response?.status === 401) {
-        setAlertMessage("You need to be logged in first to reserve a meal.");
-      } else {
-        setAlertMessage("Failed to place order. Please try again.");
-      }
+      setAlertMessage(
+        err.response?.status === 401
+          ? "You need to be logged in first to reserve a meal."
+          : "Failed to place order."
+      );
       setAlertType("error");
       setShowAlert(true);
     }
@@ -277,114 +237,63 @@ const Meals = () => {
   if (isLoading) {
     return (
       <div className="meals_loading">
-        <RotatingLines
-          strokeColor="grey"
-          strokeWidth="5"
-          animationDuration="0.75"
-          width="96"
-          visible={true}
-        />
+        <RotatingLines strokeColor="grey" strokeWidth="5" animationDuration="0.75" width="96" visible={true} />
       </div>
     );
   }
+
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
+<<<<<<< HEAD
         {/* CFentered Tabs */}
         <div className="meals_container"></div>
 
         {/* Horizontal Categories */}
+=======
+>>>>>>> 8f9626387be6c53303f9e3a7cb8634bfc21277b9
         <div className="meals_categories_container">
           <div className="meals_category_grid">
-            {categories.map((category) => (
+            {categories.map((cat) => (
               <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`meals_category_button ${
-                  selectedCategory === category.id ? "cat_active" : ""
-                }`}
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`meals_category_button ${selectedCategory === cat.id ? "cat_active" : ""}`}
               >
-                <img src={category.icon} alt={category.name} />
-                <span>{category.name}</span>
+                <img src={cat.icon} alt={cat.name} />
+                <span>{cat.name}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Centered Promo Image */}
         <div className="meals_promo_container">
           <div className="meals_promo_img">
-            <img src={offer} alt="meals_Special_offer" />
+            <img src={offer} alt="Offer" />
           </div>
         </div>
-
-        {selectedCategory && (
-          <>
-            <h2 className="meals_section_title">
-              All <span id="meals_category_name">{selectedCategory}</span> meals
-            </h2>
-            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
-              {allMeals.length > 0 ? (
-                allMeals.map((meal) => (
-                  <>
-                    <MealCard
-                      key={`all-${meal.id}`}
-                      meal={meal}
-                      onClick={(e) => fetchMealDetails(meal.id)}
-                    />
-                  </>
-                ))
-              ) : (
-                <p>No meals found</p>
-              )}
-            </div>
-          </>
-        )}
 
         <h2 className="meals_section_title">Picks for you</h2>
-
-        <div
-          className="meals_horizontal_scroll"
-          onClick={() => setOpenPopup(true)}
-        >
+        <div className="meals_horizontal_scroll">
           <div className="meals_scroll_container">
-            {recommendedMeals.length > 0 ? (
-              recommendedMeals.map((meal) => (
-                <MealCard
-                  key={`recommended-${meal.id}`}
-                  meal={meal}
-                  onClick={(e) => fetchMealDetails(meal.id)}
-                />
-              ))
-            ) : (
-              <p>No recommended meals found</p>
-            )}
+            {recommendedMeals.map((meal) => (
+              <MealCard key={`rec-${meal.id}`} meal={meal} onClick={() => fetchMealDetails(meal.id)} />
+            ))}
           </div>
         </div>
-        {!selectedCategory && (
-          <>
-            <h2 className="meals_section_title">
-              All <span id="meals_category_name">meals</span>
-            </h2>
-            <div className="meals_grid" onClick={() => setOpenPopup(true)}>
-              {allMeals.length > 0 ? (
-                allMeals.map((meal) => (
-                  <>
-                    <MealCard
-                      key={`all-${meal.id}`}
-                      meal={meal}
-                      onClick={(e) => fetchMealDetails(meal.id)}
-                    />
-                  </>
-                ))
-              ) : (
-                <p>No meals found</p>
-              )}
-            </div>
-          </>
-        )}
+
+        <h2 className="meals_section_title">
+          All <span>{selectedCategory || "meals"}</span>
+        </h2>
+        <div className="meals_grid">
+          {allMeals.map((meal) => (
+            <MealCard key={`all-${meal.id}`} meal={meal} onClick={() => fetchMealDetails(meal.id)} />
+          ))}
+        </div>
       </div>
+
       {openpopup && (
+<<<<<<< HEAD
         <>
           <MealPopUp
             open={openpopup}
@@ -406,12 +315,33 @@ const Meals = () => {
         <ConfirmModal
           message={confirmationMessage}
           show={showConfirm}
+=======
+        <MealPopUp
+          open={openpopup}
+          meal={popupContent}
+          onClose={() => {
+            setOpenPopup(false);
+            setOrderquantity(1);
+          }}
+          orderQuantity={orderquantity}
+          setOrderquantity={setOrderquantity}
+          handleDecrement={handleDecrement}
+          handleIncrement={handleIncrement}
+          handlePlaceOrder={handlePlaceOrder}
+          loading={popupLoading}
+        />
+      )}
+
+      {showConfirm && (
+        <ConfirmModal
+          show={showConfirm}
+          message={confirmationMessage}
+>>>>>>> 8f9626387be6c53303f9e3a7cb8634bfc21277b9
           onConfirm={placeOrder}
           onCancel={() => setShowConfirm(false)}
         />
       )}
 
-      {/* Alert Modal */}
       {showAlert && (
         <AlertModal
           message={alertMessage}

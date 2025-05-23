@@ -4,6 +4,7 @@ import axios from 'axios';
 import ConfirmModal from '../Alerts/ConfirmModal';
 import AlertModal from '../Alerts/AlertModal';
 import { RiUser3Line } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 import { FaBuildingCircleCheck, FaBuildingCircleXmark } from "react-icons/fa6";
 
 const API_BASE = 'https://4399-91-186-255-241.ngrok-free.app/api';
@@ -18,13 +19,13 @@ const AdminDashboard = () => {
 });
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalData, setModalData] = useState(null);
-  const [alertMessage, setAlertMessage] = useState(null);
-  const [alertType, setAlertType] = useState("success");
-  const [showAlert, setShowAlert] = useState("success");
+  
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [modalData, setModalData] = useState(null); // for confirm modal
+const [alertData, setAlertData] = useState(null); // for alert modal
 
+const navigate = useNavigate();
 
   const axiosConfig = {
     headers: {
@@ -73,10 +74,10 @@ const handleSearch = (e) => {
   }, []);
 
 const handleLogout = () => {
-  confirmAction(() => {
+  confirmAction("Are you sure you want to logout?", async () => {
     localStorage.removeItem("authToken");
-    window.location.href = "/"; // or redirect to your login route
-  }, "session", { id: "", name: "your session" }, "Logged out successfully.");
+    navigate("/", { state: { refresh: true } });
+  });
 };
 
   const fetchApprovedRestaurants = async () => {
@@ -106,59 +107,62 @@ const handleLogout = () => {
     }
   };
 
-  const confirmAction = (actionFn, itemType, item, successMsg) => {
-    setModalData({ actionFn, itemType, item, successMsg });
-  };
+ const confirmAction = (message, actionFn) => {
+  setModalData({ message, actionFn });
+};
+
+
+
+const handleModalConfirm = async () => {
+  if (modalData?.actionFn) {
+    await modalData.actionFn();
+    showAlertModal(modalData.message || "Action completed successfully");
+  }
+  setModalData(null);
+};
+
+  const showAlertModal = (message, type = "success") => {
+  setAlertData({ message, type });
+};
 
   const approveRestaurant = (id) => {
     const restaurant = unapprovedRestaurants.find(r => r.id === id);
-    confirmAction(async () => {
-      await axios.post(`${API_BASE}/admin/approve-restaurant/${id}`, {}, axiosConfig);
-      await fetchApprovedRestaurants();
-      await fetchUnapprovedRestaurants();
-    }, "restaurant", restaurant, "Restaurant approved successfully.");
-  };
+    confirmAction(`Approve ${restaurant.name}?`, async () => {
+    await axios.post(`${API_BASE}/admin/approve-restaurant/${id}`, {}, axiosConfig);
+    await fetchApprovedRestaurants();
+    await fetchUnapprovedRestaurants();
+  });
+};
 
   const unapproveRestaurant = (id) => {
     const restaurant = approvedRestaurants.find(r => r.id === id);
-    confirmAction(async () => {
-      await axios.post(`${API_BASE}/admin/unapprove-restaurant/${id}`, {}, axiosConfig);
-      await fetchApprovedRestaurants();
-      await fetchUnapprovedRestaurants();
-    }, "restaurant", restaurant, "Restaurant unapproved successfully.");
-  };
+    confirmAction(`Unapprove ${restaurant.name}?`, async () => {
+    await axios.post(`${API_BASE}/admin/unapprove-restaurant/${id}`, {}, axiosConfig);
+    await fetchApprovedRestaurants();
+    await fetchUnapprovedRestaurants();
+  });
+};
 
   const deleteRestaurant = (id) => {
     const list = activeTab === "approved" ? approvedRestaurants : unapprovedRestaurants;
     const restaurant = list.find(r => r.id === id);
-    confirmAction(async () => {
-      await axios.post(`${API_BASE}/delete-restaurant/${id}`, {}, axiosConfig);
-      await fetchApprovedRestaurants();
-      await fetchUnapprovedRestaurants();
-    }, "restaurant", restaurant, "Restaurant deleted successfully.");
-  };
+    confirmAction(`Delete ${restaurant.name}?`, async () => {
+    await axios.post(`${API_BASE}/delete-restaurant/${id}`, {}, axiosConfig);
+    await fetchApprovedRestaurants();
+    await fetchUnapprovedRestaurants();
+  });
+};
 
   const deleteClient = (id) => {
     const client = clients.find(c => c.id === id);
-    confirmAction(async () => {
-      await axios.post(`${API_BASE}/delete-client/${id}`, {}, axiosConfig);
-      await fetchClients();
-    }, "client", client, "Client deleted successfully.");
-  };
+     confirmAction(`Delete client ${client.name}?`, async () => {
+    await axios.post(`${API_BASE}/delete-client/${id}`, {}, axiosConfig);
+    await fetchClients();
+  });
+};
 
-  const handleModalConfirm = async () => {
-    await modalData.actionFn();
-    setModalData(null);
-    setAlertMessage(modalData.successMsg);
-    setAlertType("success");
-    setTimeout(() => {
-      setAlertMessage(null);
-    }, 3000);
-  };
+ 
 
-  const handleModalCancel = () => {
-    setModalData(null);
-  };
 
   return (
     <div id='adminDashboardPage'>
@@ -252,6 +256,22 @@ const handleLogout = () => {
             </ul></>)
         }
       </div>
+ {modalData && (
+  <ConfirmModal
+    message={modalData.message}
+    onConfirm={handleModalConfirm}
+    onCancel={() => setModalData(null)}
+  />
+)}
+
+
+      {alertData && (
+  <AlertModal
+    message={alertData.message}
+    type={alertData.type}
+    onClose={() => setAlertData(null)}
+  />
+)}
 
      
     </div>
