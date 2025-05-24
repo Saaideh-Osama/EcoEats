@@ -91,23 +91,25 @@ useEffect(() => {
   };
 
   const fetchRecommendedMeals = async () => {
-    if (isVegetarian === null) return;
-    try {
-      const endpoint = isVegetarian
-        ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
-        : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
-      const res = await axios.get(endpoint, {
-        headers: {
-          Accept: "application/json",
-          "ngrok-skip-browser-warning": "true",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
-      setRecommendedMeals(res.data.meals);
-    } catch (err) {
-      console.error("Error fetching recommended meals:", err);
-    }
-  };
+  const token = localStorage.getItem("authToken");
+  if (!token || isVegetarian === null) return;
+
+  try {
+    const endpoint = isVegetarian
+      ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
+      : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
+    const res = await axios.get(endpoint, {
+      headers: {
+        Accept: "application/json",
+        "ngrok-skip-browser-warning": "true",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setRecommendedMeals(res.data.meals);
+  } catch (err) {
+    console.error("Error fetching recommended meals:", err);
+  }
+};
 
   const fetchMealDetails = async (mealId) => {
     try {
@@ -133,50 +135,76 @@ useEffect(() => {
   };
 
   const fetchMealsByCategory = async (category) => {
-    try {
-      const res = await axios.get(`https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`, {
+  const token = localStorage.getItem("authToken");
+  if (!token) return;
+  try {
+    const res = await axios.get(
+      `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
+      {
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${token}`,
           "ngrok-skip-browser-warning": "true",
         },
-      });
-      setAllMeals(res.data.meals);
-    } catch (err) {
-      console.error("Error fetching meals by category:", err);
-    }
-  };
+      }
+    );
+    setAllMeals(res.data.meals);
+  } catch (err) {
+    console.error("Error fetching meals by category:", err);
+  }
+};
 
   useEffect(() => {
-    const init = async () => {
+  const init = async () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
       await fetchUser();
-      await fetchRestaurants();
-    };
-    init();
-  }, []);
+    }
+    await fetchRestaurants();
+  };
+  init();
+}, []);
+
+ useEffect(() => {
+  if (user) setIsVegetarian(user.is_vegetarian);
+}, [user]);
+
 
   useEffect(() => {
-    if (user) setIsVegetarian(user.is_vegetarian);
-  }, [user]);
-
-  useEffect(() => {
-    const loadMeals = async () => {
-      setIsLoading(true);
-      if (selectedCategory) {
+  const loadMeals = async () => {
+    setIsLoading(true);
+    if (selectedCategory) {
+      const token = localStorage.getItem("authToken");
+      if (token) {
         await fetchMealsByCategory(selectedCategory);
       } else {
-        await fetchAllMeals();
+        await fetchAllMeals(); // fallback if not logged in
       }
-      await fetchRecommendedMeals();
-      setIsLoading(false);
-    };
-    if (isVegetarian !== null) loadMeals();
-  }, [selectedCategory, isVegetarian]);
+    } else {
+      await fetchAllMeals();
+    }
 
-  const handlePlaceOrder = () => {
-    setConfirmationMessage(`Are you sure you want to order ${orderquantity} x ${popupContent?.name}?`);
-    setShowConfirm(true);
+    const token = localStorage.getItem("authToken");
+    if (token && isVegetarian !== null) {
+      await fetchRecommendedMeals();
+    }
+    setIsLoading(false);
   };
+
+  // If logged in OR guest browsing
+  loadMeals();
+}, [selectedCategory, isVegetarian]);
+
+
+  const handlePlaceOrder = (e) => {
+  if (!user) {
+    setAlertMessage("You need to be logged in to reserve a meal.");
+    setAlertType("fail");
+    setShowAlert(true);
+    return;
+  }
+  setShowConfirm(true);
+};
 
   const placeOrder = async () => {
     try {
@@ -221,7 +249,7 @@ useEffect(() => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-        <div className="meals_categories_container">
+       {user&&( <div className="meals_categories_container">
           <div className="meals_category_grid">
             {categories.map((cat) => (
               <button
@@ -234,7 +262,7 @@ useEffect(() => {
               </button>
             ))}
           </div>
-        </div>
+        </div>)}
 
         <div className="meals_promo_container">
           <div className="meals_promo_img">

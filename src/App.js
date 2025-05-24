@@ -33,7 +33,6 @@ const AppWrapper = () => {
         <Route index path="res_home" element={<ResHome />} />
         <Route path="/signup" element={<AuthForm />} />
         <Route path="/resignup" element={<RestaurantSignup />} />
-
         <Route path="/orderslist" element={<OrdersList />} />
         <Route path="/editclient" element={<EditClientProfile />} />
         <Route path="/clientmain" element={<ClientDashboard />} />
