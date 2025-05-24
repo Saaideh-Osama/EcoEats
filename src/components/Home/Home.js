@@ -11,10 +11,12 @@ import order from "../../assets/images/order.jpg";
 import veg from "../../assets/images/veg.jpg";
 import food from "../../assets/images/food.jpeg";
 import { UserContext } from "../context/UserContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect,useState } from "react";
+
 
 function Home() {
  
+
   const navigate = useNavigate();
   const { user, fetchUser } = useContext(UserContext);
 
@@ -195,7 +197,9 @@ function Home() {
             </div>
           </div>
         </div>
+        
       </div>
+     
       
     </div>
   );

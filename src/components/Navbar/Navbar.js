@@ -32,23 +32,28 @@ const toggleSidebar = () => {
 };
 
   const handleTabClick = (tab) => {
+  if (activeTab === tab) return; 
+  if(user && user.role_id === 2 ){
   setActiveTab(tab);
-  navigate("/clientmain", { state: { tab } });
+  navigate("/clientmain", { state: { tab } });}
+  else if(user && user.role_id === 3){
+    setActiveTab(tab);
+    navigate("/restdash", { state: { tab } });
+  }
+ 
 };
   
  useEffect(() => {
+   
     if (!activeTab && user) {
       if (user.role_id === 3) {
         setActiveTab("mealListings");
       } else if (user.role_id === 2) {
-        setActiveTab("restaurants");
+        setActiveTab("meals");
       }
     }
   }, [user]);
-  useEffect(() => {
-    
-
-  }, []);
+  
 
 
 

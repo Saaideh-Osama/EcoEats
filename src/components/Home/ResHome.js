@@ -6,40 +6,39 @@ import img from "../../assets/images/why .jpg";
 import two from "../../assets/images/steptwo.png";
 import one from "../../assets/images/one.png";
 import three from "../../assets/images/three.jpg";
+import AlertModal from "../Alerts/AlertModal";
+import ConfirmModal from "../Alerts/ConfirmModal";
 import "./ResHome.css";
 
 function ResHome() {
   const navigate = useNavigate();
   const { user, fetchUser } = useContext(UserContext);
   
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showAlertModal, setShowAlertModal] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertType, setAlertType] = useState('success'); // or 'error'
-  const [confirmAction, setConfirmAction] = useState(null);
+   const [showConfirm, setShowConfirm] = useState(false);
+   const [confirmationMessage, setConfirmationMessage] = useState("");
+   const [alertMessage, setAlertMessage] = useState("");
+   const [alertType, setAlertType] = useState("");
+   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     fetchUser();
   }, []);
+const handleLogout = () => {
+    setConfirmationMessage("Are you sure you want to logout?");
+    setShowConfirm(true);
+  };
 
-  const handleLogout = () => {
-  setConfirmAction(() => () => {
-    // Confirmed!
+  const confirmLogout = () => {
     localStorage.removeItem("authToken");
+    setShowConfirm(false);
+    setShowAlert(true);
+    navigate("/",{ state :{refresh:true}});
+  };
 
-    // Show alert
-    setAlertMessage("You have logged out successfully.");
-    setAlertType("success");
-    setShowAlertModal(true);
+  const cancelLogout = () => {
+    setShowConfirm(false);
+  };
 
-    // Redirect after short delay
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1500);
-  });
-
-  setShowConfirmModal(true); // Show the confirmation modal
-};
 
   return (
     <>
@@ -168,6 +167,20 @@ function ResHome() {
             </p>
           </div>
         </div>
+         {showConfirm && (
+          <ConfirmModal
+            message="Are you sure you want to logout?"
+            onConfirm={confirmLogout}
+            onCancel={cancelLogout}
+          />
+        )}
+        {showAlert && (
+          <AlertModal
+            type="success"
+            message="You have been logged out successfully."
+            onClose={() => setShowAlert(false)}
+          />
+        )}
       </div>
     </>
   );
