@@ -1,7 +1,7 @@
 import React from "react";
 import "./RestaurantCard.css";
 import { FaLocationDot } from "react-icons/fa6";
-import { Link } from "react-router-dom"; // تأكد من استخدام react-router-dom
+import { Link } from "react-router-dom";
 
 function RestaurantCard({ id, name, address, image }) {
   return (

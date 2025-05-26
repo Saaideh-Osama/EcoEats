@@ -11,7 +11,7 @@ import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
 
 import pizza from "../../../assets/images/pizza.png";
-import beef from "../../../assets/images/beef.png"; 
+import beef from "../../../assets/images/beef.png";
 import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
 import shaw from "../../../assets/images/shaw.png";
@@ -39,7 +39,11 @@ const Meals = () => {
   const [isVegetarian, setIsVegetarian] = useState(null);
 
   const categories = [
-    { id: null, name: "All", icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png" },
+    {
+      id: null,
+      name: "All",
+      icon: "https://cdn-icons-png.flaticon.com/512/833/833314.png",
+    },
     { id: "shawarma", name: "shawarma", icon: shaw },
     { id: "burger", name: "burger", icon: beef },
     { id: "Chicken Sandwich", name: "Chicken Sandwich", icon: chk },
@@ -48,28 +52,34 @@ const Meals = () => {
     { id: "pizza", name: "pizza", icon: pizza },
   ];
 
-useEffect(() => {
-  if (showAlert) {
-    const timer = setTimeout(() => {
-      setShowAlert(false);
-    }, 2000); // 2 seconds
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 2000); // 2 seconds
 
-    return () => clearTimeout(timer); // cleanup
-  }
-}, [showAlert]);
+      return () => clearTimeout(timer); // cleanup
+    }
+  }, [showAlert]);
 
-
-  const handleDecrement = () => setOrderquantity((prev) => Math.max(prev - 1, 1));
-  const handleIncrement = () => setOrderquantity((prev) => Math.min(prev + 1, popupContent?.available_count || 1));
+  const handleDecrement = () =>
+    setOrderquantity((prev) => Math.max(prev - 1, 1));
+  const handleIncrement = () =>
+    setOrderquantity((prev) =>
+      Math.min(prev + 1, popupContent?.available_count || 1)
+    );
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names", {
-        headers: {
-          Accept: "application/json",
-          "ngrok-skip-browser-warning": "true",
-        },
-      });
+      const res = await axios.get(
+        "https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names",
+        {
+          headers: {
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
       setRestaurants(res.data.restaurants);
     } catch (err) {
       console.error("Error fetching restaurants:", err);
@@ -78,12 +88,15 @@ useEffect(() => {
 
   const fetchAllMeals = async () => {
     try {
-      const res = await axios.get("https://4399-91-186-255-241.ngrok-free.app/api/all-meals", {
-        headers: {
-          Accept: "application/json",
-          "ngrok-skip-browser-warning": "true",
-        },
-      });
+      const res = await axios.get(
+        "https://4399-91-186-255-241.ngrok-free.app/api/all-meals",
+        {
+          headers: {
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
       setAllMeals(res.data.meals);
     } catch (err) {
       console.error("Error fetching all meals:", err);
@@ -91,41 +104,47 @@ useEffect(() => {
   };
 
   const fetchRecommendedMeals = async () => {
-  const token = localStorage.getItem("authToken");
-  if (!token || isVegetarian === null) return;
+    const token = localStorage.getItem("authToken");
+    if (!token || isVegetarian === null) return;
 
-  try {
-    const endpoint = isVegetarian
-      ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
-      : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
-    const res = await axios.get(endpoint, {
-      headers: {
-        Accept: "application/json",
-        "ngrok-skip-browser-warning": "true",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setRecommendedMeals(res.data.meals);
-  } catch (err) {
-    console.error("Error fetching recommended meals:", err);
-  }
-};
+    try {
+      const endpoint = isVegetarian
+        ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
+        : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
+      const res = await axios.get(endpoint, {
+        headers: {
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRecommendedMeals(res.data.meals);
+    } catch (err) {
+      console.error("Error fetching recommended meals:", err);
+    }
+  };
 
   const fetchMealDetails = async (mealId) => {
     try {
       setPopupLoading(true);
-      const res = await axios.get(`https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`, {
-        headers: {
-          Accept: "application/json",
-          "ngrok-skip-browser-warning": "true",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
+      const res = await axios.get(
+        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
 
       const meal = res.data.meal;
       const restaurant = restaurants.find((r) => r.id === meal.restaurant_id);
 
-      setPopupContent({ ...meal, restaurant_name: restaurant?.name || "Unknown" });
+      setPopupContent({
+        ...meal,
+        restaurant_name: restaurant?.name || "Unknown",
+      });
       setOpenPopup(true);
     } catch (err) {
       console.error("Error fetching meal details:", err);
@@ -135,76 +154,74 @@ useEffect(() => {
   };
 
   const fetchMealsByCategory = async (category) => {
-  const token = localStorage.getItem("authToken");
-  if (!token) return;
-  try {
-    const res = await axios.get(
-      `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
-      {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "true",
-        },
-      }
-    );
-    setAllMeals(res.data.meals);
-  } catch (err) {
-    console.error("Error fetching meals by category:", err);
-  }
-};
-
-  useEffect(() => {
-  const init = async () => {
     const token = localStorage.getItem("authToken");
-    if (token) {
-      await fetchUser();
+    if (!token) return;
+    try {
+      const res = await axios.get(
+        `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+      setAllMeals(res.data.meals);
+    } catch (err) {
+      console.error("Error fetching meals by category:", err);
     }
-    await fetchRestaurants();
   };
-  init();
-}, []);
-
- useEffect(() => {
-  if (user) setIsVegetarian(user.is_vegetarian);
-}, [user]);
-
 
   useEffect(() => {
-  const loadMeals = async () => {
-    setIsLoading(true);
-    if (selectedCategory) {
+    const init = async () => {
       const token = localStorage.getItem("authToken");
       if (token) {
-        await fetchMealsByCategory(selectedCategory);
-      } else {
-        await fetchAllMeals(); // fallback if not logged in
+        await fetchUser();
       }
-    } else {
-      await fetchAllMeals();
-    }
+      await fetchRestaurants();
+    };
+    init();
+  }, []);
 
-    const token = localStorage.getItem("authToken");
-    if (token && isVegetarian !== null) {
-      await fetchRecommendedMeals();
-    }
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    if (user) setIsVegetarian(user.is_vegetarian);
+  }, [user]);
 
-  // If logged in OR guest browsing
-  loadMeals();
-}, [selectedCategory, isVegetarian]);
+  useEffect(() => {
+    const loadMeals = async () => {
+      setIsLoading(true);
+      if (selectedCategory) {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          await fetchMealsByCategory(selectedCategory);
+        } else {
+          await fetchAllMeals(); // fallback if not logged in
+        }
+      } else {
+        await fetchAllMeals();
+      }
 
+      const token = localStorage.getItem("authToken");
+      if (token && isVegetarian !== null) {
+        await fetchRecommendedMeals();
+      }
+      setIsLoading(false);
+    };
+
+    // If logged in OR guest browsing
+    loadMeals();
+  }, [selectedCategory, isVegetarian]);
 
   const handlePlaceOrder = (e) => {
-  if (!user) {
-    setAlertMessage("You need to be logged in to reserve a meal.");
-    setAlertType("fail");
-    setShowAlert(true);
-    return;
-  }
-  setShowConfirm(true);
-};
+    if (!user) {
+      setAlertMessage("You need to be logged in to reserve a meal.");
+      setAlertType("fail");
+      setShowAlert(true);
+      return;
+    }
+    setShowConfirm(true);
+  };
 
   const placeOrder = async () => {
     try {
@@ -241,7 +258,13 @@ useEffect(() => {
   if (isLoading) {
     return (
       <div className="meals_loading">
-        <RotatingLines strokeColor="grey" strokeWidth="5" animationDuration="0.75" width="96" visible={true} />
+        <RotatingLines
+          strokeColor="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          width="96"
+          visible={true}
+        />
       </div>
     );
   }
@@ -249,20 +272,24 @@ useEffect(() => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-       {user&&( <div className="meals_categories_container">
-          <div className="meals_category_grid">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`meals_category_button ${selectedCategory === cat.id ? "cat_active" : ""}`}
-              >
-                <img src={cat.icon} alt={cat.name} />
-                <span>{cat.name}</span>
-              </button>
-            ))}
+        {user && (
+          <div className="meals_categories_container">
+            <div className="meals_category_grid">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`meals_category_button ${
+                    selectedCategory === cat.id ? "cat_active" : ""
+                  }`}
+                >
+                  <img src={cat.icon} alt={cat.name} />
+                  <span>{cat.name}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>)}
+        )}
 
         <div className="meals_promo_container">
           <div className="meals_promo_img">
@@ -274,7 +301,11 @@ useEffect(() => {
         <div className="meals_horizontal_scroll">
           <div className="meals_scroll_container">
             {recommendedMeals.map((meal) => (
-              <MealCard key={`rec-${meal.id}`} meal={meal} onClick={() => fetchMealDetails(meal.id)} />
+              <MealCard
+                key={`rec-${meal.id}`}
+                meal={meal}
+                onClick={() => fetchMealDetails(meal.id)}
+              />
             ))}
           </div>
         </div>
@@ -284,7 +315,11 @@ useEffect(() => {
         </h2>
         <div className="meals_grid">
           {allMeals.map((meal) => (
-            <MealCard key={`all-${meal.id}`} meal={meal} onClick={() => fetchMealDetails(meal.id)} />
+            <MealCard
+              key={`all-${meal.id}`}
+              meal={meal}
+              onClick={() => fetchMealDetails(meal.id)}
+            />
           ))}
         </div>
       </div>
