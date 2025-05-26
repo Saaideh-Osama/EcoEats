@@ -103,30 +103,32 @@ margin: 2vh;
   text-align: center;
 }
 
-.meals_promo_img {
+.meals_promo_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px auto;
+  padding: 0;
+  margin: 0;
+  background-color: transparent; /* يتأكد ما في خلفية بيضاء */
   width: 100%;
 }
 
-.meals_promo_img img {
-  width: 95%;
-  max-width: 900px;
+.meals_promo_container video {
+  width: 550px;         /* حجم صغير */
+  max-width: 90vw;      /* استجابة للشاشات الصغيرة */
   height: auto;
-  aspect-ratio: 3 / 1; /* بانورامي أكثر */
-  border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  margin: 10px;
-  object-fit: cover; /* يعطي واقعية أكثر من fill */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;         /* يتأكد ما في إطار */
+  box-shadow: none;     /* يشيل الظل */
+  border-radius: 0;     /* يشيل الحواف الدائرية */
+  margin: 0;            /* يشيل أي مسافات خارجية */
+  padding: 0;           /* يشيل أي فراغ داخلي */
+  background-color: transparent; /* يتأكد أن الفيديو نفسه شفاف */
+  display: block;
 }
 
-.meals_promo_img img:hover {
-  transform: scale(1.01);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
+
+
+
 
 
 

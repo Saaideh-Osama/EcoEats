@@ -90,3 +90,22 @@ color: rgb(41, 172, 44);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
   
+  .vegetarian-ribbon {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* داخل الصندوق من الجهة اليمنى */
+  background: #29ac2c; /* لون أخضر متناسق مع أيقونة الهاتف */
+  color: white;
+  font-weight: 700;
+  padding: 0.3rem 1rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  user-select: none;
+  pointer-events: none;
+  z-index: 1010;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: Arial, sans-serif;
+  /* بدون دوران، بشكل مستطيل أنيق */
+}

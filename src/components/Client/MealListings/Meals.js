@@ -16,7 +16,8 @@ import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
 import shaw from "../../../assets/images/shaw.png";
 import salad from "../../../assets/images/salad.png";
-import offer from "../../../assets/images/add.jpg";
+import offer from "../../../assets/images/promo.mp4";
+
 // ... imports unchanged
 const Meals = () => {
   const [openpopup, setOpenPopup] = useState(false);
@@ -292,9 +293,7 @@ const Meals = () => {
         )}
 
         <div className="meals_promo_container">
-          <div className="meals_promo_img">
-            <img src={offer} alt="Offer" />
-          </div>
+          <video src={offer} autoPlay muted loop playsInline />
         </div>
 
         <h2 className="meals_section_title">Picks for you</h2>
