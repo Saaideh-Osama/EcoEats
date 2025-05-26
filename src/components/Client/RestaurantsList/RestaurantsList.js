@@ -61,7 +61,7 @@ const AllRestaurants = ({ active }) => {
       <div id="restaurant-card-container">
         {restaurants.map((restaurant) => {
           const is_vegetarian = restaurant.meals?.some(
-            (meal) => meal.type?.toLowerCase() === "vegetarian"
+            (meal) => meal.contains_meat === 0 && meal.contains_chicken === 0
           );
 
           return (
