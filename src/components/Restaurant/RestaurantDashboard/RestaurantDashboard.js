@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import ConfirmModal from "../../Alerts/ConfirmModal";
 import AlertModal from "../../Alerts/AlertModal";
@@ -7,6 +7,7 @@ import MealListings from "./MealListings";
 import ReservedOrders from "./ReservedOrders";
 import Navbar from "../../Navbar/Navbar";
 import CreateMeal from "./CreateMeal";
+import { UserContext } from "../../context/UserContext";
 
 const RestaurantDashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -21,11 +22,11 @@ const RestaurantDashboard = () => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
  const [activeTab, setActiveTab] = useState("mealListings");
-
+const { user, fetchUser } = useContext(UserContext);
   const token = localStorage.getItem("authToken");
 const renderTabContent = () => {
     switch (activeTab) {
-      case "addMeal":
+      case "addmeal":
         return <CreateMeal />;
       case "mealListings":
         return (
@@ -183,6 +184,9 @@ const renderTabContent = () => {
   };
 
   useEffect(() => {
+     const init = async () => {
+      await fetchUser();}
+      init();
     fetchMeals();
     fetchOrders();
     

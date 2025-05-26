@@ -7,7 +7,7 @@ const CustomAlert = ({ message, onClose }) => {
 
   const handleLoginRedirect = () => {
     onClose();
-    navigate("/signup");
+    navigate("/signup", { state: { isLogin: "true" } });
   };
 
   return (

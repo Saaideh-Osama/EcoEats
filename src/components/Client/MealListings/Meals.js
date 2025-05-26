@@ -104,7 +104,9 @@ const Meals = () => {
   };
 
   const fetchRecommendedMeals = async () => {
-    if (isVegetarian === null) return;
+    const token = localStorage.getItem("authToken");
+    if (!token || isVegetarian === null) return;
+
     try {
       const endpoint = isVegetarian
         ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
@@ -113,7 +115,7 @@ const Meals = () => {
         headers: {
           Accept: "application/json",
           "ngrok-skip-browser-warning": "true",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setRecommendedMeals(res.data.meals);
@@ -152,13 +154,15 @@ const Meals = () => {
   };
 
   const fetchMealsByCategory = async (category) => {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
     try {
       const res = await axios.get(
         `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
         {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            Authorization: `Bearer ${token}`,
             "ngrok-skip-browser-warning": "true",
           },
         }
@@ -171,7 +175,10 @@ const Meals = () => {
 
   useEffect(() => {
     const init = async () => {
-      await fetchUser();
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        await fetchUser();
+      }
       await fetchRestaurants();
     };
     init();
@@ -185,20 +192,34 @@ const Meals = () => {
     const loadMeals = async () => {
       setIsLoading(true);
       if (selectedCategory) {
-        await fetchMealsByCategory(selectedCategory);
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          await fetchMealsByCategory(selectedCategory);
+        } else {
+          await fetchAllMeals(); // fallback if not logged in
+        }
       } else {
         await fetchAllMeals();
       }
-      await fetchRecommendedMeals();
+
+      const token = localStorage.getItem("authToken");
+      if (token && isVegetarian !== null) {
+        await fetchRecommendedMeals();
+      }
       setIsLoading(false);
     };
-    if (isVegetarian !== null) loadMeals();
+
+    // If logged in OR guest browsing
+    loadMeals();
   }, [selectedCategory, isVegetarian]);
 
-  const handlePlaceOrder = () => {
-    setConfirmationMessage(
-      `Are you sure you want to order ${orderquantity} x ${popupContent?.name}?`
-    );
+  const handlePlaceOrder = (e) => {
+    if (!user) {
+      setAlertMessage("You need to be logged in to reserve a meal.");
+      setAlertType("fail");
+      setShowAlert(true);
+      return;
+    }
     setShowConfirm(true);
   };
 
@@ -251,22 +272,24 @@ const Meals = () => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-        <div className="meals_categories_container">
-          <div className="meals_category_grid">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`meals_category_button ${
-                  selectedCategory === cat.id ? "cat_active" : ""
-                }`}
-              >
-                <img src={cat.icon} alt={cat.name} />
-                <span>{cat.name}</span>
-              </button>
-            ))}
+        {user && (
+          <div className="meals_categories_container">
+            <div className="meals_category_grid">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`meals_category_button ${
+                    selectedCategory === cat.id ? "cat_active" : ""
+                  }`}
+                >
+                  <img src={cat.icon} alt={cat.name} />
+                  <span>{cat.name}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="meals_promo_container">
           <div className="meals_promo_img">

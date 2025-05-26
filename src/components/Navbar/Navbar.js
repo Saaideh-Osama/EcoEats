@@ -32,23 +32,38 @@ const toggleSidebar = () => {
 };
 
   const handleTabClick = (tab) => {
-  setActiveTab(tab);
-  navigate("/clientmain", { state: { tab } });
+  if (activeTab === tab) return;
+
+  if (user) {
+    if (user.role_id === 2) {
+      setActiveTab(tab);
+      navigate("/clientmain", { state: { tab } });
+    } else if (user.role_id === 3) {
+      setActiveTab(tab);
+      navigate("/restdash", { state: { tab } });
+    }
+  } else {
+    // For guests
+    if (tab === "meals" || tab === "restaurants") {
+      setActiveTab(tab);
+      navigate("/clientmain", { state: { tab } });
+    }
+  }
 };
+
   
  useEffect(() => {
+   
     if (!activeTab && user) {
       if (user.role_id === 3) {
         setActiveTab("mealListings");
       } else if (user.role_id === 2) {
-        setActiveTab("restaurants");
+        setActiveTab("meals");
       }
+      
     }
   }, [user]);
-  useEffect(() => {
-    
-
-  }, []);
+  
 
 
 
@@ -126,6 +141,26 @@ const toggleSidebar = () => {
       </a>
     </>
   )}
+{!user &&  (
+    <>
+
+      <a
+        className={activeTab === "meals" ? "active" : ""}
+         onClick={() => handleTabClick("meals")}
+      >
+        Meals
+      </a>
+       <a
+        className={activeTab === "restaurants" ? "active" : ""}
+         onClick={() => handleTabClick("restaurants")}
+      >
+        Restaurants
+      </a>
+      
+    </>
+  )}
+
+
 </div>
   <div className="settings" onClick={toggleSidebar}>
   <AiTwotoneSetting />
