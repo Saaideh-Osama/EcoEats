@@ -3,7 +3,7 @@ import "./RestaurantCard.css";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
-function RestaurantCard({ id, name, address, image }) {
+function RestaurantCard({ id, name, address, image, is_vegetarian }) {
   return (
     <div
       className="restaurant-card"
@@ -11,7 +11,9 @@ function RestaurantCard({ id, name, address, image }) {
     >
       <div className="restaurant-card-image-container">
         <img src={image} alt={name} className="restaurant-image" />
+        {is_vegetarian && <div className="veg-ribbon">🍃 Vegetarian</div>}
       </div>
+
       <div className="restaurant-card-content">
         <h2 className="restaurant-name">{name}</h2>
         <p className="restaurant-address">

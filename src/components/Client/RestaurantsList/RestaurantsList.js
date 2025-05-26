@@ -56,22 +56,29 @@ const AllRestaurants = ({ active }) => {
   }
 
   return (
-    <div>
+    <div className="restList-page">
       <h1>All Restaurants</h1>
       <div id="restaurant-card-container">
-        {restaurants.map((restaurant) => (
-          <RestaurantCard
-            key={restaurant.id}
-            id={restaurant.id}
-            name={restaurant.name}
-            address={restaurant.address}
-            image={restaurant.image}
-            phone_number={restaurant.phone_number}
-            Working_hours_from={restaurant.working_hours_from}
-            Working_hours_to={restaurant.working_hours_to}
-            restaurant_info={restaurant.restaurant_info}
-          />
-        ))}
+        {restaurants.map((restaurant) => {
+          const is_vegetarian = restaurant.meals?.some(
+            (meal) => meal.type?.toLowerCase() === "vegetarian"
+          );
+
+          return (
+            <RestaurantCard
+              key={restaurant.id}
+              id={restaurant.id}
+              name={restaurant.name}
+              address={restaurant.address}
+              image={restaurant.image}
+              phone_number={restaurant.phone_number}
+              Working_hours_from={restaurant.working_hours_from}
+              Working_hours_to={restaurant.working_hours_to}
+              restaurant_info={restaurant.restaurant_info}
+              is_vegetarian={is_vegetarian}
+            />
+          );
+        })}
       </div>
     </div>
   );

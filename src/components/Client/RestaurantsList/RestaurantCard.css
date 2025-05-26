@@ -18,6 +18,7 @@
 }
 
 .restaurant-card-image-container {
+  position: relative;
   width: 120px;
   height: 120px;
   overflow: hidden;
@@ -25,6 +26,21 @@
   margin: 10px;
   flex-shrink: 0;
 }
+
+.veg-ribbon {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background-color: green;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  z-index: 1;
+}
+
+
 
 .restaurant-image {
   width: 100%;

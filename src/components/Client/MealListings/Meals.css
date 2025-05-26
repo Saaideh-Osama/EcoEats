@@ -3,7 +3,9 @@
   margin: 0 auto;
   padding: 20px;
 }
-
+.restList-page h1{
+margin: 2vh;
+}
 
 .meals_tabs-container {
   display: flex;
@@ -78,6 +80,7 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   cursor: pointer;
   transition: all 0.3s ease;
+  margin: 2vh;
 }
 
 .meals_category_button:hover {
@@ -109,15 +112,22 @@
 }
 
 .meals_promo_img img {
-  width: 90%;
-  max-width: 600px;
+  width: 95%;
+  max-width: 900px;
   height: auto;
-  aspect-ratio: 2 / 1; /* يقلل الطول ويعطي شكل بانورامي ممتد */
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 3 / 1; /* بانورامي أكثر */
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
   margin: 10px;
-  object-fit: fill;
+  object-fit: cover; /* يعطي واقعية أكثر من fill */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.meals_promo_img img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
 
 
 
