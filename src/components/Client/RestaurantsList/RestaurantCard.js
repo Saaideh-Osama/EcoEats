@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"; // تأكد من استخدام react-r
 
 function RestaurantCard({ id, name, address, image }) {
   return (
+     <Link to={`/restaurant/${id}`} className="restaurant-card-link">
     <div
       className="restaurant-card"
       onClick={() => (window.location.href = `/restaurant/${id}`)}
@@ -17,11 +18,10 @@ function RestaurantCard({ id, name, address, image }) {
         <p className="restaurant-address">
           <FaLocationDot className="location-icon" /> {address}
         </p>
-        <Link className="view-button" to={`/restaurant/${id}`}>
-          View details
-        </Link>
+        
       </div>
     </div>
+    </Link>
   );
 }
 

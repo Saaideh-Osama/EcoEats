@@ -37,6 +37,10 @@ const AppWrapper = () => {
         <Route path="/editclient" element={<EditClientProfile />} />
         <Route path="/clientmain" element={<ClientDashboard />} />
         <Route path="/editrestaurant" element={<EditRestaurantProfile />} />
+        
+   
+    <Route path="/restaurant/:id" element={<SinglePageRestaurant />} />
+  
         <Route path="/restdash" element={<RestaurantDashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
