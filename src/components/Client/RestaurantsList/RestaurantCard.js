@@ -4,6 +4,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 function RestaurantCard({ id, name, address, image, is_vegetarian }) {
+  console.log("isvegetarian", is_vegetarian);
   return (
     <Link to={`/restaurant/${id}`} className="restaurant-card-link">
       <div
