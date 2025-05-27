@@ -60,10 +60,6 @@ const AllRestaurants = ({ active }) => {
       <h1>All Restaurants</h1>
       <div id="restaurant-card-container">
         {restaurants.map((restaurant) => {
-          const is_vegetarian = restaurant.meals?.some(
-            (meal) => meal.contains_meat === 0 && meal.contains_chicken === 0
-          );
-
           return (
             <RestaurantCard
               key={restaurant.id}
@@ -75,7 +71,6 @@ const AllRestaurants = ({ active }) => {
               Working_hours_from={restaurant.working_hours_from}
               Working_hours_to={restaurant.working_hours_to}
               restaurant_info={restaurant.restaurant_info}
-              is_vegetarian={is_vegetarian}
             />
           );
         })}

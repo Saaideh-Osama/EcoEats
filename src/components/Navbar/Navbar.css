@@ -8,7 +8,7 @@
 .navbar{
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr  7vw;
+  grid-template-columns: auto 1fr  auto;
   align-items: center;
   column-gap: 20vw;
   padding: 0 30px;
@@ -18,8 +18,15 @@
   font-weight: 700;
   background-color: #007FC8;
   backdrop-filter: blur(8px);
+  column-gap: 20px;
   
 }
+.navbar-tabs {
+  display: flex;
+  justify-content: center; /* تمركز التابس أفقياً */
+  gap: 20px;
+}
+
 #logo-link:hover{
  background-color: transparent;
   color: inherit;

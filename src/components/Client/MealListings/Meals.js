@@ -307,9 +307,7 @@ useEffect(() => {
         
 
         <div className="meals_promo_container">
-          <div className="meals_promo_img">
-            <img src={offer} alt="Offer" />
-          </div>
+          <video src={offer} autoPlay muted loop playsInline />
         </div>
 {user && (
   <>

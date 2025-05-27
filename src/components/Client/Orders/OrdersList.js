@@ -41,7 +41,15 @@ const OrdersList = ({ active }) => {
 
   return (
     <div className="client-orders-container">
-      <h2>Upcoming Orders</h2>
+      <h2
+        style={{
+          margin: "40px 0",
+          textAlign: "center",
+          padding: "10px",
+        }}
+      >
+        Upcoming Orders
+      </h2>
       <section className="client-current-orders">
         {loading ? (
           <p>Loading...</p>
@@ -58,7 +66,16 @@ const OrdersList = ({ active }) => {
         )}
       </section>
 
-      <h2>Past Orders</h2>
+      <h2
+        style={{
+          margin: "40px 0",
+
+          textAlign: "center",
+          padding: "10px",
+        }}
+      >
+        Past Orders
+      </h2>
       <section className="client-past-orders">
         {loading ? (
           <p>Loading...</p>

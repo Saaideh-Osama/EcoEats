@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
 import "./SinglePageRestaurant.css";
@@ -29,10 +29,8 @@ const SinglePageRestaurant = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState(""); // "success" or "error"
   const [showAlert, setShowAlert] = useState(false);
-const [activeTab, setActiveTab] = useState("");
-
-
-
+  const [activeTab, setActiveTab] = useState("");
+  const [hasVegetarianMeal, setHasVegetarianMeal] = useState(false);
 
   const navigate = useNavigate();
   const fetchMealDetails = async (mealId) => {
@@ -108,46 +106,46 @@ const [activeTab, setActiveTab] = useState("");
     ); // prevents going above available count
   };
   const handlePlaceOrder = (e) => {
-     
     setShowConfirm(true);
   };
 
-const placeOrder = async (e) => {
- 
-  try {
-    console.log("Placing order...");
-    const token = localStorage.getItem("authToken");
+  const placeOrder = async (e) => {
+    try {
+      console.log("Placing order...");
+      const token = localStorage.getItem("authToken");
 
-    const response = await axios.post(
-      "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
-      {
-        meal_id: popupContent.id,
-        quantity: orderquantity,
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "true",
+      const response = await axios.post(
+        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        {
+          meal_id: popupContent.id,
+          quantity: orderquantity,
         },
-      }
-    );
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
 
-    setShowConfirm(false); // hide confirmation
-    setAlertMessage(`Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`);
-    setAlertType("success");
-    setShowAlert(true);
-  } catch (error) {
-    setShowConfirm(false);
-    if (error.response?.status === 401) {
-      setAlertMessage("You need to be logged in first to reserve a meal.");
-    } else {
-      setAlertMessage("Failed to place order. Please try again.");
+      setShowConfirm(false); // hide confirmation
+      setAlertMessage(
+        `Order placed successfully! You ordered ${orderquantity} x ${popupContent.name}.`
+      );
+      setAlertType("success");
+      setShowAlert(true);
+    } catch (error) {
+      setShowConfirm(false);
+      if (error.response?.status === 401) {
+        setAlertMessage("You need to be logged in first to reserve a meal.");
+      } else {
+        setAlertMessage("Failed to place order. Please try again.");
+      }
+      setAlertType("error");
+      setShowAlert(true);
     }
-    setAlertType("error");
-    setShowAlert(true);
-  }
-};
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -159,6 +157,14 @@ const placeOrder = async (e) => {
 
     fetchData();
   }, [id]);
+  useEffect(() => {
+    if (meals.length > 0) {
+      const hasVeg = meals.some((meal) => meal.is_vegetarian === true);
+      setHasVegetarianMeal(hasVeg);
+    } else {
+      setHasVegetarianMeal(false);
+    }
+  }, [meals]);
 
   if (loading) {
     return (
@@ -180,21 +186,24 @@ const placeOrder = async (e) => {
 
   return (
     <div>
-     <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <div className={`restaurant-page ${openpopup ? "blurred" : ""}`}>
         <div className="restaurant-banner">
           <img src={restaurant.image} alt="Restaurant" />
           <div className="restaurant-info-box">
+            {meals.some(
+              (meal) => meal.contains_meat === 0 && meal.contains_chicken === 0
+            ) && <div className="vegetarian-ribbon">vegetarian</div>}
             <p className="about">{restaurant.restaurant_info}</p>
             <p>
-              <FaLocationDot id="locationIcon"/> {restaurant.address}
+              <FaLocationDot id="locationIcon" /> {restaurant.address}
             </p>
             <p>
-              <FaPhoneAlt id="phoneIcon"/> {restaurant.phone_number}
+              <FaPhoneAlt id="phoneIcon" /> {restaurant.phone_number}
             </p>
             <p>
-              <GoClock id="clockIcon"/> {restaurant.working_hours_from} -{" "}
+              <GoClock id="clockIcon" /> {restaurant.working_hours_from} -{" "}
               {restaurant.working_hours_to}
             </p>
           </div>
@@ -236,7 +245,7 @@ const placeOrder = async (e) => {
           loading={popupLoading}
         />
       )}
-       {showConfirm && (
+      {showConfirm && (
         <ConfirmModal
           message={`Are you sure you want to order ${orderquantity} x "${popupContent?.name}"?`}
           show={showConfirm}

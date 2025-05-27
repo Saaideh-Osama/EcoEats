@@ -16,44 +16,60 @@ const OrderCard = ({ order }) => {
 
   // Determine if order is upcoming or past
   const status = order.status;
+  const cleanStatus = status.trim().toLowerCase();
 
   return (
-    <div className={`client-order-card ${status ==="reserved"? "reserved" : "Picked-Up"}`}>
-      <div className="client-order-meal-info">
-        <p><strong> Order details</strong></p>
-        <p>{order.meal.name}</p>
-      <button className={`status ${status === 'reserved' ? 'status-reserved' : 'status-not-reserved'}`}>
-   {status}
-</button>
-      <p>
-          Total:  {order.total_price} JOD
+    <div
+      className={`client-order-card ${
+        cleanStatus === "reserved" ? "reserved" : "picked-up"
+      }`}
+    >
+      <div className="order-section">
+        <p>
+          <strong>order details:</strong>{" "}
+          <span className="highlight">#{order.meal.name}</span>
+        </p>
+        <p className="dim-text">
+          Quantity: <span className="black-text">{order.quantity}</span>
+        </p>
+        <p className="dim-text">
+          pickup-time:{" "}
+          <span className="black-text">
+            {formatDateTime(order.pickup_time)}
+          </span>
         </p>
       </div>
 
-      <div className="client-order-details">
-        
+      <div className="restaurant-section">
         <p>
-          <strong>Quantity:</strong> {order.quantity}
-        </p>
-        
-        <p className="client-order-time">pickup-time:{formatDateTime(order.pickup_time)}</p>
-
-      </div>
-
-      <div className="client-order-restaurant-info">
-        <h4>Restaurant Details:</h4>
-        <p>
-          <strong>Name:</strong> {order.restaurant.name}
+          <strong>Restaurant Details:</strong>
         </p>
         <p>
-          <strong>Address:</strong> {order.restaurant.address}
+          <span className="dim-text">Name:</span> {order.restaurant.name}
         </p>
         <p>
-          <strong>Phone:</strong> {order.restaurant.phone_number}
+          <span className="dim-text">Address:</span> {order.restaurant.address}
+        </p>
+        <p>
+          <span className="dim-text">Phone:</span>{" "}
+          {order.restaurant.phone_number}
         </p>
       </div>
 
-      
+      <div className="summary-section">
+        <p>
+          <strong>Total:</strong> {order.total_price} JOD
+        </p>
+        <button
+          className={`status ${
+            cleanStatus === "reserved"
+              ? "status-reserved"
+              : "status-not-reserved"
+          }`}
+        >
+          {status}
+        </button>
+      </div>
     </div>
   );
 };
