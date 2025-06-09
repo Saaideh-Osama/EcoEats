@@ -24,6 +24,7 @@ const AdminDashboard = () => {
 
   const [modalData, setModalData] = useState(null); // for confirm modal
   const [alertData, setAlertData] = useState(null); // for alert modal
+  const [profits, setProfits] = useState([]);
 
   const navigate = useNavigate();
 
@@ -71,6 +72,22 @@ const AdminDashboard = () => {
     };
     loadData();
   }, []);
+  const fetchProfits = async () => {
+    try {
+      const res = await axios.get(
+        `${API_BASE}/RestaurantMonthlyProfit`,
+        axiosConfig
+      );
+      setProfits(res.data.profits);
+    } catch (err) {
+      console.error("Failed to fetch profits", err);
+    }
+  };
+  useEffect(() => {
+    if (activeTab === "profit") {
+      fetchProfits();
+    }
+  }, [activeTab]);
 
   const handleLogout = () => {
     confirmAction("Are you sure you want to logout?", async () => {
@@ -218,6 +235,13 @@ const AdminDashboard = () => {
           </div>
           Unapproved Restaurants
         </button>
+        <button
+          className={activeTab === "profit" ? "tab active" : "tab"}
+          onClick={() => setActiveTab("profit")}
+        >
+          <div className="iconContainer">💰</div>
+          Profit
+        </button>
       </div>
 
       <div className="admin-tab-content">
@@ -323,6 +347,26 @@ const AdminDashboard = () => {
                       Approve
                     </button>
                   </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {activeTab === "profit" && (
+          <>
+            <ul className="responsive-table">
+              <li className="table-header">
+                <div className="col col-1">Restaurant ID</div>
+                <div className="col col-2">Restaurant Name</div>
+                <div className="col col-3">Profit</div>
+                <div className="col col-4">Total Sales</div>
+              </li>
+              {profits.map((item) => (
+                <li key={item.restaurant_id} className="table-row">
+                  <div>{item.restaurant_id}</div>
+                  <div>{item.restaurant.name}</div>
+                  <div>{item.profit}</div>
+                  <div>{item.total_sales}</div>
                 </li>
               ))}
             </ul>
