@@ -38,7 +38,7 @@ function RestaurantSignup() {
 
     try {
       const response = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/restaurants/register ",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurants/register ",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

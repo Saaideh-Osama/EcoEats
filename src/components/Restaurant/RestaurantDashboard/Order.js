@@ -18,48 +18,45 @@ const Order = ({ order, onCancel, onPickup }) => {
   const status = order.status;
 
   return (
-    <div className={`client-order-card ${status ==="reserved"? "reserved" : "Picked-Up"}`}>
+    <div
+      className={`client-order-card ${
+        status === "reserved" ? "reserved" : "Picked-Up"
+      }`}
+    >
       <div className="client-order-meal-info">
-        <p><strong> Order details</strong></p>
-        <p>{order.meal_id}</p>
-      <button className={`status ${status === 'reserved' ? 'status-reserved' : 'status-not-reserved'}`}>
-   {status}
-</button>
-      <p>
-          Total:  {order.total_price} JOD
+        <p>
+          <strong> Order details</strong>
+        </p>
+        <p>#{order.meal_id}</p>
+
+        <p>
+          {" "}
+          <span style={{ fontWeight: "bold" }}>Total: </span>
+          {order.total_price} JOD
         </p>
       </div>
 
       <div className="client-order-details">
-        
         <p>
           <strong>Quantity:</strong> {order.quantity}
         </p>
-        
-        <p className="client-order-time">pickup-time:{formatDateTime(order.pickup_time)}</p>
 
+        <p className="client-order-time">
+          <span style={{ fontWeight: "bold" }}> pickup-time:</span>
+          {formatDateTime(order.pickup_time)}
+        </p>
       </div>
 
-      
-<div className="button-row">
-        <button
-          className="order-btn cancel"
-          onClick={() => onCancel(order.id)}
-        >
+      <div className="button-row">
+        <button className="order-btn cancel" onClick={() => onCancel(order.id)}>
           Cancel
         </button>
-        <button
-          className="order-btn pickup"
-          onClick={() => onPickup(order.id)}
-        >
+        <button className="order-btn pickup" onClick={() => onPickup(order.id)}>
           Picked Up
         </button>
       </div>
-      
     </div>
   );
 };
-  
-
 
 export default Order;

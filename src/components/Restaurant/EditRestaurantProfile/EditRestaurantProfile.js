@@ -6,7 +6,7 @@ import axios from "axios";
 import AlertModal from "../../Alerts/AlertModal"; // Adjust the import path as necessary
 const EditRestaurantProfile = () => {
   const { user, loading } = useContext(UserContext);
-   const [alert, setAlert] = useState({ show: false, message: '', type: '' });
+  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
   const [formData, setFormData] = useState({
     name: "",
     phone_number: "",
@@ -44,7 +44,7 @@ const EditRestaurantProfile = () => {
 
     try {
       const response = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/restaurant/edit",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant/edit",
         formData,
         {
           headers: {
@@ -56,9 +56,8 @@ const EditRestaurantProfile = () => {
       setAlert({
         show: true,
         message: "data updated successfully",
-        type: "success"
+        type: "success",
       });
-
     } catch (error) {
       console.error("Update failed:", error);
       alert("Something went wrong while updating");
@@ -131,14 +130,14 @@ const EditRestaurantProfile = () => {
 
         <button type="submit">Save Changes</button>
       </form>
-       {alert.show && (
-  <AlertModal 
-    key={Date.now()} // forces remount each time
-    message={alert.message} 
-    type={alert.type} 
-    onClose={() => setAlert({ show: false, message: '', type: '' })}
-  />
-)}
+      {alert.show && (
+        <AlertModal
+          key={Date.now()} // forces remount each time
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert({ show: false, message: "", type: "" })}
+        />
+      )}
     </div>
   );
 };

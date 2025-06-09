@@ -40,7 +40,7 @@ const SinglePageRestaurant = () => {
 
       const token = localStorage.getItem("authToken");
       const response = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/meals/${mealId}`,
         {
           headers: {
             Accept: "application/json",
@@ -67,7 +67,7 @@ const SinglePageRestaurant = () => {
   const fetchRestaurantDetails = async () => {
     try {
       const response = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/restaurant/info/${id}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant/info/${id}`,
         {
           headers: {
             Accept: "application/json",
@@ -84,7 +84,7 @@ const SinglePageRestaurant = () => {
   const fetchRestaurantMeals = async () => {
     try {
       const response = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/restaurant-meals/${id}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant-meals/${id}`,
         {
           headers: {
             Accept: "application/json",
@@ -115,7 +115,7 @@ const SinglePageRestaurant = () => {
       const token = localStorage.getItem("authToken");
 
       const response = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/place-order",
         {
           meal_id: popupContent.id,
           quantity: orderquantity,

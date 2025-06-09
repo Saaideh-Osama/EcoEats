@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import ConfirmModal from "../../Alerts/ConfirmModal";
 import AlertModal from "../../Alerts/AlertModal";
@@ -21,10 +21,10 @@ const RestaurantDashboard = () => {
   const [actionType, setActionType] = useState(null);
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
- const [activeTab, setActiveTab] = useState("mealListings");
-const { user, fetchUser } = useContext(UserContext);
+  const [activeTab, setActiveTab] = useState("mealListings");
+  const { user, fetchUser } = useContext(UserContext);
   const token = localStorage.getItem("authToken");
-const renderTabContent = () => {
+  const renderTabContent = () => {
     switch (activeTab) {
       case "addmeal":
         return <CreateMeal />;
@@ -53,7 +53,7 @@ const renderTabContent = () => {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/restaurant-meals",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant-meals",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,9 +92,14 @@ const renderTabContent = () => {
     try {
       if (actionType === "delete") {
         await axios.post(
-          `https://4399-91-186-255-241.ngrok-free.app/api/delete-meal/${selectedMeal.id}`,
+          `https://3cfd-91-186-247-216.ngrok-free.app/api/delete-meal/${selectedMeal.id}`,
           {},
-          { headers: { Authorization: `Bearer ${token}`, "ngrok-skip-browser-warning": "true" } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
         setMeals((prev) => prev.filter((meal) => meal.id !== selectedMeal.id));
         setAlert({
@@ -105,9 +110,14 @@ const renderTabContent = () => {
       } else if (actionType === "update") {
         const { id, newQuantity } = selectedMeal;
         const response = await axios.post(
-          `https://4399-91-186-255-241.ngrok-free.app/api/updateMealQuantity/${id}/${newQuantity}`,
+          `https://3cfd-91-186-247-216.ngrok-free.app/api/updateMealQuantity/${id}/${newQuantity}`,
           {},
-          { headers: { Authorization: `Bearer ${token}`, "ngrok-skip-browser-warning": "true" } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
         const updatedMeal = response.data.meal;
         setMeals((prev) =>
@@ -122,9 +132,16 @@ const renderTabContent = () => {
         await axios.post(
           `https://4399-91-186-255-241.ngrok-free.app/api/order/${selectedOrder.id}/pickup`,
           {},
-          { headers: { Authorization: `Bearer ${token}`, "ngrok-skip-browser-warning": "true" } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
-        setOrders((prev) => prev.filter((order) => order.id !== selectedOrder.id));
+        setOrders((prev) =>
+          prev.filter((order) => order.id !== selectedOrder.id)
+        );
         setAlert({
           show: true,
           message: `Order ID ${selectedOrder.id} marked as picked up.`,
@@ -132,11 +149,18 @@ const renderTabContent = () => {
         });
       } else if (actionType === "cancel") {
         await axios.post(
-          `https://4399-91-186-255-241.ngrok-free.app/api/cancel/resturant/orders/${selectedOrder.id}`,
+          `https://3cfd-91-186-247-216.ngrok-free.app/api/cancel/resturant/orders/${selectedOrder.id}`,
           {},
-          { headers: { Authorization: `Bearer ${token}`, "ngrok-skip-browser-warning": "true" } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
-        setOrders((prev) => prev.filter((order) => order.id !== selectedOrder.id));
+        setOrders((prev) =>
+          prev.filter((order) => order.id !== selectedOrder.id)
+        );
         setAlert({
           show: true,
           message: `Order ID ${selectedOrder.id} cancelled.`,
@@ -184,35 +208,35 @@ const renderTabContent = () => {
   };
 
   useEffect(() => {
-     const init = async () => {
-      await fetchUser();}
-      init();
+    const init = async () => {
+      await fetchUser();
+    };
+    init();
     fetchMeals();
     fetchOrders();
-    
   }, []);
 
   return (
     <>
-     <Navbar  activeTab={activeTab} setActiveTab={setActiveTab}  />
-    <div className="orders-wrapper">
-      {renderTabContent()}
+      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div className="orders-wrapper">
+        {renderTabContent()}
 
-      {showConfirmModal && (
-        <ConfirmModal
-          message={confirmMessage}
-          onConfirm={handleConfirmAction}
-          onCancel={() => setShowConfirmModal(false)}
-        />
-      )}
-      {showAlertModal && (
-        <AlertModal
-          message={alert.message}
-          type={alert.type}
-          onClose={() => setShowAlertModal(false)}
-        />
-      )}
-    </div>
+        {showConfirmModal && (
+          <ConfirmModal
+            message={confirmMessage}
+            onConfirm={handleConfirmAction}
+            onCancel={() => setShowConfirmModal(false)}
+          />
+        )}
+        {showAlertModal && (
+          <AlertModal
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setShowAlertModal(false)}
+          />
+        )}
+      </div>
     </>
   );
 };
