@@ -8,6 +8,7 @@
   cursor: pointer;
   transition: transform 0.2s ease;
   margin: 12px;
+  scroll-snap-align: start;
 }
 
 .xmeal_card_unq:hover {

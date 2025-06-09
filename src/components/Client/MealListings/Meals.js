@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext,useRef } from "react";
 import axios from "axios";
 
 import "./Meals.css";
@@ -16,10 +16,19 @@ import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
 import shaw from "../../../assets/images/shaw.png";
 import salad from "../../../assets/images/salad.png";
-import offer from "../../../assets/images/promo.mp4";
+import offer from "../../../assets/images/add.jpg";
+import { FaArrowCircleLeft } from "react-icons/fa";
+import { FaArrowCircleRight } from "react-icons/fa";
 
 // ... imports unchanged
 const Meals = () => {
+
+  const recommendedScrollRef = useRef(null);
+  const scrollRecommended = (scrollOffset) => {
+  if (recommendedScrollRef.current) {
+    recommendedScrollRef.current.scrollBy({ left: scrollOffset, behavior: "smooth" });
+  }
+};
   const [openpopup, setOpenPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [popupLoading, setPopupLoading] = useState(false);
@@ -61,7 +70,13 @@ const Meals = () => {
 
       return () => clearTimeout(timer); // cleanup
     }
+    
   }, [showAlert]);
+useEffect(() => {
+    if (selectedCategory) {
+      fetchMealsByCategory(selectedCategory);
+    }
+  }, [selectedCategory]);
 
   const handleDecrement = () =>
     setOrderquantity((prev) => Math.max(prev - 1, 1));
@@ -155,15 +170,14 @@ const Meals = () => {
   };
 
   const fetchMealsByCategory = async (category) => {
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
+    
     try {
+      console.log("Fetching meals for category:", category);
       const res = await axios.get(
         `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
         {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
             "ngrok-skip-browser-warning": "true",
           },
         }
@@ -273,15 +287,15 @@ const Meals = () => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-        {user && (
+       
           <div className="meals_categories_container">
             <div className="meals_category_grid">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
+                  onClick={() => setSelectedCategory(cat.name)}
                   className={`meals_category_button ${
-                    selectedCategory === cat.id ? "cat_active" : ""
+                    selectedCategory === cat.name ? "cat_active" : ""
                   }`}
                 >
                   <img src={cat.icon} alt={cat.name} />
@@ -290,24 +304,45 @@ const Meals = () => {
               ))}
             </div>
           </div>
-        )}
+        
 
         <div className="meals_promo_container">
           <video src={offer} autoPlay muted loop playsInline />
         </div>
+{user && (
+  <>
+    <h2 className="meals_section_title">Picks for you</h2>
+    <div className="meals_horizontal_scroll_with_arrows">
+      <button
+        className="scroll_arrow left"
+        onClick={() => scrollRecommended(-300)}
+      >
+        <FaArrowCircleLeft />
+      </button>
 
-        <h2 className="meals_section_title">Picks for you</h2>
-        <div className="meals_horizontal_scroll">
-          <div className="meals_scroll_container">
-            {recommendedMeals.map((meal) => (
-              <MealCard
-                key={`rec-${meal.id}`}
-                meal={meal}
-                onClick={() => fetchMealDetails(meal.id)}
-              />
-            ))}
-          </div>
+      <div className="meals_horizontal_scroll" ref={recommendedScrollRef}>
+        <div className="meals_scroll_container">
+          {recommendedMeals.map((meal) => (
+            <MealCard
+              key={`rec-${meal.id}`}
+              meal={meal}
+              onClick={() => fetchMealDetails(meal.id)}
+            />
+          ))}
         </div>
+      </div>
+
+      <button
+        className="scroll_arrow right"
+        onClick={() => scrollRecommended(300)}
+      >
+        <FaArrowCircleRight />
+
+      </button>
+    </div>
+  </>
+)}
+
 
         <h2 className="meals_section_title">
           All <span>{selectedCategory || "meals"}</span>

@@ -1,3 +1,9 @@
+.meals_loading{
+display: flex;
+width: 100%;
+justify-content: center;
+align-items: center;
+}
 .meals_container {
   max-width: 1200px;
   margin: 0 auto;
@@ -266,3 +272,39 @@ margin: 2vh;
 .meals_horizontal_scroll::-webkit-scrollbar {
   display:none;
 }
+.meals_horizontal_scroll_with_arrows {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.scroll_arrow {
+  position: absolute;
+  top: 35%;
+  z-index: 10;
+  border: none;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  height: 9vh;
+  border-radius: 50%;
+  transition: background 0.4s ease;
+  background: #005db7;
+  color: #FCA502;
+  transition: .3s;
+  transition: 0.5s;
+}
+
+.scroll_arrow:active {
+  background: #005db7;
+  color: #FCA502;
+  transition: .3s;
+}
+.scroll_arrow.left {
+  left: -00px;
+}
+
+.scroll_arrow.right {
+  right: -0px;
+}
+
