@@ -89,7 +89,7 @@ const Meals = () => {
   const fetchRestaurants = async () => {
     try {
       const res = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/get/all-restaurants-names",
         {
           headers: {
             Accept: "application/json",
@@ -106,7 +106,7 @@ const Meals = () => {
   const fetchAllMeals = async () => {
     try {
       const res = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/all-meals",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/all-meals",
         {
           headers: {
             Accept: "application/json",
@@ -126,8 +126,8 @@ const Meals = () => {
 
     try {
       const endpoint = isVegetarian
-        ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
-        : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
+        ? "https://3cfd-91-186-247-216.ngrok-free.app/api/vegetarian-meals"
+        : "https://3cfd-91-186-247-216.ngrok-free.app/api/non-vegetarian-meals";
       const res = await axios.get(endpoint, {
         headers: {
           Accept: "application/json",
@@ -145,7 +145,7 @@ const Meals = () => {
     try {
       setPopupLoading(true);
       const res = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/meals/${mealId}`,
         {
           headers: {
             Accept: "application/json",
@@ -174,7 +174,7 @@ const Meals = () => {
     try {
       console.log("Fetching meals for category:", category);
       const res = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/meals/category/${category}`,
         {
           headers: {
             Accept: "application/json",
@@ -241,7 +241,7 @@ const Meals = () => {
   const placeOrder = async () => {
     try {
       const res = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/place-order",
         { meal_id: popupContent.id, quantity: orderquantity },
         {
           headers: {
