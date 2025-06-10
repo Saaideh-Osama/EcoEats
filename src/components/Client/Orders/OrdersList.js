@@ -11,7 +11,7 @@ const OrdersList = ({ active }) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/client-orders-history",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/client-orders-history",
         {
           headers: {
             Accept: "application/json",

@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext,useRef } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 
 import "./Meals.css";
@@ -16,19 +16,21 @@ import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
 import shaw from "../../../assets/images/shaw.png";
 import salad from "../../../assets/images/salad.png";
-
+import offer from "../../../assets/images/promo.mp4";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
 
 // ... imports unchanged
 const Meals = () => {
-
   const recommendedScrollRef = useRef(null);
   const scrollRecommended = (scrollOffset) => {
-  if (recommendedScrollRef.current) {
-    recommendedScrollRef.current.scrollBy({ left: scrollOffset, behavior: "smooth" });
-  }
-};
+    if (recommendedScrollRef.current) {
+      recommendedScrollRef.current.scrollBy({
+        left: scrollOffset,
+        behavior: "smooth",
+      });
+    }
+  };
   const [openpopup, setOpenPopup] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
   const [popupLoading, setPopupLoading] = useState(false);
@@ -70,9 +72,8 @@ const Meals = () => {
 
       return () => clearTimeout(timer); // cleanup
     }
-    
   }, [showAlert]);
-useEffect(() => {
+  useEffect(() => {
     if (selectedCategory) {
       fetchMealsByCategory(selectedCategory);
     }
@@ -88,7 +89,7 @@ useEffect(() => {
   const fetchRestaurants = async () => {
     try {
       const res = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/get/all-restaurants-names",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/get/all-restaurants-names",
         {
           headers: {
             Accept: "application/json",
@@ -105,7 +106,7 @@ useEffect(() => {
   const fetchAllMeals = async () => {
     try {
       const res = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/all-meals",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/all-meals",
         {
           headers: {
             Accept: "application/json",
@@ -125,8 +126,8 @@ useEffect(() => {
 
     try {
       const endpoint = isVegetarian
-        ? "https://4399-91-186-255-241.ngrok-free.app/api/vegetarian-meals"
-        : "https://4399-91-186-255-241.ngrok-free.app/api/non-vegetarian-meals";
+        ? "https://3cfd-91-186-247-216.ngrok-free.app/api/vegetarian-meals"
+        : "https://3cfd-91-186-247-216.ngrok-free.app/api/non-vegetarian-meals";
       const res = await axios.get(endpoint, {
         headers: {
           Accept: "application/json",
@@ -144,7 +145,7 @@ useEffect(() => {
     try {
       setPopupLoading(true);
       const res = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/${mealId}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/meals/${mealId}`,
         {
           headers: {
             Accept: "application/json",
@@ -170,11 +171,10 @@ useEffect(() => {
   };
 
   const fetchMealsByCategory = async (category) => {
-    
     try {
       console.log("Fetching meals for category:", category);
       const res = await axios.get(
-        `https://4399-91-186-255-241.ngrok-free.app/api/meals/category/${category}`,
+        `https://3cfd-91-186-247-216.ngrok-free.app/api/meals/category/${category}`,
         {
           headers: {
             Accept: "application/json",
@@ -241,7 +241,7 @@ useEffect(() => {
   const placeOrder = async () => {
     try {
       const res = await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/place-order",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/place-order",
         { meal_id: popupContent.id, quantity: orderquantity },
         {
           headers: {
@@ -287,62 +287,61 @@ useEffect(() => {
   return (
     <div>
       <div className={`container ${openpopup ? "blurred" : ""}`}>
-       
-          <div className="meals_categories_container">
-            <div className="meals_category_grid">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.name)}
-                  className={`meals_category_button ${
-                    selectedCategory === cat.name ? "cat_active" : ""
-                  }`}
-                >
-                  <img src={cat.icon} alt={cat.name} />
-                  <span>{cat.name}</span>
-                </button>
-              ))}
-            </div>
+        <div className="meals_categories_container">
+          <div className="meals_category_grid">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.name)}
+                className={`meals_category_button ${
+                  selectedCategory === cat.name ? "cat_active" : ""
+                }`}
+              >
+                <img src={cat.icon} alt={cat.name} />
+                <span>{cat.name}</span>
+              </button>
+            ))}
           </div>
-        
+        </div>
 
         <div className="meals_promo_container">
           
         </div>
-{user && (
-  <>
-    <h2 className="meals_section_title">Picks for you</h2>
-    <div className="meals_horizontal_scroll_with_arrows">
-      <button
-        className="scroll_arrow left"
-        onClick={() => scrollRecommended(-300)}
-      >
-        <FaArrowCircleLeft />
-      </button>
+        {user && (
+          <>
+            <h2 className="meals_section_title">Picks for you</h2>
+            <div className="meals_horizontal_scroll_with_arrows">
+              <button
+                className="scroll_arrow left"
+                onClick={() => scrollRecommended(-300)}
+              >
+                <FaArrowCircleLeft />
+              </button>
 
-      <div className="meals_horizontal_scroll" ref={recommendedScrollRef}>
-        <div className="meals_scroll_container">
-          {recommendedMeals.map((meal) => (
-            <MealCard
-              key={`rec-${meal.id}`}
-              meal={meal}
-              onClick={() => fetchMealDetails(meal.id)}
-            />
-          ))}
-        </div>
-      </div>
+              <div
+                className="meals_horizontal_scroll"
+                ref={recommendedScrollRef}
+              >
+                <div className="meals_scroll_container">
+                  {recommendedMeals.map((meal) => (
+                    <MealCard
+                      key={`rec-${meal.id}`}
+                      meal={meal}
+                      onClick={() => fetchMealDetails(meal.id)}
+                    />
+                  ))}
+                </div>
+              </div>
 
-      <button
-        className="scroll_arrow right"
-        onClick={() => scrollRecommended(300)}
-      >
-        <FaArrowCircleRight />
-
-      </button>
-    </div>
-  </>
-)}
-
+              <button
+                className="scroll_arrow right"
+                onClick={() => scrollRecommended(300)}
+              >
+                <FaArrowCircleRight />
+              </button>
+            </div>
+          </>
+        )}
 
         <h2 className="meals_section_title">
           All <span>{selectedCategory || "meals"}</span>

@@ -51,6 +51,12 @@
 }
 
 
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
 .status {
   margin-top: 10px;
   padding: 8px 20px;

@@ -106,7 +106,7 @@ const EditClientProfile = () => {
       if (formData.password) payload.password = formData.password;
 
       await axios.post(
-        "https://4399-91-186-255-241.ngrok-free.app/api/client/edit",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/client/edit",
         payload,
         {
           headers: {
@@ -253,10 +253,6 @@ const EditClientProfile = () => {
 
 // Styled components remain the same as your original code ...
 
-
-
-
-
 // Styled Components
 const ProfileContainer = styled.div`
   display: flex;
@@ -286,7 +282,6 @@ const Title = styled.h2`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
- 
 `;
 
 const FormGroup = styled.div`
