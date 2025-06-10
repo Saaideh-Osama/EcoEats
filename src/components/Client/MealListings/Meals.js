@@ -16,7 +16,7 @@ import chk from "../../../assets/images/chk.png";
 import pasta from "../../../assets/images/pasta.png";
 import shaw from "../../../assets/images/shaw.png";
 import salad from "../../../assets/images/salad.png";
-import offer from "../../../assets/images/add.jpg";
+
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
 
@@ -307,7 +307,7 @@ useEffect(() => {
         
 
         <div className="meals_promo_container">
-          <video src={offer} autoPlay muted loop playsInline />
+          
         </div>
 {user && (
   <>

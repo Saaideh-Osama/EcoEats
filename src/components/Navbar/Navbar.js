@@ -162,9 +162,9 @@ const toggleSidebar = () => {
 
 
 </div>
-  <div className="settings" onClick={toggleSidebar}>
+ {user&&( <div className="settings" onClick={toggleSidebar}>
   <AiTwotoneSetting />
-</div>
+</div>)}
 {showSidebar && (
   <Sidebar onClose={() => setShowSidebar(false)}>
     {user?.role_id === 2 ? <EditClientProfile /> : <EditRestaurantProfile />}
