@@ -72,7 +72,7 @@ const RestaurantDashboard = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        "https://4399-91-186-255-241.ngrok-free.app/api/restaurant/reserved-orders",
+        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant/reserved-orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
