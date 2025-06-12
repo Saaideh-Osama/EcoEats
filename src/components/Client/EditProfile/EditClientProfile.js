@@ -161,6 +161,7 @@ const EditClientProfile = () => {
           message="Are you sure you want to save the changes?"
           onConfirm={confirmSave}
           onCancel={() => setShowConfirmModal(false)}
+          
         />
       )}
 

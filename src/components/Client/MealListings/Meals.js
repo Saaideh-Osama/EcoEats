@@ -182,6 +182,7 @@ const Meals = () => {
         }
       );
       setAllMeals(res.data.meals);
+      console.log("Meals fetched:", res.data.meals);
     } catch (err) {
       console.error("Error fetching meals by category:", err);
     }
@@ -206,8 +207,8 @@ const Meals = () => {
     const loadMeals = async () => {
       setIsLoading(true);
       if (selectedCategory) {
-        const token = localStorage.getItem("authToken");
-        if (token) {
+       
+        if (selectedCategory) {
           await fetchMealsByCategory(selectedCategory);
         } else {
           await fetchAllMeals(); // fallback if not logged in

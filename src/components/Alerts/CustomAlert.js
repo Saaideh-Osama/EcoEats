@@ -13,6 +13,7 @@ const CustomAlert = ({ message, onClose }) => {
   return (
     <div className="custom-alert-overlay">
       <div className="custom-alert-box">
+        <button className="close-custom-alert" onClick={onClose}> X</button>
         <p>{message}</p>
         <button onClick={handleLoginRedirect} className="alert-login-btn">
           Login

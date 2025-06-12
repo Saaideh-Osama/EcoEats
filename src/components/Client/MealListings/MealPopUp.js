@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useEffect,useContext, useState } from "react";
 import { MdOutlineClose, MdRestaurant } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -17,10 +17,28 @@ const MealPopup = ({
   loading,
 }) => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+const { user, fetchUser, loading: userLoading } = useContext(UserContext);
   const [showAlert, setShowAlert] = useState(false);
+useEffect(() => {
+  const init = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.log("No token found, user not logged in.");
+      return;
+    }
 
-  if (!open) return null;
+    try {
+      console.log("Token found, fetching user data...");
+      await fetchUser();
+    } catch (error) {
+      console.log("Failed to fetch user:", error);
+    }
+  };
+  init();
+}, []);
+
+if (!open || userLoading) return null;
+ 
 
   return (
     <div id="popup-overlay">
@@ -95,7 +113,7 @@ const MealPopup = ({
                 id="orderBTN"
                 onClick={async (e) => {
                   e.stopPropagation();
-
+                  
                   if (!user) {
                     setShowAlert(true);
                     return;

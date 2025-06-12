@@ -48,7 +48,17 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 242, 254, 0.4);
 }
-
+.close-custom-alert{
+  position: absolute;
+  top: 37.5vh;
+  right: 30vw;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: red;
+}
 @keyframes scaleIn {
   from {
     opacity: 0;

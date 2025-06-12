@@ -31,6 +31,7 @@ const SinglePageRestaurant = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [activeTab, setActiveTab] = useState("");
   const [hasVegetarianMeal, setHasVegetarianMeal] = useState(false);
+  
 
   const navigate = useNavigate();
   const fetchMealDetails = async (mealId) => {
