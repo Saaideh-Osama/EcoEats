@@ -9,7 +9,6 @@ import AlertModal from "../../Alerts/AlertModal";
 import ConfirmModal from "../../Alerts/ConfirmModal";
 import MealCard from "./MealCard";
 import MealPopUp from "./MealPopUp";
-
 import pizza from "../../../assets/images/pizza.png";
 import beef from "../../../assets/images/beef.png";
 import chk from "../../../assets/images/chk.png";

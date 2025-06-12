@@ -27,13 +27,8 @@ const Order = ({ order, onCancel, onPickup }) => {
         <p>
           <strong> Order details</strong>
         </p>
-        <p>#{order.meal_id}</p>
-
-        <p>
-          {" "}
-          <span style={{ fontWeight: "bold" }}>Total: </span>
-          {order.total_price} JOD
-        </p>
+        <p>meal name:{order.meal.name}</p>
+        <p>client name:{order.user.name}</p>
       </div>
 
       <div className="client-order-details">
@@ -44,6 +39,10 @@ const Order = ({ order, onCancel, onPickup }) => {
         <p className="client-order-time">
           <span style={{ fontWeight: "bold" }}> pickup-time:</span>
           {formatDateTime(order.pickup_time)}
+        </p>
+        <p>
+          <span style={{ fontWeight: "bold" }}>Total: </span>
+          {order.total_price} JOD
         </p>
       </div>
 
