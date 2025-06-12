@@ -63,7 +63,7 @@ const AuthForm = () => {
     if (isLogin) {
       try {
         const response = await axios.post(
-          "https://3cfd-91-186-247-216.ngrok-free.app/api/login",
+          "https://d201-91-186-254-78.ngrok-free.app/api/login",
           {
             email: formData.email,
             password: formData.password,
@@ -157,7 +157,7 @@ const AuthForm = () => {
     if (isSignup) {
       try {
         const response = await axios.post(
-          "https://3cfd-91-186-247-216.ngrok-free.app/api/clients/register",
+          "https://d201-91-186-254-78.ngrok-free.app/api/clients/register",
           {
             ...formData,
             role_id: 2,

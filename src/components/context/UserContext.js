@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
 
     try {
       const response = await axios.get(
-        "https://3cfd-91-186-247-216.ngrok-free.app/api/client/info",
+        "https://d201-91-186-254-78.ngrok-free.app/api/client/info",
         {
           headers: {
             Accept: "application/json",

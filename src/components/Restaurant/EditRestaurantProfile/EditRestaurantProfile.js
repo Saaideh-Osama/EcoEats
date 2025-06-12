@@ -44,7 +44,7 @@ const EditRestaurantProfile = () => {
 
     try {
       const response = await axios.post(
-        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant/edit",
+        "https://d201-91-186-254-78.ngrok-free.app/api/restaurant/edit",
         formData,
         {
           headers: {

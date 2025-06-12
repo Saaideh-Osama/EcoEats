@@ -7,7 +7,7 @@ import { RiUser3Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FaBuildingCircleCheck, FaBuildingCircleXmark } from "react-icons/fa6";
 
-const API_BASE = "https://3cfd-91-186-247-216.ngrok-free.app/api";
+const API_BASE = "https://d201-91-186-254-78.ngrok-free.app/api";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("approved");
@@ -265,7 +265,7 @@ const AdminDashboard = () => {
                     <button onClick={() => deleteClient(client.id)} id="delete">
                       Delete
                     </button>
-                    <button id="suspend">Suspend</button>
+                    
                   </div>
                 </li>
               ))}

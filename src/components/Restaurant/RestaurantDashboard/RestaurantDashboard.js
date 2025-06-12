@@ -53,7 +53,7 @@ const RestaurantDashboard = () => {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(
-        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant-meals",
+        "https://d201-91-186-254-78.ngrok-free.app/api/restaurant-meals",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,7 +72,7 @@ const RestaurantDashboard = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(
-        "https://3cfd-91-186-247-216.ngrok-free.app/api/restaurant/reserved-orders",
+        "https://d201-91-186-254-78.ngrok-free.app/api/restaurant/reserved-orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ const RestaurantDashboard = () => {
     try {
       if (actionType === "delete") {
         await axios.post(
-          `https://3cfd-91-186-247-216.ngrok-free.app/api/delete-meal/${selectedMeal.id}`,
+          `https://d201-91-186-254-78.ngrok-free.app/api/delete-meal/${selectedMeal.id}`,
           {},
           {
             headers: {
@@ -110,7 +110,7 @@ const RestaurantDashboard = () => {
       } else if (actionType === "update") {
         const { id, newQuantity } = selectedMeal;
         const response = await axios.post(
-          `https://3cfd-91-186-247-216.ngrok-free.app/api/updateMealQuantity/${id}/${newQuantity}`,
+          `https://d201-91-186-254-78.ngrok-free.app/api/updateMealQuantity/${id}/${newQuantity}`,
           {},
           {
             headers: {
@@ -130,7 +130,7 @@ const RestaurantDashboard = () => {
         });
       } else if (actionType === "pickup") {
         await axios.post(
-          `https://4399-91-186-255-241.ngrok-free.app/api/order/${selectedOrder.id}/pickup`,
+          `https://d201-91-186-254-78.ngrok-free.app/api/order/${selectedOrder.id}/pickup`,
           {},
           {
             headers: {
@@ -149,7 +149,7 @@ const RestaurantDashboard = () => {
         });
       } else if (actionType === "cancel") {
         await axios.post(
-          `https://3cfd-91-186-247-216.ngrok-free.app/api/cancel/resturant/orders/${selectedOrder.id}`,
+          `https://d201-91-186-254-78.ngrok-free.app/api/cancel/resturant/orders/${selectedOrder.id}`,
           {},
           {
             headers: {

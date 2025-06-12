@@ -8,10 +8,7 @@ import ConfirmModal from "../../Alerts/ConfirmModal"; // adjust path as needed
 const EditClientProfile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState({});
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("success"); // 'success' or 'error'
-  const [showAlertModal, setShowAlertModal] = useState(false);
+  
 
   const { user, fetchUser } = useContext(UserContext);
 
@@ -81,62 +78,47 @@ const EditClientProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      // Show alert modal for validation errors (first error)
-      const firstError = Object.values(errors)[0] || "Validation error";
-      setAlertMessage(firstError);
-      setAlertType("error");
-      setShowAlertModal(true);
-      return;
-    }
-    setShowConfirmModal(true);
+   if (!validateForm()) return;
+saveChanges()
   };
 
-  const confirmSave = async () => {
-    setShowConfirmModal(false);
-    setIsSaving(true);
-    setErrors({});
-    try {
-      const payload = {
-        name: formData.name,
-        email: formData.email,
-        phone_number: formData.phone,
-        is_vegetarian: formData.is_vegetarian === "1",
-      };
-      if (formData.password) payload.password = formData.password;
+ const saveChanges = async () => {
+  setIsSaving(true);
+  setErrors({});
+  try {
+    const payload = {
+      name: formData.name,
+      email: formData.email,
+      phone_number: formData.phone,
+      is_vegetarian: formData.is_vegetarian === "1",
+    };
+    if (formData.password) payload.password = formData.password;
 
-      await axios.post(
-        "https://3cfd-91-186-247-216.ngrok-free.app/api/client/edit",
-        payload,
-        {
-          headers: {
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
+    await axios.post(
+      "https://d201-91-186-254-78.ngrok-free.app/api/client/edit",
+      payload,
+      {
+        headers: {
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      }
+    );
 
-      fetchUser();
-      setAlertMessage("Your profile was updated successfully.");
-      setAlertType("success");
-      setShowAlertModal(true);
-    } catch (error) {
-      setErrors({
-        submit:
-          error.response?.data?.message ||
-          "Failed to update profile. Please try again.",
-      });
-      setAlertMessage(
+    fetchUser();
+    // Success message removed
+  } catch (error) {
+    setErrors({
+      submit:
         error.response?.data?.message ||
-          "Failed to update profile. Please try again."
-      );
-      setAlertType("error");
-      setShowAlertModal(true);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+        "Failed to update profile. Please try again.",
+    });
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   if (!user) {
     return (
@@ -156,22 +138,8 @@ const EditClientProfile = () => {
         </SpinnerOverlay>
       )}
 
-      {showConfirmModal && (
-        <ConfirmModal
-          message="Are you sure you want to save the changes?"
-          onConfirm={confirmSave}
-          onCancel={() => setShowConfirmModal(false)}
-          
-        />
-      )}
+     
 
-      {showAlertModal && (
-        <AlertModal
-          message={alertMessage}
-          type={alertType}
-          onClose={() => setShowAlertModal(false)}
-        />
-      )}
 
       <ProfileCard>
         <Title>Edit Profile</Title>

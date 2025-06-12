@@ -15,7 +15,7 @@ const AllRestaurants = ({ active }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://3cfd-91-186-247-216.ngrok-free.app/api/get/restaurants",
+          "https://d201-91-186-254-78.ngrok-free.app/api/get/restaurants",
           {
             headers: {
               Accept: "application/json",
